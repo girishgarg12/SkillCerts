@@ -29,3 +29,7 @@ dist-ssr
 .env
 backend/.env
 .env.*
+FRONTEND_README.md
+INSTRUCTOR_FEATURES.md
+PAGES_COMPLETED.md
+PROJECT_STRUCTURE.md

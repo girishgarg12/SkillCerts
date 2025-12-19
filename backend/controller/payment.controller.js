@@ -16,6 +16,8 @@ const razorpay = new Razorpay({
   key_secret: env.RZP_SECRET,
 });
 
+console.log('Razorpay initialized with key:', env.RZP_KEY ? 'Key is set' : 'Key is MISSING');
+
 // Validation schemas
 const createOrderSchema = z.object({
   courseId: z.string().min(1, 'Course ID is required'),
@@ -80,7 +82,8 @@ export const createOrder = async (req, res) => {
     // Calculate amount from backend (don't trust frontend)
     const amount = Math.round(course.price * 100); // Convert to paise
     const currency = 'INR';
-    const receipt = `receipt_${Date.now()}_${req.user._id}`;
+    // Receipt must be max 40 chars - use shortened format
+    const receipt = `rcpt_${Date.now()}_${req.user._id.toString().slice(-8)}`;
 
     // Create Razorpay order
     const razorpayOrder = await razorpay.orders.create({
@@ -126,7 +129,14 @@ export const createOrder = async (req, res) => {
       );
     }
     console.error('Create order error:', error);
-    return ApiResponse.serverError('Failed to create order').send(res);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
+    return ApiResponse.serverError('Failed to create order', {
+      error: error.message,
+    }).send(res);
   }
 };
 
