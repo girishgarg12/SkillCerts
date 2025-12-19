@@ -7,6 +7,8 @@ import categoryRouter from './routes/category.routes.js';
 import enrollmentRouter from './routes/enrollment.routes.js';
 import paymentRouter from './routes/payment.routes.js';
 import progressRouter from './routes/progress.routes.js';
+import reviewRouter from './routes/review.routes.js';
+import sectionRouter from './routes/section.routes.js';
 import cors from 'cors';
 
 const app = express();
@@ -21,6 +23,8 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/enrollments', enrollmentRouter);
 app.use('/api/payments', paymentRouter);
 app.use('/api/progress', progressRouter);
+app.use('/api/reviews', reviewRouter);
+app.use('/api/sections', sectionRouter);
 
 
 const PORT = env.PORT;
