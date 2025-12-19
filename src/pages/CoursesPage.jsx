@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Filter, SlidersHorizontal } from 'lucide-react';
 import { courseService } from '../services/courseService';
 import { categoryService } from '../services/categoryService';
+import { wishlistService } from '../services/wishlistService';
 import { CourseGrid } from '../components/course/CourseGrid';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { COURSE_LEVELS } from '../lib/constants';
+import { useAuthStore } from '../store/authStore';
 
 export const CoursesPage = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuthStore();
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [wishlistIds, setWishlistIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     level: '',
@@ -21,7 +27,10 @@ export const CoursesPage = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+    if (isAuthenticated) {
+      fetchWishlist();
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     fetchCourses();
@@ -33,6 +42,38 @@ export const CoursesPage = () => {
       setCategories(response.data || []);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
+    }
+  };
+
+  const fetchWishlist = async () => {
+    try {
+      const response = await wishlistService.getWishlist();
+      const ids = response.data.courses?.map(c => c._id) || [];
+      setWishlistIds(ids);
+    } catch (error) {
+      console.error('Failed to fetch wishlist:', error);
+    }
+  };
+
+  const handleWishlistToggle = async (course) => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    const courseId = course._id || course.id;
+    const isInWishlist = wishlistIds.includes(courseId);
+
+    try {
+      if (isInWishlist) {
+        await wishlistService.removeFromWishlist(courseId);
+        setWishlistIds(wishlistIds.filter(id => id !== courseId));
+      } else {
+        await wishlistService.addToWishlist(courseId);
+        setWishlistIds([...wishlistIds, courseId]);
+      }
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
     }
   };
 
@@ -152,7 +193,12 @@ export const CoursesPage = () => {
         </div>
 
         {/* Course Grid */}
-        <CourseGrid courses={courses} loading={loading} />
+        <CourseGrid 
+          courses={courses} 
+          loading={loading} 
+          onWishlistToggle={handleWishlistToggle}
+          wishlistIds={wishlistIds}
+        />
       </div>
     </div>
   );

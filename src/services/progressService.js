@@ -1,8 +1,12 @@
 import api from './api';
 
 export const progressService = {
-  getProgress: (courseId) => api.get(`/progress/${courseId}`),
+  getMyProgress: () => api.get('/progress/my'),
   
-  markLectureComplete: (lectureId) => 
-    api.post('/progress/complete', { lectureId }),
+  getCourseProgress: (courseId) => api.get(`/progress/${courseId}`),
+  
+  toggleLectureCompletion: (courseId, lectureId) => 
+    api.post(`/progress/${courseId}/toggle`, { lectureId }),
+  
+  resetProgress: (courseId) => api.delete(`/progress/${courseId}/reset`),
 };

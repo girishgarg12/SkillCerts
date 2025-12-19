@@ -7,7 +7,7 @@ export const authService = {
   
   getProfile: () => api.get('/user/me'),
   
-  updateProfile: (data) => api.put('/user/profile', data),
+  updateProfile: (data) => api.patch('/user/profile', data),
   
   logout: () => {
     localStorage.removeItem('token');

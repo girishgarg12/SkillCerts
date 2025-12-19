@@ -6,7 +6,7 @@ import { Button } from '../ui/Button';
 import { formatCurrency, formatDuration } from '../../lib/utils';
 import { COURSE_LEVELS } from '../../lib/constants';
 
-export const CourseCard = ({ course, onWishlistToggle }) => {
+export const CourseCard = ({ course, onWishlistToggle, isInWishlist }) => {
   const levelColors = {
     beginner: 'success',
     intermediate: 'warning',
@@ -79,9 +79,10 @@ export const CourseCard = ({ course, onWishlistToggle }) => {
               e.preventDefault();
               onWishlistToggle(course);
             }}
-            className="text-gray-500 hover:text-red-500 transition-colors"
+            className={`transition-colors ${isInWishlist ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}
+            title={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
           >
-            <Heart className="w-6 h-6" />
+            <Heart className={`w-6 h-6 ${isInWishlist ? 'fill-red-500' : ''}`} />
           </button>
         )}
       </CardFooter>

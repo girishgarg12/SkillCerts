@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   Play, 
   CheckCircle, 
@@ -8,10 +8,16 @@ import {
   ChevronUp,
   BookOpen,
   Clock,
-  Award
+  Award,
+  Home,
+  Library,
+  LayoutDashboard,
+  X,
+  Menu
 } from 'lucide-react';
 import { courseService } from '../services/courseService';
 import { progressService } from '../services/progressService';
+import { sectionService } from '../services/sectionService';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -29,6 +35,7 @@ export const CourseLearningPage = () => {
   const [expandedSections, setExpandedSections] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showSidebar, setShowSidebar] = useState(true);
 
   useEffect(() => {
     fetchCourseData();
@@ -37,47 +44,27 @@ export const CourseLearningPage = () => {
   const fetchCourseData = async () => {
     try {
       // Fetch course details and progress
-      const [courseRes, progressRes] = await Promise.all([
+      const [courseRes, progressRes, sectionsRes] = await Promise.all([
         courseService.getCourse(id),
-        progressService.getProgress(id),
+        progressService.getCourseProgress(id),
+        sectionService.getCourseSections(id),
       ]);
 
       setCourse(courseRes.data);
       setProgress(progressRes.data);
-
-      // Fetch sections with lectures (you'll need to add this API endpoint)
-      // For now, using mock data structure
-      const mockSections = [
-        {
-          _id: '1',
-          title: 'Introduction',
-          order: 1,
-          lectures: [
-            { _id: 'l1', title: 'Welcome to the Course', duration: 300, videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', order: 1 },
-            { _id: 'l2', title: 'Course Overview', duration: 420, videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', order: 2 },
-          ]
-        },
-        {
-          _id: '2',
-          title: 'Getting Started',
-          order: 2,
-          lectures: [
-            { _id: 'l3', title: 'Setting Up Your Environment', duration: 600, videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', order: 1 },
-            { _id: 'l4', title: 'First Steps', duration: 480, videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', order: 2 },
-          ]
-        }
-      ];
-
-      setSections(mockSections);
+      setSections(sectionsRes.data);
       
       // Set first lecture as current
-      if (mockSections[0]?.lectures[0]) {
-        setCurrentLecture(mockSections[0].lectures[0]);
+      if (sectionsRes.data[0]?.lectures[0]) {
+        setCurrentLecture(sectionsRes.data[0].lectures[0]);
       }
 
       // Expand first section by default
-      setExpandedSections({ '1': true });
+      if (sectionsRes.data[0]?._id) {
+        setExpandedSections({ [sectionsRes.data[0]._id]: true });
+      }
     } catch (error) {
+      console.error('Failed to load course:', error);
       setError('Failed to load course');
     } finally {
       setLoading(false);
@@ -99,27 +86,33 @@ export const CourseLearningPage = () => {
     if (!currentLecture) return;
 
     try {
-      await progressService.markLectureComplete(currentLecture._id);
+      const response = await progressService.toggleLectureCompletion(id, currentLecture._id);
       
-      // Update progress state
-      setProgress(prev => ({
-        ...prev,
-        completedLectures: [...(prev?.completedLectures || []), currentLecture._id]
-      }));
+      // Update progress state with response
+      setProgress({
+        ...progress,
+        completedLectures: response.data.progress.completedLectures,
+        progressPercentage: response.data.progress.progressPercentage,
+      });
 
-      // Move to next lecture
-      const allLectures = sections.flatMap(s => s.lectures);
-      const currentIndex = allLectures.findIndex(l => l._id === currentLecture._id);
-      if (currentIndex < allLectures.length - 1) {
-        setCurrentLecture(allLectures[currentIndex + 1]);
+      // Move to next lecture only if marking as complete
+      const wasCompleted = isLectureCompleted(currentLecture._id);
+      if (!wasCompleted) {
+        const allLectures = sections.flatMap(s => s.lectures);
+        const currentIndex = allLectures.findIndex(l => l._id === currentLecture._id);
+        if (currentIndex < allLectures.length - 1) {
+          setCurrentLecture(allLectures[currentIndex + 1]);
+        }
       }
     } catch (error) {
-      console.error('Failed to mark lecture complete:', error);
+      console.error('Failed to toggle lecture completion:', error);
     }
   };
 
   const isLectureCompleted = (lectureId) => {
-    return progress?.completedLectures?.includes(lectureId);
+    return progress?.completedLectures?.some(id => 
+      (typeof id === 'string' ? id : id._id) === lectureId
+    ) || false;
   };
 
   if (loading) return <PageLoader />;
@@ -127,178 +120,247 @@ export const CourseLearningPage = () => {
   if (!course) return <Alert variant="error">Course not found</Alert>;
 
   return (
-    <div className="flex h-screen bg-gray-900">
-      {/* Main Content - Video Player */}
-      <div className="flex-1 flex flex-col">
-        {/* Video Player */}
-        <div className="bg-black aspect-video">
-          {currentLecture ? (
-            <iframe
-              src={currentLecture.videoUrl}
-              title={currentLecture.title}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+    <div className="flex h-screen bg-gray-50">
+      {/* Small Navigation Sidebar */}
+      <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-4 gap-4">
+        <Link
+          to="/"
+          className="p-3 rounded-lg hover:bg-gray-100 transition-colors group relative"
+          title="Home"
+        >
+          <Home className="w-6 h-6 text-gray-600 group-hover:text-blue-600" />
+        </Link>
+        <Link
+          to="/courses"
+          className="p-3 rounded-lg hover:bg-gray-100 transition-colors group relative"
+          title="All Courses"
+        >
+          <Library className="w-6 h-6 text-gray-600 group-hover:text-blue-600" />
+        </Link>
+        <Link
+          to="/my-learning"
+          className="p-3 rounded-lg hover:bg-gray-100 transition-colors group relative"
+          title="My Learning"
+        >
+          <LayoutDashboard className="w-6 h-6 text-gray-600 group-hover:text-blue-600" />
+        </Link>
+        
+        <div className="flex-1" />
+        
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+          title={showSidebar ? "Hide sidebar" : "Show sidebar"}
+        >
+          {showSidebar ? (
+            <X className="w-6 h-6 text-gray-600 group-hover:text-blue-600" />
           ) : (
-            <div className="flex items-center justify-center h-full text-white">
-              <div className="text-center">
-                <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg">Select a lecture to start learning</p>
+            <Menu className="w-6 h-6 text-gray-600 group-hover:text-blue-600" />
+          )}
+        </button>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Video Player Section */}
+        <div className="flex-1 flex flex-col bg-gray-900 p-4">
+          <div className="flex-1 max-w-7xl w-full mx-auto flex flex-col">
+            {/* Video Player */}
+            <div className="bg-black rounded-lg overflow-hidden shadow-2xl aspect-video">
+              {currentLecture ? (
+                <iframe
+                  src={currentLecture.videoUrl}
+                  title={currentLecture.title}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-white">
+                  <div className="text-center">
+                    <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg">Select a lecture to start learning</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Video Info and Controls */}
+            <div className="bg-gray-800 text-white p-6 mt-4 rounded-lg shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold mb-1">
+                    {currentLecture?.title || 'No lecture selected'}
+                  </h2>
+                  <p className="text-sm text-gray-400">
+                    {course.title}
+                  </p>
+                </div>
+                
+                {currentLecture && (
+                  <Button
+                    onClick={handleMarkComplete}
+                    disabled={isLectureCompleted(currentLecture._id)}
+                    variant={isLectureCompleted(currentLecture._id) ? 'secondary' : 'primary'}
+                    size="lg"
+                  >
+                    {isLectureCompleted(currentLecture._id) ? (
+                      <>
+                        <CheckCircle className="w-5 h-5 mr-2" />
+                        Completed
+                      </>
+                    ) : (
+                      <>
+                        Mark Complete
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+
+              {/* Progress Bar */}
+              {progress && (
+                <div className="mt-4">
+                  <div className="flex justify-between text-sm text-gray-400 mb-2">
+                    <span>Course Progress</span>
+                    <span className="font-semibold">{Math.round(progress.progressPercentage || 0)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-3">
+                    <div
+                      className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                      style={{ width: `${progress.progressPercentage || 0}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {progress.completedCount || 0} of {progress.totalLectures || 0} lectures completed
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Sidebar - Course Content */}
+      {showSidebar && (
+        <div className="w-96 bg-white border-l border-gray-200 flex flex-col shadow-xl">
+          <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <h3 className="font-bold text-gray-900 mb-2 text-lg">Course Content</h3>
+            <p className="text-sm text-gray-600">
+              {sections.length} sections • {sections.reduce((acc, s) => acc + s.lectures.length, 0)} lectures
+            </p>
+          </div>
+
+          <div className="flex-1 overflow-y-auto">
+            <div className="divide-y divide-gray-200">
+              {sections.map((section) => (
+                <div key={section._id}>
+                  {/* Section Header */}
+                  <button
+                    onClick={() => toggleSection(section._id)}
+                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <BookOpen className="w-5 h-5 text-blue-600" />
+                      <div className="text-left">
+                        <h4 className="font-semibold text-gray-900">{section.title}</h4>
+                        <p className="text-xs text-gray-500">
+                          {section.lectures.length} lectures
+                        </p>
+                      </div>
+                    </div>
+                    {expandedSections[section._id] ? (
+                      <ChevronUp className="w-5 h-5 text-gray-400" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-400" />
+                    )}
+                  </button>
+
+                  {/* Lectures List */}
+                  {expandedSections[section._id] && (
+                    <div className="bg-gray-50">
+                      {section.lectures.map((lecture) => {
+                        const isCompleted = isLectureCompleted(lecture._id);
+                        const isCurrent = currentLecture?._id === lecture._id;
+
+                        return (
+                          <div
+                            key={lecture._id}
+                            className={`px-6 py-3 flex items-center gap-3 hover:bg-gray-100 transition-colors border-l-4 ${
+                              isCurrent ? 'bg-blue-50 border-blue-600' : 'border-transparent'
+                            }`}
+                          >
+                            {/* Checkbox for completion */}
+                            <input
+                              type="checkbox"
+                              checked={isCompleted}
+                              onChange={async (e) => {
+                                e.stopPropagation();
+                                try {
+                                  const response = await progressService.toggleLectureCompletion(id, lecture._id);
+                                  setProgress({
+                                    ...progress,
+                                    completedLectures: response.data.progress.completedLectures,
+                                    progressPercentage: response.data.progress.progressPercentage,
+                                  });
+                                } catch (error) {
+                                  console.error('Failed to toggle lecture completion:', error);
+                                }
+                              }}
+                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                            />
+                            
+                            <button
+                              onClick={() => handleLectureClick(lecture)}
+                              className="flex items-center gap-3 flex-1 text-left min-w-0"
+                            >
+                              <Play className={`w-4 h-4 flex-shrink-0 ${isCurrent ? 'text-blue-600' : 'text-gray-400'}`} />
+                              <span className={`text-sm flex-1 truncate ${
+                                isCurrent ? 'font-semibold text-blue-600' : 'text-gray-700'
+                              }`}>
+                                {lecture.title}
+                              </span>
+                            </button>
+                            
+                            <div className="flex items-center gap-1 text-xs text-gray-500 flex-shrink-0">
+                              <Clock className="w-3 h-3" />
+                              {formatDuration(lecture.duration)}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Completion CTA */}
+          {progress?.progressPercentage === 100 && (
+            <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-t border-green-200">
+              <div className="flex items-start gap-3">
+                <Award className="w-7 h-7 text-green-600 flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="font-bold text-green-900 mb-1">
+                    Congratulations! 🎉
+                  </h4>
+                  <p className="text-sm text-green-800 mb-3">
+                    You've completed this course
+                  </p>
+                  <Button
+                    size="sm"
+                    onClick={() => navigate('/certificates')}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    View Certificate
+                  </Button>
+                </div>
               </div>
             </div>
           )}
         </div>
-
-        {/* Video Controls */}
-        <div className="bg-gray-800 text-white p-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-1">
-                  {currentLecture?.title || 'No lecture selected'}
-                </h2>
-                <p className="text-sm text-gray-400">
-                  {course.title}
-                </p>
-              </div>
-              
-              {currentLecture && (
-                <Button
-                  onClick={handleMarkComplete}
-                  disabled={isLectureCompleted(currentLecture._id)}
-                  variant={isLectureCompleted(currentLecture._id) ? 'secondary' : 'primary'}
-                >
-                  {isLectureCompleted(currentLecture._id) ? (
-                    <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                      Completed
-                    </>
-                  ) : (
-                    <>
-                      Mark Complete
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
-
-            {/* Progress Bar */}
-            {progress && (
-              <div className="mt-4">
-                <div className="flex justify-between text-sm text-gray-400 mb-2">
-                  <span>Course Progress</span>
-                  <span>{Math.round(progress.progressPercentage || 0)}%</span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${progress.progressPercentage || 0}%` }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Sidebar - Course Content */}
-      <div className="w-96 bg-white overflow-y-auto border-l border-gray-200">
-        <div className="p-4 border-b border-gray-200 bg-gray-50">
-          <h3 className="font-semibold text-gray-900 mb-1">Course Content</h3>
-          <p className="text-sm text-gray-600">
-            {sections.length} sections • {sections.reduce((acc, s) => acc + s.lectures.length, 0)} lectures
-          </p>
-        </div>
-
-        <div className="divide-y divide-gray-200">
-          {sections.map((section) => (
-            <div key={section._id}>
-              {/* Section Header */}
-              <button
-                onClick={() => toggleSection(section._id)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <BookOpen className="w-5 h-5 text-gray-600" />
-                  <div className="text-left">
-                    <h4 className="font-medium text-gray-900">{section.title}</h4>
-                    <p className="text-sm text-gray-600">
-                      {section.lectures.length} lectures
-                    </p>
-                  </div>
-                </div>
-                {expandedSections[section._id] ? (
-                  <ChevronUp className="w-5 h-5 text-gray-600" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-600" />
-                )}
-              </button>
-
-              {/* Lectures List */}
-              {expandedSections[section._id] && (
-                <div className="bg-gray-50">
-                  {section.lectures.map((lecture) => {
-                    const isCompleted = isLectureCompleted(lecture._id);
-                    const isCurrent = currentLecture?._id === lecture._id;
-
-                    return (
-                      <button
-                        key={lecture._id}
-                        onClick={() => handleLectureClick(lecture)}
-                        className={`w-full px-4 py-3 pl-12 flex items-center justify-between hover:bg-gray-100 transition-colors ${
-                          isCurrent ? 'bg-blue-50 border-l-4 border-blue-600' : ''
-                        }`}
-                      >
-                        <div className="flex items-center gap-3 flex-1">
-                          {isCompleted ? (
-                            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                          ) : (
-                            <Play className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                          )}
-                          <span className={`text-sm text-left ${
-                            isCurrent ? 'font-medium text-blue-600' : 'text-gray-700'
-                          }`}>
-                            {lecture.title}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <Clock className="w-3 h-3" />
-                          {formatDuration(lecture.duration)}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Completion CTA */}
-        {progress?.progressPercentage === 100 && (
-          <div className="p-4 bg-green-50 border-t border-green-200">
-            <div className="flex items-start gap-3">
-              <Award className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-              <div>
-                <h4 className="font-semibold text-green-900 mb-1">
-                  Congratulations! 🎉
-                </h4>
-                <p className="text-sm text-green-800 mb-3">
-                  You've completed this course
-                </p>
-                <Button
-                  size="sm"
-                  onClick={() => navigate('/certificates')}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  View Certificate
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

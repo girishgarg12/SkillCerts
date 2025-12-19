@@ -4,6 +4,7 @@ import { Clock, BookOpen, Star, Users, Award, Play, Heart } from 'lucide-react';
 import { courseService } from '../services/courseService';
 import { enrollmentService } from '../services/enrollmentService';
 import { reviewService } from '../services/reviewService';
+import { wishlistService } from '../services/wishlistService';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Card, CardContent } from '../components/ui/Card';
@@ -20,6 +21,7 @@ export const CourseDetailPage = () => {
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(false);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [error, setError] = useState('');
@@ -29,6 +31,7 @@ export const CourseDetailPage = () => {
     fetchReviews();
     if (isAuthenticated) {
       checkEnrollment();
+      checkWishlistStatus();
     }
   }, [id]);
 
@@ -58,6 +61,35 @@ export const CourseDetailPage = () => {
       setIsEnrolled(response.data.enrolled);
     } catch (error) {
       console.error('Failed to check enrollment:', error);
+    }
+  };
+
+  const checkWishlistStatus = async () => {
+    try {
+      const response = await wishlistService.checkWishlist(id);
+      setIsInWishlist(response.data.inWishlist);
+    } catch (error) {
+      console.error('Failed to check wishlist status:', error);
+    }
+  };
+
+  const handleWishlistToggle = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      if (isInWishlist) {
+        await wishlistService.removeFromWishlist(id);
+        setIsInWishlist(false);
+      } else {
+        await wishlistService.addToWishlist(id);
+        setIsInWishlist(true);
+      }
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
+      setError(error.message || 'Failed to update wishlist');
     }
   };
 
@@ -167,10 +199,16 @@ export const CourseDetailPage = () => {
                     </Button>
                   )}
 
-                  <Button variant="outline" className="w-full">
-                    <Heart className="w-5 h-5 mr-2" />
-                    Add to Wishlist
-                  </Button>
+                  {!isEnrolled && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full"
+                      onClick={handleWishlistToggle}
+                    >
+                      <Heart className={`w-5 h-5 mr-2 ${isInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
+                      {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                    </Button>
+                  )}
 
                   <div className="mt-6 space-y-3 text-sm">
                     {course.totalDuration && (
