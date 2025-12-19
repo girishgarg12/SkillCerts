@@ -176,14 +176,8 @@ export const CertificatesPage = () => {
               <div className="flex items-start gap-4">
                 <Award className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
-          
-        {/* Certificate Modal */}
-        {selectedCertificate && (
-          <CertificateModal
-            certificateData={selectedCertificate}
-            onClose={() => setSelectedCertificate(null)}
-          />
-        )}                    About Your Certificates
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    About Your Certificates
                   </h3>
                   <ul className="text-sm text-gray-700 space-y-1">
                     <li>• All certificates are digitally signed and verifiable</li>
@@ -195,6 +189,14 @@ export const CertificatesPage = () => {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Certificate Modal */}
+        {selectedCertificate && (
+          <CertificateModal
+            certificateData={selectedCertificate}
+            onClose={() => setSelectedCertificate(null)}
+          />
         )}
       </div>
     </div>

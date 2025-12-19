@@ -2,7 +2,6 @@ import { Certificate } from '../model/certificate.model.js';
 import { Enrollment } from '../model/enrollment.model.js';
 import { Course } from '../model/course.model.js';
 import { generateCertificateId } from '../utils/certificateGenerator.js';
-import { generateCertificateHTML } from '../utils/certificateTemplate.js';
 import ApiResponse from '../utils/ApiResponse.js';
 
 /**
