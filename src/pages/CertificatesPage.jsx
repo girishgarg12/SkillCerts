@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Award, Download, ExternalLink, CheckCircle } from 'lucide-react';
+import { Award, Download, ExternalLink, CheckCircle, Eye } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { certificateService } from '../services/certificateService';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -7,11 +8,14 @@ import { Badge } from '../components/ui/Badge';
 import { PageLoader } from '../components/ui/Spinner';
 import { Alert } from '../components/ui/Alert';
 import { formatDate } from '../lib/utils';
+import { CertificateModal } from '../components/ui/CertificateModal';
 
 export const CertificatesPage = () => {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [viewLoading, setViewLoading] = useState(false);
 
   useEffect(() => {
     fetchCertificates();
@@ -22,16 +26,40 @@ export const CertificatesPage = () => {
       const response = await certificateService.getMyCertificates();
       setCertificates(response.data || []);
     } catch (error) {
+      toast.error('Failed to load certificates');
       setError('Failed to load certificates');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDownload = (certificateId) => {
-    // Placeholder for certificate download
-    console.log('Download certificate:', certificateId);
-    // In production, this would generate and download a PDF
+  const handleView = async (certificate) => {
+    try {
+      setViewLoading(true);
+      const response = await certificateService.viewCertificate(certificate.course._id);
+      setSelectedCertificate(response.data);
+      toast.success('Certificate loaded');
+    } catch (error) {
+      toast.error('Failed to view certificate');
+    } finally {
+      setViewLoading(false);
+    }
+  };
+
+  const handleDownload = async (certificate) => {
+    try {
+      setViewLoading(true);
+      const response = await certificateService.viewCertificate(certificate.course._id);
+      setSelectedCertificate(response.data);
+      // The modal has a download button that triggers print
+      setTimeout(() => {
+        toast.success('Click the download button in the certificate to save as PDF');
+      }, 500);
+    } catch (error) {
+      toast.error('Failed to download certificate');
+    } finally {
+      setViewLoading(false);
+    }
   };
 
   const handleVerify = (certificateId) => {
@@ -109,7 +137,16 @@ export const CertificatesPage = () => {
 
                   <div className="space-y-2">
                     <Button
-                      onClick={() => handleDownload(certificate.certificateId)}
+                      onClick={() => handleView(certificate)}
+                      className="w-full"
+                      size="sm"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Certificate
+                    </Button>
+                    <Button
+                      onClick={() => handleDownload(certificate)}
+                      variant="outline"
                       className="w-full"
                       size="sm"
                     >
@@ -139,8 +176,14 @@ export const CertificatesPage = () => {
               <div className="flex items-start gap-4">
                 <Award className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    About Your Certificates
+          
+        {/* Certificate Modal */}
+        {selectedCertificate && (
+          <CertificateModal
+            certificateData={selectedCertificate}
+            onClose={() => setSelectedCertificate(null)}
+          />
+        )}                    About Your Certificates
                   </h3>
                   <ul className="text-sm text-gray-700 space-y-1">
                     <li>• All certificates are digitally signed and verifiable</li>

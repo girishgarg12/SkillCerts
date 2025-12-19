@@ -8,7 +8,13 @@ import { env } from '../utils/env.js';
  */
 export const authenticate = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.replace('Bearer ', '');
+    // Check for token in Authorization header or query parameter
+    let token = req.headers.authorization?.replace('Bearer ', '');
+    
+    // If no token in header, check query params (useful for certificate views)
+    if (!token && req.query.token) {
+      token = req.query.token;
+    }
 
     if (!token) {
       return ApiResponse.unauthorized('Access token required').send(res);

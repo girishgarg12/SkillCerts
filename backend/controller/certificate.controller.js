@@ -119,7 +119,7 @@ export const getCertificate = async (req, res) => {
 };
 
 /**
- * View certificate as HTML page
+ * View certificate - returns JSON data for frontend rendering
  */
 export const viewCertificate = async (req, res) => {
   try {
@@ -140,26 +140,19 @@ export const viewCertificate = async (req, res) => {
       return ApiResponse.notFound('Certificate not found').send(res);
     }
 
-    const completionDate = new Date(certificate.issuedAt).toLocaleDateString(
-      'en-US',
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }
-    );
-
-    // Generate HTML certificate
-    const html = generateCertificateHTML({
+    // Return certificate data as JSON for frontend rendering
+    const certificateData = {
       userName: certificate.user.name,
       courseTitle: certificate.course.title,
-      completionDate,
+      completionDate: certificate.issuedAt,
       certificateId: certificate.certificateId,
       instructorName: certificate.course.instructor.name,
-    });
+    };
 
-    res.setHeader('Content-Type', 'text/html');
-    res.send(html);
+    return ApiResponse.success(
+      'Certificate data fetched successfully',
+      certificateData
+    ).send(res);
   } catch (error) {
     console.error('View certificate error:', error);
     return ApiResponse.serverError('Failed to view certificate').send(res);

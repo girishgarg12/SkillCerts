@@ -19,12 +19,14 @@ import toast from 'react-hot-toast';
 import { courseService } from '../services/courseService';
 import { progressService } from '../services/progressService';
 import { sectionService } from '../services/sectionService';
+import { certificateService } from '../services/certificateService';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { PageLoader } from '../components/ui/Spinner';
 import { Alert } from '../components/ui/Alert';
 import { formatDuration } from '../lib/utils';
+import { CertificateModal } from '../components/ui/CertificateModal';
 
 export const CourseLearningPage = () => {
   const { id } = useParams();
@@ -37,6 +39,9 @@ export const CourseLearningPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showSidebar, setShowSidebar] = useState(true);
+  const [hasCertificate, setHasCertificate] = useState(false);
+  const [generatingCertificate, setGeneratingCertificate] = useState(false);
+  const [certificateData, setCertificateData] = useState(null);
 
   useEffect(() => {
     fetchCourseData();
@@ -64,11 +69,31 @@ export const CourseLearningPage = () => {
       if (sectionsRes.data[0]?._id) {
         setExpandedSections({ [sectionsRes.data[0]._id]: true });
       }
+
+      // Check if certificate exists or needs to be generated
+      if (progressRes.data.progressPercentage === 100) {
+        checkAndGenerateCertificate();
+      }
     } catch (error) {
       console.error('Failed to load course:', error);
       setError('Failed to load course');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkAndGenerateCertificate = async () => {
+    try {
+      // Try to get existing certificate
+      const certResponse = await certificateService.getCertificate(id);
+      if (certResponse.data) {
+        setHasCertificate(true);
+      }
+    } catch (error) {
+      // Certificate doesn't exist, generate it
+      if (error.response?.status === 404) {
+        await generateCertificate();
+      }
     }
   };
 
@@ -105,12 +130,53 @@ export const CourseLearningPage = () => {
         if (currentIndex < allLectures.length - 1) {
           setCurrentLecture(allLectures[currentIndex + 1]);
         }
+        
+        // Check if course is now 100% complete and generate certificate
+        if (response.data.progress.progressPercentage === 100 && !hasCertificate) {
+          generateCertificate();
+        }
       } else {
         toast.success('Lecture marked as incomplete');
       }
     } catch (error) {
       console.error('Failed to toggle lecture completion:', error);
       toast.error('Failed to update lecture status');
+    }
+  };
+
+  const generateCertificate = async () => {
+    try {
+      setGeneratingCertificate(true);
+      const response = await certificateService.generateCertificate(id);
+      if (response.data) {
+        setHasCertificate(true);
+        toast.success('🎉 Congratulations! Your certificate has been generated!');
+      }
+    } catch (error) {
+      console.error('Failed to generate certificate:', error);
+      // Check if certificate already exists
+      if (error.response?.data?.message?.includes('already exists')) {
+        setHasCertificate(true);
+      } else {
+        toast.error('Failed to generate certificate. Please try again.');
+      }
+    } finally {
+      setGeneratingCertificate(false);
+    }
+  };
+
+  const handleViewCertificate = async () => {
+    try {
+      // If no certificate yet, try to generate it first
+      if (!hasCertificate) {
+        await generateCertificate();
+      }
+      
+      const response = await certificateService.viewCertificate(id);
+      setCertificateData(response.data);
+      toast.success('Certificate loaded');
+    } catch (error) {
+      toast.error('Failed to view certificate. Please ensure the course is fully completed.');
     }
   };
 
@@ -346,25 +412,45 @@ export const CourseLearningPage = () => {
             <div className="p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-t border-green-200">
               <div className="flex items-start gap-3">
                 <Award className="w-7 h-7 text-green-600 flex-shrink-0 mt-1" />
-                <div>
+                <div className="flex-1">
                   <h4 className="font-bold text-green-900 mb-1">
                     Congratulations! 🎉
                   </h4>
                   <p className="text-sm text-green-800 mb-3">
                     You've completed this course
                   </p>
-                  <Button
-                    size="sm"
-                    onClick={() => navigate('/certificates')}
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    View Certificate
-                  </Button>
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      size="sm"
+                      onClick={handleViewCertificate}
+                      className="bg-green-600 hover:bg-green-700 text-white w-full"
+                      disabled={generatingCertificate}
+                    >
+                      <Award className="w-4 h-4 mr-2" />
+                      {generatingCertificate ? 'Generating...' : 'View Certificate'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => navigate('/certificates')}
+                      className="w-full"
+                    >
+                      Go to Certificates
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           )}
         </div>
+      )}
+
+      {/* Certificate Modal */}
+      {certificateData && (
+        <CertificateModal
+          certificateData={certificateData}
+          onClose={() => setCertificateData(null)}
+        />
       )}
     </div>
   );
