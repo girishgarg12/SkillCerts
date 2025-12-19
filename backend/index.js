@@ -6,6 +6,7 @@ import courseRouter from './routes/course.routes.js';
 import categoryRouter from './routes/category.routes.js';
 import enrollmentRouter from './routes/enrollment.routes.js';
 import paymentRouter from './routes/payment.routes.js';
+import progressRouter from './routes/progress.routes.js';
 import cors from 'cors';
 
 const app = express();
@@ -19,6 +20,7 @@ app.use('/api/courses', courseRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/enrollments', enrollmentRouter);
 app.use('/api/payments', paymentRouter);
+app.use('/api/progress', progressRouter);
 
 
 const PORT = env.PORT;
