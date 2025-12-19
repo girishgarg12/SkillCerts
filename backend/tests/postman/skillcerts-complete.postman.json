@@ -29,6 +29,21 @@
       "key": "categoryId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "paymentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "enrollmentId",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -540,7 +555,235 @@
                   {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"},
                   {"key": "Content-Type", "value": "application/json"}
                 ],
-                "body": {
+     ,
+    {
+      "name": "4. Payments",
+      "item": [
+        {
+          "name": "Create Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('orderId', jsonData.data.orderId);",
+                  "    pm.collectionVariables.set('paymentId', jsonData.data.paymentId);",
+                  "    console.log('Order created: ' + jsonData.data.orderId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/create-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "create-order"]
+            },
+            "description": "Create Razorpay order - backend validates course and price"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"{{orderId}}\",\n  \"razorpay_payment_id\": \"pay_test123\",\n  \"razorpay_signature\": \"test_signature\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "verify"]
+            },
+            "description": "Verify payment signature and auto-enroll (use actual Razorpay response values)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Payments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "my"]
+            },
+            "description": "Get payment history"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/{{paymentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "{{paymentId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Payments (Instructor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/course/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "course", "{{courseId}}"]
+            },
+            "description": "Get revenue for course (instructor/admin only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. Enrollments",
+      "item": [
+        {
+          "name": "Enroll in Free Course",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('enrollmentId', jsonData.data._id);",
+                  "    console.log('Enrolled successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/enrollments",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments"]
+            },
+            "description": "Enroll in free course (paid courses require payment first)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Enrollments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "my"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Enrollments - Ongoing",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/my?status=ongoing",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "my"],
+              "query": [{"key": "status", "value": "ongoing"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check Enrollment Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/check/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "check", "{{courseId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Course Completed",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/{{courseId}}/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}", "complete"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Enrollments (Instructor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/course/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "course", "{{courseId}}"]
+            },
+            "description": "View students enrolled in course (instructor/admin)"
+          },
+          "response": []
+        }
+      ]
+    }           "body": {
                   "mode": "raw",
                   "raw": "{\n  \"name\": \"Forbidden Category\"\n}"
                 },
