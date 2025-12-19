@@ -1,0 +1,337 @@
+{
+  "info": {
+    "_postman_id": "cbf4cb58-d184-4511-90b1-7a9dead66b20",
+    "name": "SkillCerts - Payments",
+    "description": "Razorpay payment workflow with backend verification",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Payment Flow",
+      "item": [
+        {
+          "name": "1. Create Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('orderId', jsonData.data.orderId);",
+                  "    pm.collectionVariables.set('paymentId', jsonData.data.paymentId);",
+                  "    console.log('Order created: ' + jsonData.data.orderId);",
+                  "    console.log('Amount: ' + jsonData.data.amount/100);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "id": "838b8c61-dd7e-4f27-b189-43bdaa38e5fc"
+              }
+            }
+          ],
+          "id": "933b7d06-be9c-4ec7-ab66-72a0009f6a44",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/create-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "create-order"
+              ]
+            },
+            "description": "Step 1: Backend creates Razorpay order, validates course from DB, stores payment as pending"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Verify Payment",
+          "id": "a1fe99ae-c062-40b9-bbb4-faf2263c66ae",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"{{orderId}}\",\n  \"razorpay_payment_id\": \"pay_test123\",\n  \"razorpay_signature\": \"test_signature\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "verify"
+              ]
+            },
+            "description": "Step 2: Backend verifies Razorpay signature, marks payment success, auto-enrolls user. Replace with actual values from Razorpay response."
+          },
+          "response": []
+        }
+      ],
+      "id": "5aebe3e3-94c9-4779-9de3-25ef87ed4ed0",
+      "description": "Complete payment flow: Create order → Frontend Razorpay checkout → Verify signature"
+    },
+    {
+      "name": "Student",
+      "item": [
+        {
+          "name": "Get My Payments",
+          "id": "da1470af-fdbd-46e1-a87a-40527d4e3d4c",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "my"
+              ]
+            },
+            "description": "Get all payments for current user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment Details",
+          "id": "b43fbb52-a6a0-41b9-ae40-5812c2a76003",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/{{paymentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "{{paymentId}}"
+              ]
+            },
+            "description": "Get single payment details"
+          },
+          "response": []
+        }
+      ],
+      "id": "9fd50a23-6ff6-41ab-a993-2907d39970b3",
+      "description": "Student payment history"
+    },
+    {
+      "name": "Instructor",
+      "item": [
+        {
+          "name": "Get Course Payments",
+          "id": "44edec96-45d4-421a-8863-c92dae8f1be6",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/course/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "course",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Get all payments for a course with total revenue (instructor/admin only)"
+          },
+          "response": []
+        }
+      ],
+      "id": "f3aab597-539c-4ac9-96bd-4a88c5e60d17",
+      "description": "Instructor payment analytics"
+    },
+    {
+      "name": "Error Tests",
+      "item": [
+        {
+          "name": "Create Order - Free Course",
+          "id": "78d054d6-5d2c-4ca3-a2d9-7586692a3b8b",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"<free_course_id>\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/create-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "create-order"
+              ]
+            },
+            "description": "Test creating order for free course (should return 400)"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify - Invalid Signature",
+          "id": "e41001b6-54ed-455f-a22e-fe0660163fc2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"{{orderId}}\",\n  \"razorpay_payment_id\": \"pay_test123\",\n  \"razorpay_signature\": \"invalid_signature\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "verify"
+              ]
+            },
+            "description": "Test invalid signature verification (should return 400, mark payment as failed)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Already Enrolled",
+          "id": "b3831191-e40d-4249-bf5c-c9fa76241de6",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/create-order",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "create-order"
+              ]
+            },
+            "description": "Test creating order for already enrolled course (should return 409)"
+          },
+          "response": []
+        }
+      ],
+      "id": "53e06882-d96f-4e55-838b-7f43df156f2b",
+      "description": "Payment error scenarios"
+    }
+  ],
+  "variable": [
+    {
+      "id": "1cc52bdb-fcd6-4f7b-ac77-cf862ba587a0",
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "id": "817d1e69-f543-454a-afb1-01f369721acb",
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "5d5d11bf-76a6-43e1-bb17-03a029350e62",
+      "key": "courseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "572658b9-e623-4648-96d8-8e4998b17161",
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "6538c0fe-fbb9-45cd-96db-4d2651d8eb55",
+      "key": "paymentId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

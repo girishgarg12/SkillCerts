@@ -1,0 +1,782 @@
+{
+  "info": {
+    "_postman_id": "fc88e5c1-0350-4142-9881-cf8aa8829273",
+    "name": "SkillCerts API - Complete",
+    "description": "Complete API collection for SkillCerts platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. User & Authentication",
+      "item": [
+        {
+          "name": "Sign Up Student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('authToken', jsonData.data.token);",
+                  "    pm.collectionVariables.set('userId', jsonData.data.user.id);",
+                  "    console.log('Student account created');",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "id": "7ac539d8-da99-4a3c-9555-47dc3444c3d3"
+              }
+            }
+          ],
+          "id": "01859e9e-22c7-44a9-9b23-9faa4507ac24",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"student\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign Up Instructor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('authToken', jsonData.data.token);",
+                  "    pm.collectionVariables.set('userId', jsonData.data.user.id);",
+                  "    console.log('Instructor account created');",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "id": "25bd0d24-7f15-4b2a-bde1-acdb91079c5f"
+              }
+            }
+          ],
+          "id": "1c7138a9-6e84-48ef-92ba-12c6e8961d35",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"instructor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('authToken', jsonData.data.token);",
+                  "    pm.collectionVariables.set('userId', jsonData.data.user.id);",
+                  "    console.log('Login successful');",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "id": "3126c9ab-499c-468b-9d4e-c1dd53d54f55"
+              }
+            }
+          ],
+          "id": "a9e0fcb7-db3f-45fb-9bcb-52db0ebbe07c",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/signin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "signin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Profile",
+          "id": "7842eb68-71d0-47c5-a9fa-c4cc6018bdef",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "62cd12f6-5c5f-4f90-8238-34b9049c63f6"
+    },
+    {
+      "name": "2. Courses",
+      "item": [
+        {
+          "name": "Public",
+          "item": [
+            {
+              "name": "Get All Courses",
+              "id": "922b967c-8c78-4c71-b9f4-a077cc98bf34",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/courses?page=1&limit=10",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Search Courses",
+              "id": "aec92d24-543f-441c-82dd-ef686564b565",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/courses?search=javascript",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "javascript"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Course by ID",
+              "id": "43496159-eb13-4d98-a501-90c50648a277",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/courses/{{courseId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses",
+                    "{{courseId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "9c414903-66c7-4518-87be-80fc541190a6"
+        },
+        {
+          "name": "Instructor",
+          "item": [
+            {
+              "name": "Create Course",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.collectionVariables.set('courseId', jsonData.data._id);",
+                      "    console.log('Course created');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "id": "7af93006-833a-494c-9996-b8fabaa3ebd9"
+                  }
+                }
+              ],
+              "id": "deb959a4-8c9b-4ef2-9a67-c4e692a7026e",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Complete JavaScript Bootcamp 2025\",\n  \"description\": \"Master JavaScript\",\n  \"price\": 2999,\n  \"level\": \"beginner\",\n  \"language\": \"English\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/courses",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Courses",
+              "id": "33cb1ba9-f0cb-4a48-89a6-0273d6bd44b4",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/courses/instructor/my-courses",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses",
+                    "instructor",
+                    "my-courses"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Course",
+              "id": "af273528-af67-4dc6-b245-92bc0ad91510",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Complete JavaScript Bootcamp 2025 - Updated\",\n  \"price\": 3499\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/courses/{{courseId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses",
+                    "{{courseId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Publish Course",
+              "id": "d71abf20-f848-4aaf-884f-1ce53594c99c",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/courses/{{courseId}}/publish",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses",
+                    "{{courseId}}",
+                    "publish"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Course",
+              "id": "077acb1c-0e35-4d4e-af9c-9dc7bc2b4033",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/courses/{{courseId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses",
+                    "{{courseId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "84129217-8b64-4f92-a908-8c040eae5271"
+        }
+      ],
+      "id": "3efb5b92-1dea-4273-96cf-91382a463f41"
+    },
+    {
+      "name": "3. Categories",
+      "item": [
+        {
+          "name": "Public",
+          "item": [
+            {
+              "name": "Get All Categories",
+              "id": "6ee5a365-254b-41be-8df5-396db0c474de",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Category by ID",
+              "id": "9d5cdb49-dcad-45c0-9e60-797d9ecb93c3",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categories/{{categoryId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories",
+                    "{{categoryId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "231010a9-7cee-4c1a-86f3-1cc0be537d58"
+        },
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "Create Category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.collectionVariables.set('categoryId', jsonData.data._id);",
+                      "    console.log('Category created');",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "id": "9aac5cd1-6313-48c1-9e4f-c8989e4c5eb1"
+                  }
+                }
+              ],
+              "id": "f10e4b12-3bff-4e0c-9379-e1d1c461b751",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Web Development\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Category",
+              "id": "d58225fe-c3c5-4529-bb26-4d8d90033732",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Web Development & Design\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categories/{{categoryId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories",
+                    "{{categoryId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Category",
+              "id": "bbfb623f-e420-4d2e-a89e-12080281c799",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/categories/{{categoryId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories",
+                    "{{categoryId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "1594ce36-9ded-4454-932c-e9c8b3baed5d"
+        }
+      ],
+      "id": "4b11de80-db96-4876-b0eb-6f7ad426d2ce"
+    },
+    {
+      "name": "4. Error Tests",
+      "item": [
+        {
+          "name": "Auth Errors",
+          "item": [
+            {
+              "name": "Sign Up - Missing Fields",
+              "id": "d9fd7d61-536c-4781-9737-34cc4383741d",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"test@example.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/user/signup",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "signup"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Sign In - Invalid Password",
+              "id": "3bfe9067-3ccb-4e3d-afab-653846478225",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"wrongpassword\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/user/signin",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "signin"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "6deed02e-2c40-46ec-9ee8-c790fd19c12d"
+        },
+        {
+          "name": "Course Errors",
+          "item": [
+            {
+              "name": "Create Course - No Auth",
+              "id": "8796bcbf-3818-483d-8ee5-c80ad6689d80",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Unauthorized Course\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/courses",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "courses"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "b7cc2bbb-f459-4b23-8133-637f90b2535a"
+        },
+        {
+          "name": "Category Errors",
+          "item": [
+            {
+              "name": "Create Category - No Auth",
+              "id": "043bca5b-def2-4525-884d-96a19394ea39",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Unauthorized Category\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Category - Not Admin",
+              "id": "72da0e7b-8d31-4606-8d05-a4db779cd1f0",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Forbidden Category\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categories",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "id": "0a35a56c-eea6-4fe5-8334-48c3779a7a13"
+        }
+      ],
+      "id": "54811670-1a4f-4762-b07b-5b1178483f3a"
+    }
+  ],
+  "variable": [
+    {
+      "id": "fe423314-01fc-455a-9b2e-81ed3adf0ea8",
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "id": "bf33843c-f455-4c7b-9dc6-de7b7e80a51d",
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "708c51bf-d607-4318-bb20-aebc2d3499a4",
+      "key": "courseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "2fc7c4e4-3f6c-462d-b6e7-0757998d3442",
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "30f4b0a9-ba9c-4bde-b802-067b32bddb9b",
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

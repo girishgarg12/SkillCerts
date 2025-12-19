@@ -1,0 +1,300 @@
+{
+  "info": {
+    "_postman_id": "f3d64914-d463-4fff-b099-00df1842126e",
+    "name": "SkillCerts - Wishlist",
+    "description": "Course wishlist management endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Wishlist Management",
+      "item": [
+        {
+          "name": "Get My Wishlist",
+          "id": "e47740a4-f731-4601-ab0e-aa1c4b95aedd",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wishlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist"
+              ]
+            },
+            "description": "Get all courses in user's wishlist with course details"
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Wishlist",
+          "id": "acf2d694-ac4b-4ea2-92bc-fbad7d915fd7",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/wishlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist"
+              ]
+            },
+            "description": "Add course to wishlist"
+          },
+          "response": []
+        },
+        {
+          "name": "Check if Course in Wishlist",
+          "id": "5bd76ea1-8788-478f-96a1-8c7fcdcb597a",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wishlist/check/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist",
+                "check",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Check if a specific course is in wishlist"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove from Wishlist",
+          "id": "11324652-470e-4bc8-b28f-1fe2ac0b2082",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wishlist/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Remove course from wishlist"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Wishlist",
+          "id": "57b9174c-9e39-4517-a4a4-91328afdfc47",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wishlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist"
+              ]
+            },
+            "description": "Clear entire wishlist (removes all courses)"
+          },
+          "response": []
+        }
+      ],
+      "id": "1da51d4b-477e-4b93-ad9d-93579cbcdeaf",
+      "description": "Wishlist CRUD operations"
+    },
+    {
+      "name": "Error Tests",
+      "item": [
+        {
+          "name": "Add to Wishlist - No Auth",
+          "id": "fc4a4380-e12a-4dbc-8552-44e254e02e27",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/wishlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist"
+              ]
+            },
+            "description": "Test adding to wishlist without auth (should return 401)"
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Wishlist - Course Not Found",
+          "id": "dd9676b2-b3cb-4ae8-a294-5831ce46217f",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"65f1a2b3c4d5e6f7g8h9i0j1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/wishlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist"
+              ]
+            },
+            "description": "Test adding non-existent course (should return 404)"
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Wishlist - Duplicate",
+          "id": "4a9a34c0-074d-40fc-8a84-00d4b832da01",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/wishlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist"
+              ]
+            },
+            "description": "Test adding course already in wishlist (should return 409)"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove from Wishlist - Not in Wishlist",
+          "id": "648ba72f-61c1-4720-91f6-ff5a923e9724",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wishlist/<course_not_in_wishlist>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist",
+                "<course_not_in_wishlist>"
+              ]
+            },
+            "description": "Test removing course not in wishlist (should return 404)"
+          },
+          "response": []
+        }
+      ],
+      "id": "4453a71e-c111-49ee-910d-478b59e841fa",
+      "description": "Wishlist error scenarios"
+    }
+  ],
+  "variable": [
+    {
+      "id": "a117e522-6331-4897-9d2c-4f9c0b4a19d2",
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "id": "43a51199-79fc-4d0c-9aa5-495cf78d9110",
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "5153d1e4-06b1-479e-918d-3ebd6a76313d",
+      "key": "courseId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,377 @@
+{
+  "info": {
+    "_postman_id": "ab645eec-1b89-445d-88a5-c414c5997261",
+    "name": "SkillCerts - Progress",
+    "description": "Course progress tracking endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Student Progress",
+      "item": [
+        {
+          "name": "Get All My Progress",
+          "id": "566d44d3-16d7-4bdd-a96b-a559b5e72889",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/progress/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "my"
+              ]
+            },
+            "description": "Get progress across all enrolled courses"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Progress",
+          "id": "8a58990b-4e71-4c92-8ee4-a379c4576b05",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/progress/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Get progress for specific course with completed lectures"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Lecture Completion - Mark Complete",
+          "id": "d4e35c61-756a-4760-854c-ded780df1361",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lectureId\": \"{{lectureId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "{{courseId}}",
+                "toggle"
+              ]
+            },
+            "description": "Mark lecture as completed (or uncompleted if already completed)"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Lecture Completion - Mark Incomplete",
+          "id": "53b28801-8d17-4e4e-8b9c-d617d61de590",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lectureId\": \"{{lectureId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "{{courseId}}",
+                "toggle"
+              ]
+            },
+            "description": "Toggle same lecture again to mark as incomplete"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Course Progress",
+          "id": "eb06bb05-68c0-4298-83ee-88b260cadd9a",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/progress/{{courseId}}/reset",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "{{courseId}}",
+                "reset"
+              ]
+            },
+            "description": "Reset all progress for a course (clears completed lectures, sets 0%)"
+          },
+          "response": []
+        }
+      ],
+      "id": "5c553315-b8b7-4e16-8863-e4ea86186f1d",
+      "description": "Student progress tracking"
+    },
+    {
+      "name": "Error Tests",
+      "item": [
+        {
+          "name": "Get Progress - No Auth",
+          "id": "2c3cc541-17d3-48c8-82bc-f891fdde96ac",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/progress/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "my"
+              ]
+            },
+            "description": "Test getting progress without auth (should return 401)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course Progress - Not Enrolled",
+          "id": "f2fb2db5-95ed-4afb-bd89-4779fc6e68a5",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/progress/<unenrolled_course_id>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "<unenrolled_course_id>"
+              ]
+            },
+            "description": "Test getting progress for unenrolled course (should return 403)"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Lecture - Not Enrolled",
+          "id": "ba15ee16-2477-43f6-99c0-31180c780c9a",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lectureId\": \"{{lectureId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/<unenrolled_course_id>/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "<unenrolled_course_id>",
+                "toggle"
+              ]
+            },
+            "description": "Test toggling lecture without enrollment (should return 403)"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Lecture - Lecture Not Found",
+          "id": "d57dc3a7-ff13-405c-be7c-a5609601db87",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lectureId\": \"65f1a2b3c4d5e6f7g8h9i0j1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "{{courseId}}",
+                "toggle"
+              ]
+            },
+            "description": "Test with non-existent lecture ID (should return 404)"
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Lecture - Wrong Course",
+          "id": "823e3279-a4eb-4e26-8ab4-a4d5b19b1e6c",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lectureId\": \"<lecture_from_other_course>\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "{{courseId}}",
+                "toggle"
+              ]
+            },
+            "description": "Test toggling lecture from different course (should return 400)"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Progress - Not Enrolled",
+          "id": "b5670705-573a-4d76-b594-944feb57fff9",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/progress/<unenrolled_course_id>/reset",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "progress",
+                "<unenrolled_course_id>",
+                "reset"
+              ]
+            },
+            "description": "Test resetting progress without enrollment (should return 403)"
+          },
+          "response": []
+        }
+      ],
+      "id": "b12bfc67-682b-4843-b439-650e0bab0ca4",
+      "description": "Progress error scenarios"
+    }
+  ],
+  "variable": [
+    {
+      "id": "d3f59dbb-f650-4499-aca2-1854a901dd88",
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "id": "5fc36b61-98c7-41d2-a522-50c77a39ab5d",
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "0f84b593-6be9-48ba-8b26-ba4f6f0731a6",
+      "key": "courseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "613b7329-fedc-4795-bffc-827c87b959c8",
+      "key": "lectureId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,472 @@
+{
+  "info": {
+    "_postman_id": "afa8969f-96dd-47f5-9716-08ebd18f3a3a",
+    "name": "SkillCerts - Sections",
+    "description": "Course section management endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Get Course Sections",
+          "id": "f152dbd1-f851-4ec2-8f50-27c11dac8de5",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Get all sections for a course with lectures (public for published courses)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Section",
+          "id": "04765c1b-04a6-4db3-807d-8e3e7ba3691d",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}"
+              ]
+            },
+            "description": "Get single section with lectures"
+          },
+          "response": []
+        }
+      ],
+      "id": "232caa1f-e954-4fd5-b6aa-ac79042f7d17",
+      "description": "Public section endpoints (no auth required for published courses)"
+    },
+    {
+      "name": "Instructor",
+      "item": [
+        {
+          "name": "Create Section",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('sectionId', jsonData.data._id);",
+                  "    console.log('Section created: ' + jsonData.data._id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "id": "5f747dbc-4102-46ed-8fb5-2c9d896548eb"
+              }
+            }
+          ],
+          "id": "305965b4-eec0-4c29-bdd3-8f2d09b9de74",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Introduction to the Course\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Create section (order auto-assigned)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Section with Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('sectionId2', jsonData.data._id);",
+                  "    console.log('Section 2 created: ' + jsonData.data._id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "id": "e99194e0-6bc2-4673-a15e-3715ad51c79b"
+              }
+            }
+          ],
+          "id": "699e43d5-38d0-4cb6-bf8b-cad580fb1cf6",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Advanced Topics\",\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Create section with custom order"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Section",
+          "id": "fb738647-1d21-4501-b87a-817ff47d5778",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Getting Started with the Course\",\n  \"order\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}"
+              ]
+            },
+            "description": "Update section title and order"
+          },
+          "response": []
+        },
+        {
+          "name": "Reorder Sections",
+          "id": "282a95a9-8954-4b31-b724-889a22615a47",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionIds\": [\n    \"{{sectionId2}}\",\n    \"{{sectionId}}\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/{{courseId}}/reorder",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "{{courseId}}",
+                "reorder"
+              ]
+            },
+            "description": "Bulk reorder sections (array order determines new section order)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Section",
+          "id": "4dfa4053-31bb-4808-8f44-8bfc1f397faf",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}"
+              ]
+            },
+            "description": "Delete section and all its lectures"
+          },
+          "response": []
+        }
+      ],
+      "id": "cbf54d7f-2d30-48a0-9406-ce1de21902e8",
+      "description": "Instructor/Admin section management"
+    },
+    {
+      "name": "Error Tests",
+      "item": [
+        {
+          "name": "Create Section - No Auth",
+          "id": "9d734040-a98a-4b68-b4b6-4b4eaa71668d",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Unauthorized Section\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Test creating section without auth (should return 401)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Section - Not Instructor",
+          "id": "29874742-d05c-4228-a15a-fc5c5bf21fe8",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Forbidden Section\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/<other_instructor_course_id>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "<other_instructor_course_id>"
+              ]
+            },
+            "description": "Test creating section in another instructor's course (should return 403)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Section - Title Too Short",
+          "id": "c65c8a2e-4f14-4ef9-afdc-ca0c026879b9",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Hi\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "{{courseId}}"
+              ]
+            },
+            "description": "Test title validation (should return 400)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Section - Not Found",
+          "id": "72ab412b-7da5-44f8-8fdf-a06bdfcc8f15",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Section\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/65f1a2b3c4d5e6f7g8h9i0j1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "65f1a2b3c4d5e6f7g8h9i0j1"
+              ]
+            },
+            "description": "Test updating non-existent section (should return 404)"
+          },
+          "response": []
+        },
+        {
+          "name": "Reorder - Invalid Array",
+          "id": "5ddc42bc-9448-401e-b243-fa371db148a0",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionIds\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/course/{{courseId}}/reorder",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "course",
+                "{{courseId}}",
+                "reorder"
+              ]
+            },
+            "description": "Test reordering with empty array (should return 400)"
+          },
+          "response": []
+        }
+      ],
+      "id": "7d86bb45-0a6c-4d2c-b288-e26b81ac2e20",
+      "description": "Section error scenarios"
+    }
+  ],
+  "variable": [
+    {
+      "id": "0e2956a4-447a-4407-a2dc-3ca91e4afa29",
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "id": "50da2892-64a7-49e5-8df0-4d7b79d84601",
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "8d2fa901-037f-4704-ab41-a1c71243f499",
+      "key": "courseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "acd9ab5b-0cef-421c-923b-44f261e423dc",
+      "key": "sectionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "719e8940-62a6-44e0-9a68-dc7a2be17065",
+      "key": "sectionId2",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
