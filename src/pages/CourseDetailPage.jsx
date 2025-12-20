@@ -42,8 +42,30 @@ export const CourseDetailPage = () => {
     }
   }, [id]);
 
+  // Mock Data Details (Frontend Only)
+  const mockCourseDetails = {
+    'mock-1': { _id: 'mock-1', title: 'Advanced Full Stack Web Development', description: 'Master MERN stack with modern practices and cloud deployment. This comprehensive course takes you from basic React concepts to advanced server-side rendering and database optimization.', thumbnail: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop', level: 'advanced', price: 1999, isFree: false, rating: 4.8, ratingCount: 124, totalDuration: 4500, instructor: { name: 'Sarah Wilson', _id: 'mock-inst-1' }, published: true, learningOutcomes: ['Build scalable web applications', 'Master React.js and Node.js', 'Deploy to AWS and Vercel', 'Implement secure authentication'], requirements: ['Basic JavaScript knowledge', 'HTML/CSS fundamentals'] },
+    'mock-2': { _id: 'mock-2', title: 'UI/UX Design Masterclass 2024', description: 'Design beautiful interfaces and user experiences like a pro.', thumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop', level: 'beginner', price: 2499, isFree: false, rating: 4.9, ratingCount: 89, totalDuration: 3200, instructor: { name: 'Alex Rivera', _id: 'mock-inst-2' }, published: true, learningOutcomes: ['Master Figma and Adobe XD', 'Understand User Psychology', 'Create High-Fidelity Prototypes'], requirements: ['No prior experience needed'] },
+    'mock-3': { _id: 'mock-3', title: 'Python for Data Science & AI', description: 'Zero to Hero in Python, Pandas, and Machine Learning concepts.', thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop', level: 'intermediate', price: 1499, isFree: false, rating: 4.7, ratingCount: 210, totalDuration: 5200, instructor: { name: 'David Chen', _id: 'mock-inst-3' }, published: true, learningOutcomes: ['Data Analysis with Pandas', 'Machine Learning Algorithms', 'Deep Learning Basics'], requirements: ['Basic Math knowledge'] },
+    'mock-4': { _id: 'mock-4', title: 'Mobile App Dev with React Native', description: 'Build native iOS and Android apps with a single codebase.', thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2070&auto=format&fit=crop', level: 'intermediate', price: 1899, isFree: false, rating: 4.6, ratingCount: 156, totalDuration: 4100, instructor: { name: 'Emily Davis', _id: 'mock-inst-4' }, published: true, learningOutcomes: ['React Native Hooks', 'Native Device Features', 'Publishing to App Stores'], requirements: ['React Basics'] },
+    'mock-5': { _id: 'mock-5', title: 'Digital Marketing & SEO Strategy', description: 'Grow your business with proven digital marketing techniques.', thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop', level: 'beginner', price: 999, isFree: false, rating: 4.5, ratingCount: 312, totalDuration: 2800, instructor: { name: 'Mark Johnson', _id: 'mock-inst-5' }, published: true, learningOutcomes: ['SEO Optimization', 'Social Media Marketing', 'Email Campaigns'], requirements: ['None'] },
+    'mock-6': { _id: 'mock-6', title: 'DevOps & Cloud Infrastructure', description: 'Learn Docker, Kubernetes, and AWS deployment pipelines.', thumbnail: 'https://images.unsplash.com/photo-1667372393119-c81c0026dfba?q=80&w=1920&auto=format&fit=crop', level: 'advanced', price: 2999, isFree: false, rating: 4.9, ratingCount: 56, totalDuration: 6200, instructor: { name: 'James Carter', _id: 'mock-inst-6' }, published: true, learningOutcomes: ['CI/CD Pipelines', 'Container Orchestration', 'Infrastructure as Code'], requirements: ['Linux Basics', 'Networking Fundamentals'] },
+    'mock-7': { _id: 'mock-7', title: 'Blender 3D Modeling Bootcamp', description: 'Create stunning 3D models and animations from scratch.', thumbnail: 'https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=2070&auto=format&fit=crop', level: 'beginner', price: 1299, isFree: false, rating: 4.8, ratingCount: 178, totalDuration: 3600, instructor: { name: 'Lisa Wong', _id: 'mock-inst-7' }, published: true, learningOutcomes: ['3D Modeling Techniques', 'Texturing and Shading', 'Animation Basics'], requirements: ['A computer with decent GPU'] },
+    'mock-8': { _id: 'mock-8', title: 'Cybersecurity Fundamentals', description: 'Protect systems and networks from digital attacks.', thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop', level: 'intermediate', price: 2299, isFree: false, rating: 4.7, ratingCount: 92, totalDuration: 3900, instructor: { name: 'Robert Fox', _id: 'mock-inst-8' }, published: true, learningOutcomes: ['Network Security', 'Ethical Hacking', 'Risk Management'], requirements: ['Basic IT knowledge'] },
+  };
+
   const fetchCourseDetails = async () => {
     try {
+      if (id.startsWith('mock-')) {
+        // Load mock data instantly
+        const mockData = mockCourseDetails[id];
+        if (mockData) {
+            setCourse(mockData);
+            setLoading(false);
+            return;
+        }
+      }
+      
       const response = await courseService.getCourse(id);
       setCourse(response.data);
     } catch (error) {
@@ -54,6 +76,15 @@ export const CourseDetailPage = () => {
   };
 
   const fetchSections = async () => {
+    if (id.startsWith('mock-')) {
+        // Return dummy sections for mock courses
+        setSections([
+            { _id: 'sec-1', title: 'Section 1: Introduction', lectures: [{ _id: 'l-1', title: 'Welcome to the Course', duration: 300, isPreview: true }, { _id: 'l-2', title: 'Course Overview', duration: 450, isPreview: false }] },
+            { _id: 'sec-2', title: 'Section 2: Core Concepts', lectures: [{ _id: 'l-3', title: 'Fundamental Theory', duration: 1200, isPreview: false }, { _id: 'l-4', title: 'Hands-on Practice', duration: 1800, isPreview: false }] }
+        ]);
+        return;
+    }
+
     try {
       const response = await sectionService.getCourseSections(id);
       setSections(response.data || []);
@@ -126,6 +157,24 @@ export const CourseDetailPage = () => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
+    }
+
+    // Mock Data Enrollment (Frontend Only)
+    if (id.startsWith('mock-')) {
+        setEnrolling(true);
+        setTimeout(() => {
+            setIsEnrolled(true);
+            
+            // Persist to localStorage
+            const mockEnrollments = JSON.parse(localStorage.getItem('mockEnrollments') || '[]');
+            if (!mockEnrollments.includes(id)) {
+                localStorage.setItem('mockEnrollments', JSON.stringify([...mockEnrollments, id]));
+            }
+
+            toast.success('Successfully enrolled in the course!');
+            setEnrolling(false);
+        }, 1500); 
+        return;
     }
 
     // If it's a paid course, redirect to payment page

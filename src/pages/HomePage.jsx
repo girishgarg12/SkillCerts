@@ -8,6 +8,7 @@ import { useAuthStore } from '../store/authStore';
 import { motion } from 'framer-motion';
 import { AuroraBackground } from '../components/ui/AuroraBackground';
 import { Button as MovingBorderButton } from '../components/ui/MovingBorder';
+import { CardContainer, CardBody, CardItem } from '../components/ui/3DCard';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -197,20 +198,21 @@ export const HomePage = () => {
                 { icon: Users, title: "Community Driven", desc: "Join a vibrant community of learners and share your journey." },
                 { icon: Shield, title: "Lifetime Access", desc: "Pay once and get lifetime access to your courses and updates." }
               ].map((feature, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.2 }}
-                  className="glass-panel p-8 rounded-2xl text-center hover:bg-white/10 transition-colors"
-                >
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-3">
-                    <feature.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
-                  <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
-                </motion.div>
+                <CardContainer key={i} className="inter-var w-full h-full">
+                  <CardBody className="bg-white/5 relative group/card dark:hover:shadow-2xl dark:hover:shadow-pink-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-full rounded-xl p-8 border transition-all duration-300 backdrop-blur-sm text-center">
+                    <CardItem translateZ="50" className="w-full flex justify-center mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center transform rotate-3 group-hover:rotate-6 transition-transform">
+                        <feature.icon className="w-8 h-8 text-white" />
+                      </div>
+                    </CardItem>
+                    <CardItem translateZ="40" className="w-full">
+                      <h3 className="text-xl font-bold text-white mb-4">{feature.title}</h3>
+                    </CardItem>
+                    <CardItem translateZ="30" className="w-full">
+                      <p className="text-gray-400 leading-relaxed text-sm">{feature.desc}</p>
+                    </CardItem>
+                  </CardBody>
+                </CardContainer>
               ))}
             </div>
         </div>

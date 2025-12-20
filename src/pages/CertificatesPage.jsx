@@ -9,6 +9,7 @@ import { Alert } from '../components/ui/Alert';
 import { formatDate } from '../lib/utils';
 import { CertificateModal } from '../components/ui/CertificateModal';
 import { downloadCertificate } from '../lib/downloadCertificate';
+import { CardContainer, CardBody, CardItem } from '../components/ui/3DCard';
 
 export const CertificatesPage = () => {
   const [certificates, setCertificates] = useState([]);
@@ -129,83 +130,100 @@ export const CertificatesPage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {certificates.map((certificate) => (
-              <div key={certificate._id} className="group bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden hover:transform hover:scale-[1.02] transition-all duration-300 shadow-2xl">
-                <div className="h-32 bg-gradient-to-r from-blue-900 to-purple-900 relative p-6">
-                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                        <Award className="w-32 h-32 transform rotate-12" />
-                    </div>
-                  <div className="flex items-center justify-between relative z-10">
-                     <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
-                        <Award className="w-6 h-6 text-yellow-400" />
-                     </div>
-                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30 backdrop-blur-md">
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                      Verified
-                    </Badge>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 h-14">
-                    {certificate.course?.title || 'Course Title'}
-                  </h3>
-                  
-                  <div className="space-y-3 mb-6 text-sm text-gray-400">
-                    <div className="flex justify-between items-center py-2 border-b border-white/5">
-                      <span>ID</span>
-                      <span className="font-mono font-medium text-gray-300 text-xs">
-                        {certificate.certificateId}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/5">
-                      <span>Issued</span>
-                      <span className="font-medium text-gray-300">
-                        {formatDate(certificate.issuedAt)}
-                      </span>
-                    </div>
-                  </div>
+              <CardContainer key={certificate._id} className="inter-var w-full h-full">
+                <CardBody className="bg-white/5 relative group/card dark:hover:shadow-2xl dark:hover:shadow-blue-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-full rounded-xl overflow-hidden border transition-all duration-300 backdrop-blur-md flex flex-col justify-between p-0">
+                  <div className="w-full">
+                      <CardItem translateZ="50" className="w-full">
+                        <div className="h-32 bg-gradient-to-r from-blue-900 to-purple-900 relative p-6 w-full">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <Award className="w-32 h-32 transform rotate-12" />
+                            </div>
+                            <div className="flex items-center justify-between relative z-10">
+                                <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
+                                    <Award className="w-6 h-6 text-yellow-400" />
+                                </div>
+                                <Badge className="bg-green-500/20 text-green-300 border-green-500/30 backdrop-blur-md">
+                                <CheckCircle className="w-3 h-3 mr-1" />
+                                Verified
+                                </Badge>
+                            </div>
+                        </div>
+                      </CardItem>
+                      
+                      <div className="p-6">
+                        <CardItem translateZ="40" className="w-full">
+                            <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 h-14">
+                                {certificate.course?.title || 'Course Title'}
+                            </h3>
+                        </CardItem>
+                        
+                        <CardItem translateZ="30" className="w-full space-y-3 mb-6 text-sm text-gray-400">
+                            <div className="flex justify-between items-center py-2 border-b border-white/5">
+                            <span>ID</span>
+                            <span className="font-mono font-medium text-gray-300 text-xs">
+                                {certificate.certificateId}
+                            </span>
+                            </div>
+                            <div className="flex justify-between items-center py-2 border-b border-white/5">
+                            <span>Issued</span>
+                            <span className="font-medium text-gray-300">
+                                {formatDate(certificate.issuedAt)}
+                            </span>
+                            </div>
+                        </CardItem>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button
-                      onClick={() => handleView(certificate)}
-                      className="w-full bg-white/10 hover:bg-white/20 text-white border-none"
-                      size="sm"
-                    >
-                      <Eye className="w-4 h-4 mr-2" />
-                      View
-                    </Button>
-                    <Button
-                      onClick={() => handleDownload(certificate)}
-                      variant="outline"
-                      className="w-full border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
-                      size="sm"
-                      disabled={downloadingId === certificate._id}
-                    >
-                      {downloadingId === certificate._id ? (
-                        <>
-                          <div className="w-4 h-4 mr-2 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          Wait...
-                        </>
-                      ) : (
-                        <>
-                          <Download className="w-4 h-4 mr-2" />
-                          PDF
-                        </>
-                      )}
-                    </Button>
-                    
-                    <Button
-                      onClick={() => handleVerify(certificate.certificateId)}
-                      variant="ghost"
-                      className="w-full col-span-2 text-gray-400 hover:text-white"
-                      size="sm"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Verify Authenticity
-                    </Button>
+                        <div className="flex flex-col gap-3">
+                             <div className="grid grid-cols-2 gap-3">
+                                <CardItem translateZ="20" className="w-full">
+                                    <Button
+                                    onClick={() => handleView(certificate)}
+                                    className="w-full bg-white/10 hover:bg-white/20 text-white border-none"
+                                    size="sm"
+                                    >
+                                    <Eye className="w-4 h-4 mr-2" />
+                                    View
+                                    </Button>
+                                </CardItem>
+                                
+                                <CardItem translateZ="20" className="w-full">
+                                    <Button
+                                    onClick={() => handleDownload(certificate)}
+                                    variant="outline"
+                                    className="w-full border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
+                                    size="sm"
+                                    disabled={downloadingId === certificate._id}
+                                    >
+                                    {downloadingId === certificate._id ? (
+                                        <>
+                                        <div className="w-4 h-4 mr-2 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        Wait...
+                                        </>
+                                    ) : (
+                                        <>
+                                        <Download className="w-4 h-4 mr-2" />
+                                        PDF
+                                        </>
+                                    )}
+                                    </Button>
+                                </CardItem>
+                             </div>
+                             
+                             <CardItem translateZ="20" className="w-full">
+                                <Button
+                                    onClick={() => handleVerify(certificate.certificateId)}
+                                    variant="ghost"
+                                    className="w-full text-gray-400 hover:text-white"
+                                    size="sm"
+                                >
+                                    <ExternalLink className="w-4 h-4 mr-2" />
+                                    Verify Authenticity
+                                </Button>
+                             </CardItem>
+                        </div>
+                      </div>
                   </div>
-                </div>
-              </div>
+                </CardBody>
+              </CardContainer>
             ))}
           </div>
         )}

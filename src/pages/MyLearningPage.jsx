@@ -4,6 +4,7 @@ import { BookOpen, TrendingUp, Clock, PlayCircle } from 'lucide-react';
 import { enrollmentService } from '../services/enrollmentService';
 import { Button } from '../components/ui/Button';
 import { PageLoader } from '../components/ui/Spinner';
+import { CardContainer, CardBody, CardItem } from '../components/ui/3DCard';
 
 export const MyLearningPage = () => {
   const [enrollments, setEnrollments] = useState([]);
@@ -14,14 +15,64 @@ export const MyLearningPage = () => {
     fetchEnrollments();
   }, [filter]);
 
+  // Mock Data Definition (Must match CourseDetailPage/CourseGrid)
+  const mockCourseDetails = {
+    'mock-1': { _id: 'mock-1', title: 'Advanced Full Stack Web Development', description: 'Master MERN stack with modern practices and cloud deployment.', thumbnail: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop', instructor: { name: 'Sarah Wilson' } },
+    'mock-2': { _id: 'mock-2', title: 'UI/UX Design Masterclass 2024', description: 'Design beautiful interfaces and user experiences like a pro.', thumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop', instructor: { name: 'Alex Rivera' } },
+    'mock-3': { _id: 'mock-3', title: 'Python for Data Science & AI', description: 'Zero to Hero in Python, Pandas, and Machine Learning concepts.', thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop', instructor: { name: 'David Chen' } },
+    'mock-4': { _id: 'mock-4', title: 'Mobile App Dev with React Native', description: 'Build native iOS and Android apps with a single codebase.', thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2070&auto=format&fit=crop', instructor: { name: 'Emily Davis' } },
+    'mock-5': { _id: 'mock-5', title: 'Digital Marketing & SEO Strategy', description: 'Grow your business with proven digital marketing techniques.', thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop', instructor: { name: 'Mark Johnson' } },
+    'mock-6': { _id: 'mock-6', title: 'DevOps & Cloud Infrastructure', description: 'Learn Docker, Kubernetes, and AWS deployment pipelines.', thumbnail: 'https://images.unsplash.com/photo-1667372393119-c81c0026dfba?q=80&w=1920&auto=format&fit=crop', instructor: { name: 'James Carter' } },
+    'mock-7': { _id: 'mock-7', title: 'Blender 3D Modeling Bootcamp', description: 'Create stunning 3D models and animations from scratch.', thumbnail: 'https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=2070&auto=format&fit=crop', instructor: { name: 'Lisa Wong' } },
+    'mock-8': { _id: 'mock-8', title: 'Cybersecurity Fundamentals', description: 'Protect systems and networks from digital attacks.', thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop', instructor: { name: 'Robert Fox' } },
+  };
+
   const fetchEnrollments = async () => {
     setLoading(true);
     try {
       const status = filter === 'all' ? undefined : filter;
       const response = await enrollmentService.getMyEnrollments(status);
-      setEnrollments(response.data || []);
+      let fetchedEnrollments = response.data || [];
+
+      // Merge with Mock Data from LocalStorage
+      const mockIds = JSON.parse(localStorage.getItem('mockEnrollments') || '[]');
+      if (mockIds.length > 0) {
+          const mockEnrollmentsList = mockIds.map(id => {
+              const course = mockCourseDetails[id];
+              if (!course) return null;
+              return {
+                  _id: `enr-${id}`,
+                  user: 'current-user',
+                  course: course,
+                  enrolledAt: new Date().toISOString(),
+                  progress: { progressPercentage: 35, completedLectures: 5 }, // Fake progress
+                  completed: false
+              };
+          }).filter(Boolean);
+          
+          fetchedEnrollments = [...mockEnrollmentsList, ...fetchedEnrollments];
+      }
+
+      setEnrollments(fetchedEnrollments);
     } catch (error) {
       console.error('Failed to fetch enrollments:', error);
+      // Fallback for mock-only experience if backend fails
+      const mockIds = JSON.parse(localStorage.getItem('mockEnrollments') || '[]');
+      if (mockIds.length > 0) {
+         const mockEnrollmentsList = mockIds.map(id => {
+              const course = mockCourseDetails[id];
+              if (!course) return null;
+              return {
+                  _id: `enr-${id}`,
+                  user: 'current-user',
+                  course: course,
+                  enrolledAt: new Date().toISOString(),
+                  progress: { progressPercentage: 35, completedLectures: 5 },
+                  completed: false
+              };
+          }).filter(Boolean);
+          setEnrollments(mockEnrollmentsList);
+      }
     } finally {
       setLoading(false);
     }
@@ -81,54 +132,63 @@ export const MyLearningPage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {enrollments.map((enrollment) => (
-              <div key={enrollment._id} className="group rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm shadow-xl flex flex-col h-full">
-                <Link to={`/courses/${enrollment.course._id}/learn`} className="relative block overflow-hidden aspect-video">
-                  <img
-                    src={enrollment.course.thumbnail || 'https://via.placeholder.com/400x225'}
-                    alt={enrollment.course.title}
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <PlayCircle className="w-12 h-12 text-white" />
-                  </div>
-                </Link>
-                
-                <div className="p-6 flex flex-col flex-grow">
+              <CardContainer key={enrollment._id} className="inter-var w-full h-full">
+                <CardBody className="bg-black/40 relative group/card dark:hover:shadow-2xl dark:hover:shadow-purple-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-full rounded-xl p-4 border transition-all duration-300 backdrop-blur-sm flex flex-col justify-between">
                   <Link to={`/courses/${enrollment.course._id}/learn`}>
-                    <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-purple-400 transition-colors">
-                      {enrollment.course.title}
-                    </h3>
+                    <CardItem translateZ="50" className="w-full mt-2">
+                        <div className="relative overflow-hidden rounded-xl aspect-video">
+                            <img
+                                src={enrollment.course.thumbnail || 'https://via.placeholder.com/400x225'}
+                                alt={enrollment.course.title}
+                                className="w-full h-full object-cover rounded-xl group-hover/card:shadow-xl group-hover/card:scale-105 transition-transform duration-300"
+                            />
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity">
+                                <PlayCircle className="w-12 h-12 text-white drop-shadow-lg" />
+                            </div>
+                        </div>
+                    </CardItem>
                   </Link>
                   
-                  {enrollment.course.instructor && (
-                    <p className="text-sm text-gray-400 mb-6">
-                      By {enrollment.course.instructor.name}
-                    </p>
-                  )}
+                  <div className="mt-4 flex flex-col flex-grow">
+                    <CardItem translateZ="60" className="text-xl font-bold text-neutral-200">
+                        <Link to={`/courses/${enrollment.course._id}/learn`} className="hover:text-purple-400 transition-colors line-clamp-2">
+                            {enrollment.course.title}
+                        </Link>
+                    </CardItem>
+                    
+                    {enrollment.course.instructor && (
+                      <CardItem translateZ="40" className="text-neutral-400 text-sm mt-2 flex items-center gap-2">
+                         <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                         By {enrollment.course.instructor.name}
+                      </CardItem>
+                    )}
 
-                  <div className="mt-auto space-y-4">
-                      {enrollment.progress && (
-                        <div>
-                          <div className="flex justify-between text-xs text-gray-400 mb-2">
-                            <span>{Math.round(enrollment.progress.progressPercentage)}% Complete</span>
-                          </div>
-                          <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-500"
-                              style={{ width: `${enrollment.progress.progressPercentage}%` }}
-                            />
-                          </div>
-                        </div>
-                      )}
+                    <div className="mt-6 pt-4 border-t border-white/10 space-y-4">
+                        {enrollment.progress && (
+                          <CardItem translateZ="30" className="w-full">
+                            <div className="flex justify-between text-xs text-gray-400 mb-2">
+                              <span>{Math.round(enrollment.progress.progressPercentage)}% Complete</span>
+                            </div>
+                            <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                              <div
+                                className="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-500"
+                                style={{ width: `${enrollment.progress.progressPercentage}%` }}
+                              />
+                            </div>
+                          </CardItem>
+                        )}
 
-                      <Link to={`/courses/${enrollment.course._id}/learn`} className="block">
-                        <Button className="w-full bg-white text-black hover:bg-gray-200 font-semibold shadow-lg shadow-white/5">
-                          Continue Learning
-                        </Button>
-                      </Link>
+                        <CardItem translateZ="20" className="w-full">
+                            <Link to={`/courses/${enrollment.course._id}/learn`} className="block">
+                                <Button className="w-full bg-white text-black hover:bg-gray-200 font-semibold shadow-lg shadow-white/5 border-none">
+                                Continue
+                                </Button>
+                            </Link>
+                        </CardItem>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </CardBody>
+              </CardContainer>
             ))}
           </div>
         )}

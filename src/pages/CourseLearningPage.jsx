@@ -48,7 +48,41 @@ export const CourseLearningPage = () => {
 
   const fetchCourseData = async () => {
     try {
-      // Fetch course details and progress
+      if (id.startsWith('mock-')) {
+          // Mock Data Handling
+          const mockTitle = {
+            'mock-1': 'Advanced Full Stack Web Development',
+            'mock-2': 'UI/UX Design Masterclass 2024',
+            'mock-3': 'Python for Data Science & AI',
+            'mock-4': 'Mobile App Dev with React Native',
+            'mock-5': 'Digital Marketing & SEO Strategy',
+            'mock-6': 'DevOps & Cloud Infrastructure',
+            'mock-7': 'Blender 3D Modeling Bootcamp',
+            'mock-8': 'Cybersecurity Fundamentals'
+          }[id] || 'Demo Course';
+
+          setCourse({ _id: id, title: mockTitle, instructor: { name: 'Demo Instructor' } });
+          
+          const mockSections = [
+              { _id: 'sec-1', title: 'Introduction', lectures: [{ _id: 'l-1', title: 'Welcome', duration: 300, videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }, { _id: 'l-2', title: 'Setup', duration: 450, videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }] },
+              { _id: 'sec-2', title: 'Core Concepts', lectures: [{ _id: 'l-3', title: 'Deep/Dive', duration: 600, videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }] }
+          ];
+          setSections(mockSections);
+          setCurrentLecture(mockSections[0].lectures[0]);
+          setExpandedSections({ 'sec-1': true });
+
+          // Load progress from localStorage
+          const localProgress = JSON.parse(localStorage.getItem(`progress-${id}`) || '{"completedLectures": [], "progressPercentage": 0}');
+          setProgress(localProgress);
+          
+          if (localProgress.progressPercentage === 100) {
+              setHasCertificate(true);
+          }
+          setLoading(false);
+          return;
+      }
+
+      // Real Data Handling
       const [courseRes, progressRes, sectionsRes] = await Promise.all([
         courseService.getCourse(id),
         progressService.getCourseProgress(id),
@@ -82,6 +116,8 @@ export const CourseLearningPage = () => {
   };
 
   const checkAndGenerateCertificate = async () => {
+    if (id.startsWith('mock-')) return; // Skip for mocks
+
     try {
       // Try to get existing certificate
       const certResponse = await certificateService.getCertificate(id);
@@ -109,6 +145,41 @@ export const CourseLearningPage = () => {
 
   const handleMarkComplete = async () => {
     if (!currentLecture) return;
+
+    if (id.startsWith('mock-')) {
+        // Mock Progress Handling
+        const newCompleted = isLectureCompleted(currentLecture._id) 
+            ? progress.completedLectures.filter(lid => lid !== currentLecture._id)
+            : [...(progress.completedLectures || []), currentLecture._id];
+        
+        const totalLectures = sections.reduce((acc, s) => acc + s.lectures.length, 0);
+        const percentage = (newCompleted.length / totalLectures) * 100;
+
+        const newProgress = {
+            completedLectures: newCompleted,
+            progressPercentage: percentage,
+            completedCount: newCompleted.length,
+            totalLectures
+        };
+
+        localStorage.setItem(`progress-${id}`, JSON.stringify(newProgress));
+        setProgress(newProgress);
+
+        if (!isLectureCompleted(currentLecture._id)) {
+            toast.success('Lecture marked as complete!');
+            const allLectures = sections.flatMap(s => s.lectures);
+            const currentIndex = allLectures.findIndex(l => l._id === currentLecture._id);
+            if (currentIndex < allLectures.length - 1) {
+                setCurrentLecture(allLectures[currentIndex + 1]);
+            }
+
+            if (percentage === 100) {
+                setHasCertificate(true);
+                toast.success('Course Completed! Certificate Unlocked 🎉');
+            }
+        }
+        return;
+    }
 
     try {
       const response = await progressService.toggleLectureCompletion(id, currentLecture._id);
@@ -144,6 +215,12 @@ export const CourseLearningPage = () => {
   };
 
   const generateCertificate = async () => {
+    if (id.startsWith('mock-')) {
+        setHasCertificate(true);
+        toast.success('🎉 Congratulations! Your certificate has been generated!');
+        return;
+    }
+
     try {
       setGeneratingCertificate(true);
       const response = await certificateService.generateCertificate(id);
@@ -165,6 +242,17 @@ export const CourseLearningPage = () => {
   };
 
   const handleViewCertificate = async () => {
+    if (id.startsWith('mock-')) {
+        setCertificateData({
+            certificateId: `MOCK-${Date.now()}`,
+            courseTitle: course.title,
+            completionDate: new Date().toISOString(),
+            userName: 'Demo Student', // In real app, get from auth store
+            instructorName: 'Demo Instructor'
+        });
+        return;
+    }
+
     try {
       // If no certificate yet, try to generate it first
       if (!hasCertificate) {

@@ -5,6 +5,7 @@ import { instructorService } from '../services/instructorService';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { PageLoader } from '../components/ui/Spinner';
+import { CardContainer, CardBody, CardItem } from '../components/ui/3DCard';
 import { Alert } from '../components/ui/Alert';
 import { formatCurrency } from '../lib/utils';
 import { COURSE_LEVELS } from '../lib/constants';
@@ -103,53 +104,26 @@ export const InstructorDashboardPage = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-400 mb-1">Total Courses</p>
-                  <p className="text-3xl font-bold text-white">{courses.length}</p>
-                </div>
-                <div className="p-3 bg-blue-500/20 rounded-xl">
-                    <BookOpen className="w-6 h-6 text-blue-400" />
-                </div>
-              </div>
-          </div>
-
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-400 mb-1">Published</p>
-                  <p className="text-3xl font-bold text-green-400">{publishedCount}</p>
-                </div>
-                <div className="p-3 bg-green-500/20 rounded-xl">
-                    <Eye className="w-6 h-6 text-green-400" />
-                </div>
-              </div>
-          </div>
-
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-400 mb-1">Drafts</p>
-                  <p className="text-3xl font-bold text-yellow-400">{draftCount}</p>
-                </div>
-                <div className="p-3 bg-yellow-500/20 rounded-xl">
-                    <FileText className="w-6 h-6 text-yellow-400" />
-                </div>
-              </div>
-          </div>
-
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 rounded-2xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-400 mb-1">Total Portfolio Value</p>
-                  <p className="text-2xl font-bold text-white">{formatCurrency(totalRevenue)}</p>
-                </div>
-                <div className="p-3 bg-purple-500/20 rounded-xl">
-                    <DollarSign className="w-6 h-6 text-purple-400" />
-                </div>
-              </div>
-          </div>
+            {[ 
+                { label: 'Total Courses', value: courses.length, icon: BookOpen, color: 'text-blue-400', bg: 'bg-blue-500/20' },
+                { label: 'Published', value: publishedCount, icon: Eye, color: 'text-green-400', bg: 'bg-green-500/20' },
+                { label: 'Drafts', value: draftCount, icon: FileText, color: 'text-yellow-400', bg: 'bg-yellow-500/20' },
+                { label: 'Total Portfolio Value', value: formatCurrency(totalRevenue), icon: DollarSign, color: 'text-purple-400', bg: 'bg-purple-500/20' }
+            ].map((stat, i) => (
+                <CardContainer key={i} className="inter-var w-full h-full">
+                    <CardBody className="bg-white/5 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-full rounded-xl p-6 border transition-all duration-300 backdrop-blur-sm">
+                        <CardItem translateZ="50" className="flex items-center justify-between w-full">
+                            <div>
+                                <p className="text-sm text-gray-400 mb-1">{stat.label}</p>
+                                <p className={`text-2xl font-bold ${i === 3 ? 'text-white' : stat.color}`}>{stat.value}</p>
+                            </div>
+                            <div className={`p-3 ${stat.bg} rounded-xl`}>
+                                <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                            </div>
+                        </CardItem>
+                    </CardBody>
+                </CardContainer>
+            ))}
         </div>
 
         {/* Courses List */}
@@ -174,45 +148,41 @@ export const InstructorDashboardPage = () => {
         ) : (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-white">My Courses</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
             {courses.map((course) => (
-              <div key={course._id} className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors">
-                  <div className="flex flex-col md:flex-row gap-6">
-                    {/* Thumbnail */}
-                    <div className="relative w-full md:w-64 h-40 flex-shrink-0 overflow-hidden rounded-xl">
-                         <img
-                            src={course.thumbnail || 'https://via.placeholder.com/200x120'}
-                            alt={course.title}
-                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                        />
-                         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
-                    </div>
-
-                    {/* Course Info */}
-                    <div className="flex-1 flex flex-col justify-between">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-3 mb-3">
-                          <h3 className="text-xl font-bold text-white">
-                            {course.title}
-                          </h3>
-                          {course.published ? (
-                            <Badge className="bg-green-500/20 text-green-300 border-green-500/30">Published</Badge>
-                          ) : (
-                            <Badge className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">Draft</Badge>
-                          )}
-                          {course.level && (
-                            <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30 capitalize">
-                              {COURSE_LEVELS[course.level]}
-                            </Badge>
-                          )}
+              <CardContainer key={course._id} className="inter-var w-full h-full">
+                <CardBody className="bg-black/40 relative group/card dark:hover:shadow-2xl dark:hover:shadow-indigo-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-full rounded-xl p-4 border transition-all duration-300 backdrop-blur-sm flex flex-col justify-between">
+                  <div className="w-full">
+                      <CardItem translateZ="50" className="w-full mt-2">
+                        <div className="relative w-full h-48 rounded-xl overflow-hidden">
+                             <img
+                                src={course.thumbnail || 'https://via.placeholder.com/200x120'}
+                                alt={course.title}
+                                className="w-full h-full object-cover transform group-hover/card:scale-105 transition-transform duration-500"
+                            />
+                            {course.published ? (
+                                <Badge className="absolute top-2 right-2 bg-green-500/90 text-white border-none shadow-lg">Published</Badge>
+                            ) : (
+                                <Badge className="absolute top-2 right-2 bg-yellow-500/90 text-black border-none shadow-lg">Draft</Badge>
+                            )}
                         </div>
+                      </CardItem>
+
+                      <CardItem translateZ="60" className="mt-4">
+                        <h3 className="text-xl font-bold text-neutral-200 line-clamp-1">
+                            {course.title}
+                        </h3>
+                      </CardItem>
                         
-                        {course.description && (
-                            <p className="text-gray-400 text-sm line-clamp-2 mb-4 max-w-3xl">
+                      {course.description && (
+                         <CardItem translateZ="40" className="mt-2">
+                            <p className="text-neutral-400 text-sm line-clamp-2">
                                 {course.description}
                             </p>
-                        )}
+                         </CardItem>
+                      )}
                         
-                        <div className="flex items-center gap-6 text-sm text-gray-400">
+                      <CardItem translateZ="30" className="flex items-center gap-4 text-sm text-gray-400 mt-4">
                             <div className="flex items-center gap-2">
                                 <DollarSign className="w-4 h-4 text-green-400" />
                                 <span className="font-medium text-white">{course.isFree ? 'Free' : formatCurrency(course.price)}</span>
@@ -223,53 +193,63 @@ export const InstructorDashboardPage = () => {
                                     <span>{course.category.name}</span>
                                 </div>
                             )}
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex flex-wrap items-center gap-3 mt-6 pt-6 border-t border-white/10">
-                          <Link to={`/instructor/courses/${course._id}/edit`}>
-                            <Button variant="outline" size="sm" className="border-white/20 text-gray-300 hover:text-white hover:bg-white/10">
-                              <Edit className="w-4 h-4 mr-2" />
-                              Edit Course
-                            </Button>
-                          </Link>
-                          
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleTogglePublish(course._id, course.published)}
-                            disabled={actionLoading === course._id}
-                            className={`${course.published ? 'text-yellow-400 hover:bg-yellow-500/10' : 'text-green-400 hover:bg-green-500/10'}`}
-                          >
-                            {course.published ? (
-                              <>
-                                <EyeOff className="w-4 h-4 mr-2" />
-                                Unpublish
-                              </>
-                            ) : (
-                              <>
-                                <Eye className="w-4 h-4 mr-2" />
-                                Publish Now
-                              </>
-                            )}
-                          </Button>
-
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteCourse(course._id)}
-                            disabled={actionLoading === course._id}
-                            className="text-red-400 hover:bg-red-500/10 ml-auto"
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete
-                          </Button>
-                      </div>
-                    </div>
+                      </CardItem>
                   </div>
-              </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col gap-2 mt-6 pt-4 border-t border-white/10">
+                       <div className="flex gap-2">
+                          <CardItem translateZ="20" className="w-full">
+                              <Link to={`/instructor/courses/${course._id}/edit`} className="w-full block">
+                                <Button variant="outline" size="sm" className="w-full border-white/20 text-gray-300 hover:text-white hover:bg-white/10">
+                                  <Edit className="w-4 h-4 mr-2" />
+                                  Edit
+                                </Button>
+                              </Link>
+                          </CardItem>
+                       </div>
+                       
+                       <div className="flex gap-2">
+                           <CardItem translateZ="20" className="w-1/2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleTogglePublish(course._id, course.published)}
+                                disabled={actionLoading === course._id}
+                                className={`w-full ${course.published ? 'text-yellow-400 hover:bg-yellow-500/10' : 'text-green-400 hover:bg-green-500/10'}`}
+                              >
+                                {course.published ? (
+                                    <>
+                                    <EyeOff className="w-4 h-4 mr-1" />
+                                    Unpub
+                                    </>
+                                ) : (
+                                    <>
+                                    <Eye className="w-4 h-4 mr-1" />
+                                    Publish
+                                    </>
+                                )}
+                              </Button>
+                           </CardItem>
+                           
+                           <CardItem translateZ="20" className="w-1/2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteCourse(course._id)}
+                                disabled={actionLoading === course._id}
+                                className="w-full text-red-400 hover:bg-red-500/10"
+                              >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                                Delete
+                              </Button>
+                           </CardItem>
+                       </div>
+                  </div>
+                </CardBody>
+              </CardContainer>
             ))}
+            </div>
           </div>
         )}
       </div>

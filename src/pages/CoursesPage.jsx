@@ -110,7 +110,7 @@ export const CoursesPage = () => {
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
 
   return (
-    <div className="bg-black min-h-screen text-white pt-20 pb-12">
+    <div className="bg-black min-h-screen text-white pt-32 pb-12">
         {/* Background Effects */}
         <div className="fixed inset-0 z-0 pointer-events-none">
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px]" />
