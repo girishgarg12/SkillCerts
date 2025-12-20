@@ -10,6 +10,7 @@ export const certificateService = {
   // Get certificate data for frontend rendering
   viewCertificate: (courseId) => api.get(`/certificates/view/${courseId}`),
   
+  // Use the new JSON endpoint for verification
   verifyCertificate: (certificateId) => 
-    api.get(`/certificates/verify/${certificateId}`),
+    api.get(`/certificates/verify/${certificateId}/json`),
 };

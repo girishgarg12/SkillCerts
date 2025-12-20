@@ -17,6 +17,7 @@ import { PaymentSuccessPage } from './pages/PaymentSuccessPage';
 import { InstructorDashboardPage } from './pages/InstructorDashboardPage';
 import { CourseFormPage } from './pages/CourseFormPage';
 import { CourseEditPage } from './pages/CourseEditPage';
+import { CertificateVerificationPage } from './pages/CertificateVerificationPage';
 
 function App() {
   return (
@@ -50,6 +51,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:id" element={<CourseDetailPage />} />
+          <Route path="/verify-certificate/:certificateId" element={<CertificateVerificationPage />} />
+          <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
           
           {/* Protected Routes */}
           <Route

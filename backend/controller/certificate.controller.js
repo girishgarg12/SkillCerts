@@ -2,7 +2,60 @@ import { Certificate } from '../model/certificate.model.js';
 import { Enrollment } from '../model/enrollment.model.js';
 import { Course } from '../model/course.model.js';
 import { generateCertificateId } from '../utils/certificateGenerator.js';
+import { generateCertificateHTML } from '../utils/certificateTemplate.js';
 import ApiResponse from '../utils/ApiResponse.js';
+
+/**
+ * Verify certificate (Public endpoint - returns JSON)
+ */
+export const verifyCertificateJson = async (req, res) => {
+  try {
+    const { certificateId } = req.params;
+
+    const certificate = await Certificate.findOne({ certificateId })
+      .populate('user', 'name')
+      .populate('course', 'title instructor')
+      .populate({
+        path: 'course',
+        populate: { path: 'instructor', select: 'name' },
+      });
+
+    if (!certificate) {
+      return res.status(404).json({
+        success: false,
+        message: 'Certificate not found',
+      });
+    }
+
+    const completionDate = new Date(certificate.issuedAt).toLocaleDateString(
+      'en-US',
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }
+    );
+
+    return res.json({
+      success: true,
+      certificate: {
+        user: { name: certificate.user.name },
+        course: {
+          title: certificate.course.title,
+          instructor: { name: certificate.course.instructor.name },
+        },
+        issuedAt: certificate.issuedAt,
+        completionDate,
+        certificateId: certificate.certificateId,
+      },
+    });
+  } catch (error) {
+    console.error('Verify certificate JSON error:', error);
+    return res
+      .status(500)
+      .json({ success: false, message: 'Failed to verify certificate' });
+  }
+};
 
 /**
  * Generate certificate for completed course (only creates DB record)

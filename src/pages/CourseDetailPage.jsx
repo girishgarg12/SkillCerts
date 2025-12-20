@@ -15,11 +15,12 @@ import { Alert } from '../components/ui/Alert';
 import { formatCurrency, formatDuration } from '../lib/utils';
 import { COURSE_LEVELS } from '../lib/constants';
 import { useAuthStore } from '../store/authStore';
+import { ReviewSection } from '../components/course/ReviewSection';
 
 export const CourseDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [course, setCourse] = useState(null);
   const [sections, setSections] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -72,7 +73,7 @@ export const CourseDetailPage = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await reviewService.getCourseReviews(id, { limit: 5 });
+      const response = await reviewService.getCourseReviews(id, { limit: 10 });
       setReviews(response.data.reviews || []);
     } catch (error) {
       console.error('Failed to fetch reviews:', error);
@@ -341,41 +342,15 @@ export const CourseDetailPage = () => {
       )}
 
       {/* Reviews Section */}
-      {reviews.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Student Reviews</h2>
-          <div className="space-y-4">
-            {reviews.map((review) => (
-              <Card key={review._id}>
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="font-medium text-gray-900">
-                          {review.user?.name}
-                        </span>
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < review.rating
-                                  ? 'text-yellow-500 fill-yellow-500'
-                                  : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-gray-700">{review.comment}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <ReviewSection
+          courseId={id}
+          reviews={reviews}
+          userReview={reviews.find(r => r.user?._id === user?._id)}
+          isEnrolled={isEnrolled}
+          onReviewSubmitted={fetchReviews}
+        />
+      </div>
     </div>
   );
 };

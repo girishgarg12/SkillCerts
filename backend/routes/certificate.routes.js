@@ -5,13 +5,15 @@ import {
   getCertificate,
   viewCertificate,
   verifyCertificate,
+  verifyCertificateJson,
 } from '../controller/certificate.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 
 const certificateRouter = Router();
 
-// Public verification endpoint
+// Public verification endpoints
 certificateRouter.get('/verify/:certificateId', verifyCertificate);
+certificateRouter.get('/verify/:certificateId/json', verifyCertificateJson);
 
 // Protected routes
 certificateRouter.use(authenticate);
