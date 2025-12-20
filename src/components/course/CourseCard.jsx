@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Clock, BookOpen, Star, Heart } from 'lucide-react';
-import { Card, CardContent, CardFooter } from '../ui/Card';
+import { Clock, Star, Heart } from 'lucide-react';
+import { CardContainer, CardBody, CardItem } from '../ui/3DCard'; // Added import
 import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
 import { formatCurrency, formatDuration } from '../../lib/utils';
 import { COURSE_LEVELS } from '../../lib/constants';
 
@@ -14,78 +13,99 @@ export const CourseCard = ({ course, onWishlistToggle, isInWishlist }) => {
   };
 
   return (
-    <Card className="group hover:shadow-lg transition-shadow duration-300">
-      <Link to={`/courses/${course._id || course.id}`}>
-        <div className="relative overflow-hidden rounded-t-lg">
-          <img
-            src={course.thumbnail || 'https://via.placeholder.com/400x225'}
-            alt={course.title}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-          {course.isFree && (
-            <Badge className="absolute top-3 left-3" variant="success">
-              Free
-            </Badge>
-          )}
-          {course.level && (
-            <Badge className="absolute top-3 right-3" variant={levelColors[course.level]}>
-              {COURSE_LEVELS[course.level]}
-            </Badge>
-          )}
-        </div>
-      </Link>
-
-      <CardContent className="p-4">
+    <CardContainer className="inter-var h-full w-full">
+      <CardBody className="bg-black/40 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-full min-h-[420px] rounded-xl p-4 border transition-all duration-300 backdrop-blur-sm flex flex-col justify-between">
         <Link to={`/courses/${course._id || course.id}`}>
-          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-            {course.title}
-          </h3>
+            <CardItem
+            translateZ="50"
+            className="w-full mt-2"
+            >
+                <div className="relative overflow-hidden rounded-xl">
+                    <img
+                        src={course.thumbnail || 'https://via.placeholder.com/400x225'}
+                        alt={course.title}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://via.placeholder.com/400x225?text=Course+Image';
+                        }}
+                        className="h-48 w-full object-cover rounded-xl group-hover/card:shadow-xl group-hover/card:scale-105 transition-transform duration-300"
+                    />
+                    {course.isFree && (
+                        <Badge className="absolute top-2 left-2" variant="success">
+                            Free
+                        </Badge>
+                    )}
+                    {course.level && (
+                        <Badge className="absolute top-2 right-2" variant={levelColors[course.level]}>
+                            {COURSE_LEVELS[course.level]}
+                        </Badge>
+                    )}
+                </div>
+            </CardItem>
         </Link>
-        
-        {course.instructor && (
-          <p className="text-sm text-gray-600 mt-1">
-            {course.instructor.name}
-          </p>
-        )}
+        <div className="mt-4">
+            <CardItem
+                translateZ="60"
+                className="text-xl font-bold text-neutral-200"
+            >
+                <Link to={`/courses/${course._id || course.id}`} className="hover:text-purple-400 transition-colors">
+                    {course.title}
+                </Link>
+            </CardItem>
 
-        <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
-          {course.rating > 0 && (
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-              <span className="font-medium">{course.rating.toFixed(1)}</span>
-              {course.ratingCount > 0 && (
-                <span className="text-gray-500">({course.ratingCount})</span>
-              )}
+            {course.instructor && (
+                <CardItem
+                    as="p"
+                    translateZ="40"
+                    className="text-neutral-400 text-sm max-w-sm mt-2 flex items-center gap-2"
+                >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                     {course.instructor.name}
+                </CardItem>
+            )}
+            
+            <div className="flex items-center gap-4 mt-4 text-sm text-gray-400">
+                {course.rating > 0 && (
+                    <CardItem translateZ={30} className="flex items-center gap-1 text-yellow-500">
+                        <Star className="w-4 h-4 fill-current" />
+                        <span className="font-medium text-white">{course.rating.toFixed(1)}</span>
+                        {course.ratingCount > 0 && (
+                            <span className="text-gray-500">({course.ratingCount})</span>
+                        )}
+                    </CardItem>
+                )}
+                {course.totalDuration && (
+                    <CardItem translateZ={30} className="flex items-center gap-1">
+                         <Clock className="w-4 h-4" />
+                        <span>{formatDuration(course.totalDuration)}</span>
+                    </CardItem>
+                )}
             </div>
-          )}
-          
-          {course.totalDuration && (
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{formatDuration(course.totalDuration)}</span>
-            </div>
-          )}
-        </div>
-      </CardContent>
+            
+            <div className="flex justify-between items-center mt-6 pt-4 border-t border-white/10">
+                <CardItem
+                    translateZ={20}
+                    className="px-4 py-2 rounded-xl text-lg font-bold text-white"
+                >
+                    {course.isFree ? 'Free' : formatCurrency(course.price)}
+                </CardItem>
 
-      <CardFooter className="p-4 pt-0 flex items-center justify-between">
-        <div className="text-xl font-bold text-gray-900">
-          {course.isFree ? 'Free' : formatCurrency(course.price)}
+                {onWishlistToggle && (
+                    <CardItem
+                        translateZ={20}
+                        as="button"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onWishlistToggle(course);
+                        }}
+                        className={`transition-all p-2 rounded-full hover:bg-white/10 ${isInWishlist ? 'text-pink-500' : 'text-gray-400 hover:text-pink-500'}`}
+                    >
+                         <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-current' : ''}`} />
+                    </CardItem>
+                )}
+            </div>
         </div>
-        
-        {onWishlistToggle && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              onWishlistToggle(course);
-            }}
-            className={`transition-colors ${isInWishlist ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}
-            title={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-          >
-            <Heart className={`w-6 h-6 ${isInWishlist ? 'fill-red-500' : ''}`} />
-          </button>
-        )}
-      </CardFooter>
-    </Card>
+      </CardBody>
+    </CardContainer>
   );
 };

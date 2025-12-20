@@ -13,6 +13,7 @@ const signupSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   role: z.enum(['student', 'instructor']).optional(),
+  interests: z.array(z.string()).optional(),
 });
 
 const signinSchema = z.object({
@@ -48,6 +49,7 @@ export const signup = async (req, res) => {
       email: validatedData.email,
       passwordHash: hashedPassword,
       role: validatedData.role || 'student',
+      interests: validatedData.interests || [],
     });
 
     const token = generateToken(user._id);
@@ -59,6 +61,7 @@ export const signup = async (req, res) => {
       role: user.role,
       avatar: user.avatar,
       isVerified: user.isVerified,
+      interests: user.interests,
     };
 
     // Send welcome email (don't await, send in background)

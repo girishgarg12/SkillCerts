@@ -19,6 +19,8 @@ const userSchema = new mongoose.Schema(
 
     avatar: String, // url 
     bio: String,
+    
+    interests: [{ type: String }], // Array of skills/interests
 
     isVerified: { type: Boolean, default: false },
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Clock, BookOpen, Star, Users, Award, Play, Heart, ChevronDown, ChevronUp, Lock } from 'lucide-react';
+import { Clock, BookOpen, Star, Users, Award, Play, Heart, ChevronDown, ChevronUp, Lock, CheckCircle, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { courseService } from '../services/courseService';
 import { enrollmentService } from '../services/enrollmentService';
@@ -160,189 +160,293 @@ export const CourseDetailPage = () => {
   };
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-black text-white min-h-screen relative overflow-hidden">
+       {/* Background Effects */}
+       <div className="fixed inset-0 z-0 pointer-events-none">
+           <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.15),transparent_50%)] blur-[100px]" />
+           <div className="absolute bottom-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.15),transparent_50%)] blur-[100px]" />
+       </div>
+
       {/* Hero Section */}
-      <div className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
+      <div className="relative z-10 pt-12 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            
+            {/* Left Content */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="flex flex-wrap items-center gap-3">
                 {course.category && (
-                  <Badge variant="primary">{course.category.name}</Badge>
+                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30 px-3 py-1 text-sm backdrop-blur-md">
+                    {course.category.name}
+                  </Badge>
                 )}
                 {course.level && (
-                  <Badge variant={levelColors[course.level]}>
+                  <Badge variant={levelColors[course.level]} className="uppercase tracking-wide text-xs font-bold px-3 py-1">
                     {COURSE_LEVELS[course.level]}
                   </Badge>
                 )}
               </div>
               
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{course.title}</h1>
-              <p className="text-lg text-gray-300 mb-6">{course.description}</p>
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
+                {course.title}
+              </h1>
               
-              <div className="flex items-center gap-6 text-sm">
+              <p className="text-xl text-gray-300 leading-relaxed max-w-2xl">
+                {course.description}
+              </p>
+              
+              <div className="flex flex-wrap items-center gap-6 text-sm md:text-base border-t border-white/10 pt-6">
                 {course.rating > 0 && (
-                  <div className="flex items-center gap-1">
-                    <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                    <span className="font-bold">{course.rating.toFixed(1)}</span>
+                  <div className="flex items-center gap-2">
+                    <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                    <span className="font-bold text-white">{course.rating.toFixed(1)}</span>
                     <span className="text-gray-400">({course.ratingCount} ratings)</span>
                   </div>
                 )}
                 
                 {course.instructor && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-400">By</span>
-                    <span className="font-medium">{course.instructor.name}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center font-bold">
+                        {course.instructor.name.charAt(0)}
+                    </div>
+                    <div>
+                        <span className="text-gray-400 text-xs uppercase tracking-wider block">Created by</span>
+                        <span className="font-medium text-white">{course.instructor.name}</span>
+                    </div>
                   </div>
                 )}
+
+                <div className="flex items-center gap-2 text-gray-300">
+                    <Clock className="w-4 h-4" />
+                    <span>Last updated {new Date().toLocaleDateString()}</span>
+                </div>
               </div>
             </div>
 
-            <div>
-              <Card className="sticky top-20">
-                <CardContent className="p-6">
-                  {course.thumbnail && (
-                    <img
-                      src={course.thumbnail}
-                      alt={course.title}
-                      className="w-full rounded-lg mb-4"
-                    />
-                  )}
-                  
-                  <div className="text-3xl font-bold text-gray-900 mb-4">
-                    {course.isFree ? 'Free' : formatCurrency(course.price)}
-                  </div>
-
-                  {isEnrolled ? (
-                    <Button
-                      onClick={() => navigate('/my-learning')}
-                      className="w-full mb-3"
-                    >
-                      Go to Course
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={handleEnroll}
-                      disabled={enrolling}
-                      className="w-full mb-3"
-                    >
-                      {enrolling ? 'Enrolling...' : course.isFree ? 'Enroll Now' : 'Buy Now'}
-                    </Button>
-                  )}
-
-                  {!isEnrolled && (
-                    <Button 
-                      variant="outline" 
-                      className="w-full"
-                      onClick={handleWishlistToggle}
-                    >
-                      <Heart className={`w-5 h-5 mr-2 ${isInWishlist ? 'fill-red-500 text-red-500' : ''}`} />
-                      {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
-                    </Button>
-                  )}
-
-                  <div className="mt-6 space-y-3 text-sm">
-                    {course.totalDuration && (
-                      <div className="flex items-center gap-3 text-gray-700">
-                        <Clock className="w-5 h-5" />
-                        <span>{formatDuration(course.totalDuration)}</span>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-3 text-gray-700">
-                      <BookOpen className="w-5 h-5" />
-                      <span>Full lifetime access</span>
+            {/* Right Sticky Card */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-24">
+                  <div className="relative group rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl">
+                    <div className="relative aspect-video overflow-hidden">
+                        {course.thumbnail && (
+                            <img
+                            src={course.thumbnail}
+                            alt={course.title}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = 'https://via.placeholder.com/400x225?text=Course+Image';
+                            }}
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                            />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                        
+                        {/* Play Button Overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+                                <Play className="w-8 h-8 text-white fill-white ml-1" />
+                             </div>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-3 text-gray-700">
-                      <Award className="w-5 h-5" />
-                      <span>Certificate of completion</span>
+
+                    <div className="p-6 space-y-6">
+                        <div className="flex items-end justify-between">
+                             <div className="text-3xl font-bold text-white">
+                                {course.isFree ? 'Free' : formatCurrency(course.price)}
+                            </div>
+                            {!course.isFree && <span className="text-gray-400 line-through text-sm mb-1">{formatCurrency(course.price * 1.5)}</span>}
+                        </div>
+
+                        {isEnrolled ? (
+                             <Button
+                              onClick={() => navigate('/my-learning')}
+                              className="w-full h-12 text-lg font-semibold bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/20"
+                            >
+                              Go to Course
+                            </Button>
+                        ) : (
+                             <Button
+                                onClick={handleEnroll}
+                                disabled={enrolling}
+                                className="w-full h-12 text-lg font-semibold bg-white text-black hover:bg-gray-100 shadow-lg shadow-white/10"
+                             >
+                                {enrolling ? 'Enrolling...' : course.isFree ? 'Enroll Now' : 'Buy Now'}
+                             </Button>
+                        )}
+
+                        {!isEnrolled && (
+                             <button 
+                                onClick={handleWishlistToggle}
+                                className="w-full flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors"
+                             >
+                                <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-pink-500 text-pink-500' : ''}`} />
+                                <span>{isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
+                             </button>
+                        )}
+
+                        <div className="space-y-4 pt-6 border-t border-white/10">
+                            <h4 className="font-semibold text-white">This course includes:</h4>
+                            <ul className="space-y-3 text-sm text-gray-300">
+                                {course.totalDuration && (
+                                    <li className="flex items-center gap-3">
+                                        <Clock className="w-5 h-5 text-gray-500" />
+                                        <span>{formatDuration(course.totalDuration)} on-demand video</span>
+                                    </li>
+                                )}
+                                <li className="flex items-center gap-3">
+                                    <BookOpen className="w-5 h-5 text-gray-500" />
+                                    <span>Full lifetime access</span>
+                                </li>
+                                <li className="flex items-center gap-3">
+                                    <Users className="w-5 h-5 text-gray-500" />
+                                    <span>Access on mobile and TV</span>
+                                </li>
+                                <li className="flex items-center gap-3">
+                                    <Award className="w-5 h-5 text-gray-500" />
+                                    <span>Certificate of completion</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Course Content Section */}
-      {sections.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Course Content</h2>
-          <div className="mb-4 text-sm text-gray-600">
-            {sections.length} sections • {sections.reduce((acc, s) => acc + (s.lectures?.length || 0), 0)} lectures
-          </div>
-          
-          <div className="space-y-3">
-            {sections.map((section) => (
-              <Card key={section._id}>
-                <CardContent className="p-0">
-                  {/* Section Header */}
-                  <button
-                    onClick={() => toggleSection(section._id)}
-                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <BookOpen className="w-5 h-5 text-blue-600" />
-                      <div className="text-left">
-                        <h3 className="font-semibold text-gray-900">{section.title}</h3>
-                        <p className="text-sm text-gray-600">
-                          {section.lectures?.length || 0} lectures
-                        </p>
-                      </div>
+       {/* Course Content Section */}
+       {sections.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            
+            <div className="lg:col-span-2 space-y-12">
+                
+                {/* What you'll learn */}
+                {course.learningOutcomes && course.learningOutcomes.length > 0 && (
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+                        <h2 className="text-2xl font-bold text-white mb-6">What you{`'`}ll learn</h2>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {course.learningOutcomes.map((outcome, index) => (
+                                <li key={index} className="flex items-start gap-3 text-gray-300">
+                                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                                    <span>{outcome}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    {expandedSections.has(section._id) ? (
-                      <ChevronUp className="w-5 h-5 text-gray-400" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-400" />
-                    )}
-                  </button>
+                )}
 
-                  {/* Section Lectures */}
-                  {expandedSections.has(section._id) && section.lectures && section.lectures.length > 0 && (
-                    <div className="border-t border-gray-200 bg-gray-50">
-                      {section.lectures.map((lecture, index) => (
-                        <div
-                          key={lecture._id}
-                          className="px-6 py-3 flex items-center justify-between border-b border-gray-200 last:border-b-0"
-                        >
-                          <div className="flex items-center gap-3">
-                            {lecture.isPreview ? (
-                              <Play className="w-4 h-4 text-blue-600" />
-                            ) : (
-                              <Lock className="w-4 h-4 text-gray-400" />
-                            )}
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-900">
-                                  {index + 1}. {lecture.title}
-                                </span>
-                                {lecture.isPreview && (
-                                  <Badge variant="success" className="text-xs">Free Preview</Badge>
+                {/* Content */}
+                <div>
+                     <h2 className="text-2xl font-bold text-white mb-6">Course Content</h2>
+                     <div className="mb-4 text-sm text-gray-400">
+                        {sections.length} sections • {sections.reduce((acc, s) => acc + (s.lectures?.length || 0), 0)} lectures
+                     </div>
+                     
+                      <div className="space-y-3">
+                        {sections.map((section) => (
+                          <div key={section._id} className="border border-white/10 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm">
+                              {/* Section Header */}
+                              <button
+                                onClick={() => toggleSection(section._id)}
+                                className="w-full px-6 py-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <BookOpen className="w-5 h-5 text-purple-400" />
+                                  <div className="text-left">
+                                    <h3 className="font-semibold text-white">{section.title}</h3>
+                                    <p className="text-sm text-gray-400">
+                                      {section.lectures?.length || 0} lectures
+                                    </p>
+                                  </div>
+                                </div>
+                                {expandedSections.has(section._id) ? (
+                                  <ChevronUp className="w-5 h-5 text-gray-400" />
+                                ) : (
+                                  <ChevronDown className="w-5 h-5 text-gray-400" />
                                 )}
-                              </div>
-                            </div>
+                              </button>
+
+                              {/* Section Lectures */}
+                              {expandedSections.has(section._id) && section.lectures && section.lectures.length > 0 && (
+                                <div className="border-t border-white/10 bg-black/20">
+                                  {section.lectures.map((lecture, index) => (
+                                    <div
+                                      key={lecture._id}
+                                      className="px-6 py-3 flex items-center justify-between border-b border-white/5 last:border-b-0"
+                                    >
+                                      <div className="flex items-center gap-3">
+                                        {lecture.isPreview ? (
+                                          <Play className="w-4 h-4 text-purple-400" />
+                                        ) : (
+                                          <Lock className="w-4 h-4 text-gray-500" />
+                                        )}
+                                        <div>
+                                          <div className="flex items-center gap-2">
+                                            <span className="text-sm text-gray-200">
+                                              {index + 1}. {lecture.title}
+                                            </span>
+                                            {lecture.isPreview && (
+                                              <Badge className="text-xs bg-purple-500/20 text-purple-300 border-purple-500/30">Free Preview</Badge>
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                                        {lecture.duration && (
+                                          <>
+                                            <Clock className="w-3 h-3" />
+                                            {formatDuration(lecture.duration)}
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                           </div>
-                          <div className="flex items-center gap-2 text-xs text-gray-500">
-                            {lecture.duration && (
-                              <>
-                                <Clock className="w-3 h-3" />
-                                {formatDuration(lecture.duration)}
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                </div>
+
+                {/* Requirements */}
+                {course.requirements && course.requirements.length > 0 && (
+                    <div>
+                        <h2 className="text-2xl font-bold text-white mb-6">Requirements</h2>
+                        <ul className="list-disc pl-5 space-y-2 text-gray-300">
+                            {course.requirements.map((req, index) => (
+                                <li key={index}>{req}</li>
+                            ))}
+                        </ul>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+                )}
+
+                {/* Certification Section */}
+                <div className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-500/20 rounded-2xl p-8">
+                     <div className="flex items-start gap-4">
+                         <div className="bg-purple-500/20 p-3 rounded-full">
+                             <Award className="w-8 h-8 text-purple-400" />
+                         </div>
+                         <div>
+                             <h2 className="text-2xl font-bold text-white mb-2">Professional Certification</h2>
+                             <p className="text-gray-300 mb-4">
+                                 Upon completing this course, you will receive a verifiable digital certificate. This can be added to your LinkedIn profile, resume, or portfolio to validate your skills to potential employers.
+                             </p>
+                             <Button variant="outline" className="border-purple-500/50 text-purple-300 hover:bg-purple-500/10">
+                                 View Sample Certificate
+                             </Button>
+                         </div>
+                     </div>
+                </div>
+
+            </div> 
           </div>
         </div>
       )}
 
       {/* Reviews Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10 border-t border-white/10 mt-12">
         <ReviewSection
           courseId={id}
           reviews={reviews}

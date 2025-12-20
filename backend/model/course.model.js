@@ -18,6 +18,9 @@ const courseSchema = new mongoose.Schema(
     },
 
     language: String,
+    
+    learningOutcomes: [String],
+    requirements: [String],
 
     instructor: {
       type: mongoose.Schema.Types.ObjectId,
