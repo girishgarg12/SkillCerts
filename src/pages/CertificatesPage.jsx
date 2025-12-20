@@ -9,6 +9,7 @@ import { PageLoader } from '../components/ui/Spinner';
 import { Alert } from '../components/ui/Alert';
 import { formatDate } from '../lib/utils';
 import { CertificateModal } from '../components/ui/CertificateModal';
+import { downloadCertificate } from '../lib/downloadCertificate';
 
 export const CertificatesPage = () => {
   const [certificates, setCertificates] = useState([]);
@@ -16,6 +17,7 @@ export const CertificatesPage = () => {
   const [error, setError] = useState('');
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const [viewLoading, setViewLoading] = useState(false);
+  const [downloadingId, setDownloadingId] = useState(null);
 
   useEffect(() => {
     fetchCertificates();
@@ -48,17 +50,34 @@ export const CertificatesPage = () => {
 
   const handleDownload = async (certificate) => {
     try {
-      setViewLoading(true);
+      setDownloadingId(certificate._id);
+      
+      // Fetch certificate data
       const response = await certificateService.viewCertificate(certificate.course._id);
-      setSelectedCertificate(response.data);
-      // The modal has a download button that triggers print
-      setTimeout(() => {
-        toast.success('Click the download button in the certificate to save as PDF');
-      }, 500);
+      const certData = response.data;
+      
+      // Format date
+      const formattedDate = new Date(certData.completionDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      
+      // Use the utility function to download
+      await downloadCertificate({
+        userName: certData.userName,
+        courseTitle: certData.courseTitle,
+        completionDate: formattedDate,
+        certificateId: certData.certificateId,
+        instructorName: certData.instructorName,
+      });
+      
+      toast.success('Certificate downloaded successfully');
     } catch (error) {
+      console.error('Download error:', error);
       toast.error('Failed to download certificate');
     } finally {
-      setViewLoading(false);
+      setDownloadingId(null);
     }
   };
 
@@ -149,10 +168,21 @@ export const CertificatesPage = () => {
                       variant="outline"
                       className="w-full"
                       size="sm"
+                      disabled={downloadingId === certificate._id}
                     >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download PDF
+                      {downloadingId === certificate._id ? (
+                        <>
+                          <div className="w-4 h-4 mr-2 border-2 border-gray-600 border-t-transparent rounded-full animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-4 h-4 mr-2" />
+                          Download PDF
+                        </>
+                      )}
                     </Button>
+                    
                     <Button
                       onClick={() => handleVerify(certificate.certificateId)}
                       variant="outline"
