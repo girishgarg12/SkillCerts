@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { AuroraBackground } from '../components/ui/AuroraBackground';
 import { Button as MovingBorderButton } from '../components/ui/MovingBorder';
 import { CardContainer, CardBody, CardItem } from '../components/ui/3DCard';
+import { SparklesCore } from '../components/ui/Sparkles';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -53,9 +54,22 @@ export const HomePage = () => {
   }, [user]);
 
   return (
-    <div className="overflow-hidden text-white">
+    <div className="overflow-hidden text-white relative">
+      {/* Background Sparkles */}
+      <div className="w-full absolute inset-0 h-full min-h-screen">
+        <SparklesCore
+          id="tsparticleshomepage"
+          background="transparent"
+          minSize={0.6}
+          maxSize={1.4}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#FFFFFF"
+        />
+      </div>
+
       {/* Hero Section */}
-      <div className="relative">
+      <div className="relative pt-20 pb-20 md:pt-32 md:pb-32">
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 md:pt-0">
           <div className="text-center max-w-4xl mx-auto">
             <motion.div

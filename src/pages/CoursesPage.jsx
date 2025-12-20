@@ -10,6 +10,7 @@ import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { COURSE_LEVELS } from '../lib/constants';
 import { useAuthStore } from '../store/authStore';
+import { SparklesCore } from '../components/ui/Sparkles';
 
 export const CoursesPage = () => {
   const navigate = useNavigate();
@@ -110,8 +111,19 @@ export const CoursesPage = () => {
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
 
   return (
-    <div className="bg-black min-h-screen text-white pt-32 pb-12">
+    <div className="bg-black min-h-screen text-white pt-32 pb-12 relative w-full overflow-hidden">
         {/* Background Effects */}
+        <div className="w-full absolute inset-0 h-screen">
+            <SparklesCore
+                id="tsparticlesfullpage"
+                background="transparent"
+                minSize={0.6}
+                maxSize={1.4}
+                particleDensity={100}
+                className="w-full h-full"
+                particleColor="#FFFFFF"
+            />
+        </div>
         <div className="fixed inset-0 z-0 pointer-events-none">
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px]" />
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]" />

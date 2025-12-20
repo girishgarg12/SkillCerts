@@ -16,6 +16,8 @@ import { formatCurrency, formatDuration } from '../lib/utils';
 import { COURSE_LEVELS } from '../lib/constants';
 import { useAuthStore } from '../store/authStore';
 import { ReviewSection } from '../components/course/ReviewSection';
+import { PaymentModal } from '../components/payment/PaymentModal';
+import { SparklesCore } from '../components/ui/Sparkles';
 
 export const CourseDetailPage = () => {
   const { id } = useParams();
@@ -29,6 +31,7 @@ export const CourseDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [error, setError] = useState('');
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [expandedSections, setExpandedSections] = useState(new Set());
   const [showCertificatePreview, setShowCertificatePreview] = useState(false);
 
@@ -49,7 +52,7 @@ export const CourseDetailPage = () => {
     'mock-3': { _id: 'mock-3', title: 'Python for Data Science & AI', description: 'Zero to Hero in Python, Pandas, and Machine Learning concepts.', thumbnail: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop', level: 'intermediate', price: 1499, isFree: false, rating: 4.7, ratingCount: 210, totalDuration: 5200, instructor: { name: 'David Chen', _id: 'mock-inst-3' }, published: true, learningOutcomes: ['Data Analysis with Pandas', 'Machine Learning Algorithms', 'Deep Learning Basics'], requirements: ['Basic Math knowledge'] },
     'mock-4': { _id: 'mock-4', title: 'Mobile App Dev with React Native', description: 'Build native iOS and Android apps with a single codebase.', thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=2070&auto=format&fit=crop', level: 'intermediate', price: 1899, isFree: false, rating: 4.6, ratingCount: 156, totalDuration: 4100, instructor: { name: 'Emily Davis', _id: 'mock-inst-4' }, published: true, learningOutcomes: ['React Native Hooks', 'Native Device Features', 'Publishing to App Stores'], requirements: ['React Basics'] },
     'mock-5': { _id: 'mock-5', title: 'Digital Marketing & SEO Strategy', description: 'Grow your business with proven digital marketing techniques.', thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop', level: 'beginner', price: 999, isFree: false, rating: 4.5, ratingCount: 312, totalDuration: 2800, instructor: { name: 'Mark Johnson', _id: 'mock-inst-5' }, published: true, learningOutcomes: ['SEO Optimization', 'Social Media Marketing', 'Email Campaigns'], requirements: ['None'] },
-    'mock-6': { _id: 'mock-6', title: 'DevOps & Cloud Infrastructure', description: 'Learn Docker, Kubernetes, and AWS deployment pipelines.', thumbnail: 'https://images.unsplash.com/photo-1667372393119-c81c0026dfba?q=80&w=1920&auto=format&fit=crop', level: 'advanced', price: 2999, isFree: false, rating: 4.9, ratingCount: 56, totalDuration: 6200, instructor: { name: 'James Carter', _id: 'mock-inst-6' }, published: true, learningOutcomes: ['CI/CD Pipelines', 'Container Orchestration', 'Infrastructure as Code'], requirements: ['Linux Basics', 'Networking Fundamentals'] },
+    'mock-6': { _id: 'mock-6', title: 'DevOps & Cloud Infrastructure', description: 'Learn Docker, Kubernetes, and AWS deployment pipelines.', thumbnail: '/devops.png', level: 'advanced', price: 2999, isFree: false, rating: 4.9, ratingCount: 56, totalDuration: 6200, instructor: { name: 'James Carter', _id: 'mock-inst-6' }, published: true, learningOutcomes: ['CI/CD Pipelines', 'Container Orchestration', 'Infrastructure as Code'], requirements: ['Linux Basics', 'Networking Fundamentals'] },
     'mock-7': { _id: 'mock-7', title: 'Blender 3D Modeling Bootcamp', description: 'Create stunning 3D models and animations from scratch.', thumbnail: 'https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=2070&auto=format&fit=crop', level: 'beginner', price: 1299, isFree: false, rating: 4.8, ratingCount: 178, totalDuration: 3600, instructor: { name: 'Lisa Wong', _id: 'mock-inst-7' }, published: true, learningOutcomes: ['3D Modeling Techniques', 'Texturing and Shading', 'Animation Basics'], requirements: ['A computer with decent GPU'] },
     'mock-8': { _id: 'mock-8', title: 'Cybersecurity Fundamentals', description: 'Protect systems and networks from digital attacks.', thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop', level: 'intermediate', price: 2299, isFree: false, rating: 4.7, ratingCount: 92, totalDuration: 3900, instructor: { name: 'Robert Fox', _id: 'mock-inst-8' }, published: true, learningOutcomes: ['Network Security', 'Ethical Hacking', 'Risk Management'], requirements: ['Basic IT knowledge'] },
   };
@@ -153,50 +156,12 @@ export const CourseDetailPage = () => {
     }
   };
 
-  const handleEnroll = async () => {
+  const handleEnroll = () => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
-
-    // Mock Data Enrollment (Frontend Only)
-    if (id.startsWith('mock-')) {
-        setEnrolling(true);
-        setTimeout(() => {
-            setIsEnrolled(true);
-            
-            // Persist to localStorage
-            const mockEnrollments = JSON.parse(localStorage.getItem('mockEnrollments') || '[]');
-            if (!mockEnrollments.includes(id)) {
-                localStorage.setItem('mockEnrollments', JSON.stringify([...mockEnrollments, id]));
-            }
-
-            toast.success('Successfully enrolled in the course!');
-            setEnrolling(false);
-        }, 1500); 
-        return;
-    }
-
-    // If it's a paid course, redirect to payment page
-    if (!course.isFree) {
-      navigate(`/payment/${id}`);
-      return;
-    }
-
-    // For free courses, enroll directly
-    setEnrolling(true);
-    try {
-      await enrollmentService.enrollCourse(id);
-      setIsEnrolled(true);
-      toast.success('Successfully enrolled in the course!');
-      navigate('/my-learning');
-    } catch (error) {
-      const errorMessage = error.message || 'Failed to enroll';
-      toast.error(errorMessage);
-      setError(errorMessage);
-    } finally {
-      setEnrolling(false);
-    }
+    setShowPaymentModal(true);
   };
 
   if (loading) return <PageLoader />;
@@ -213,6 +178,17 @@ export const CourseDetailPage = () => {
     <div className="bg-black text-white min-h-screen relative overflow-hidden">
        {/* Background Effects */}
        <div className="fixed inset-0 z-0 pointer-events-none">
+           <div className="w-full absolute inset-0 h-screen">
+                <SparklesCore
+                    id="tsparticlesdetailpage"
+                    background="transparent"
+                    minSize={0.6}
+                    maxSize={1.4}
+                    particleDensity={100}
+                    className="w-full h-full"
+                    particleColor="#FFFFFF"
+                />
+           </div>
            <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.15),transparent_50%)] blur-[100px]" />
            <div className="absolute bottom-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.15),transparent_50%)] blur-[100px]" />
        </div>
@@ -520,6 +496,15 @@ export const CourseDetailPage = () => {
                 instructorName: course.instructor?.name || "Instructor Name"
             }}
             onClose={() => setShowCertificatePreview(false)}
+        />
+      )}
+      
+      {course && (
+        <PaymentModal
+            course={course}
+            isOpen={showPaymentModal}
+            onClose={() => setShowPaymentModal(false)}
+            user={user}
         />
       )}
     </div>
