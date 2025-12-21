@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+# SkillCert
+
+SkillCert is a MERN stack skill-based learning and certification platform where instructors can create and manage courses, and learners can purchase courses to upskill.
+
+## Tech Stack
+- MongoDB
+- Express.js
+- React
+- Node.js
+
+## Features
+- Role-based authentication (Instructor & Learner)
+- Course creation and management
+- Secure payments
+- Certificate generation
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -14,3 +30,7 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+=======
+# SkillCerts
+SkillCert | MERN Stack Skill-Based Learning &amp; Certification Platform | Role-Based Access (Instructor &amp; Learner)
+>>>>>>> 7a70eee9541f93d47981287d0d76b80171e9bbc1
