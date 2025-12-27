@@ -10,6 +10,7 @@ const lectureSchema = new mongoose.Schema({
   },
 
   videoUrl: String,
+  notesUrl: String,
   duration: Number,
 
   isPreview: { type: Boolean, default: false },
@@ -17,4 +18,3 @@ const lectureSchema = new mongoose.Schema({
 });
 
 export const Lecture = mongoose.model("Lecture", lectureSchema);
-  

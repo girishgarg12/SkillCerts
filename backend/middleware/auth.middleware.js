@@ -10,7 +10,7 @@ export const authenticate = async (req, res, next) => {
   try {
     // Check for token in Authorization header or query parameter
     let token = req.headers.authorization?.replace('Bearer ', '');
-    
+
     // If no token in header, check query params (useful for certificate views)
     if (!token && req.query.token) {
       token = req.query.token;
@@ -58,4 +58,31 @@ export const authorize = (...roles) => {
 
     next();
   };
+};
+
+/**
+ * Optional authentication - attaches user if token is valid, but doesn't fail if missing
+ */
+export const optionalAuthenticate = async (req, res, next) => {
+  try {
+    let token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token && req.query.token) {
+      token = req.query.token;
+    }
+
+    if (!token) {
+      return next();
+    }
+
+    const decoded = jwt.verify(token, env.JWT_SECRET);
+    const user = await User.findById(decoded.userId).select('-passwordHash');
+
+    if (user) {
+      req.user = user;
+    }
+    next();
+  } catch (error) {
+    // If token is invalid/expired, we just treat it as guest instead of failing
+    next();
+  }
 };

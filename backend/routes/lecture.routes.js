@@ -8,6 +8,7 @@ import {
   reorderLectures,
 } from '../controller/lecture.controller.js';
 import { authenticate, authorize } from '../middleware/auth.middleware.js';
+import { upload } from '../middleware/upload.middleware.js';
 
 const lectureRouter = Router();
 
@@ -17,8 +18,8 @@ lectureRouter.get('/:id', getLecture);
 
 // Instructor/Admin routes
 lectureRouter.use(authenticate, authorize('instructor', 'admin'));
-lectureRouter.post('/section/:sectionId', createLecture);
-lectureRouter.put('/:id', updateLecture);
+lectureRouter.post('/section/:sectionId', upload.fields([{ name: 'video', maxCount: 1 }, { name: 'notes', maxCount: 1 }]), createLecture);
+lectureRouter.put('/:id', upload.fields([{ name: 'video', maxCount: 1 }, { name: 'notes', maxCount: 1 }]), updateLecture);
 lectureRouter.delete('/:id', deleteLecture);
 lectureRouter.patch('/section/:sectionId/reorder', reorderLectures);
 

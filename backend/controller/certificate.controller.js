@@ -1,8 +1,4 @@
-import { Certificate } from '../model/certificate.model.js';
-import { Enrollment } from '../model/enrollment.model.js';
-import { Course } from '../model/course.model.js';
-import { generateCertificateId } from '../utils/certificateGenerator.js';
-import { generateCertificateHTML } from '../utils/certificateTemplate.js';
+import { certificateService } from '../services/certificate.service.js';
 import ApiResponse from '../utils/ApiResponse.js';
 
 /**
@@ -11,49 +7,14 @@ import ApiResponse from '../utils/ApiResponse.js';
 export const verifyCertificateJson = async (req, res) => {
   try {
     const { certificateId } = req.params;
-
-    const certificate = await Certificate.findOne({ certificateId })
-      .populate('user', 'name')
-      .populate('course', 'title instructor')
-      .populate({
-        path: 'course',
-        populate: { path: 'instructor', select: 'name' },
-      });
-
-    if (!certificate) {
-      return res.status(404).json({
-        success: false,
-        message: 'Certificate not found',
-      });
-    }
-
-    const completionDate = new Date(certificate.issuedAt).toLocaleDateString(
-      'en-US',
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }
-    );
-
-    return res.json({
-      success: true,
-      certificate: {
-        user: { name: certificate.user.name },
-        course: {
-          title: certificate.course.title,
-          instructor: { name: certificate.course.instructor.name },
-        },
-        issuedAt: certificate.issuedAt,
-        completionDate,
-        certificateId: certificate.certificateId,
-      },
-    });
+    const result = await certificateService.verifyCertificateJson(certificateId);
+    return res.json({ success: true, ...result });
   } catch (error) {
+    if (error.message === 'Certificate not found') {
+      return res.status(404).json({ success: false, message: 'Certificate not found' });
+    }
     console.error('Verify certificate JSON error:', error);
-    return res
-      .status(500)
-      .json({ success: false, message: 'Failed to verify certificate' });
+    return res.status(500).json({ success: false, message: 'Failed to verify certificate' });
   }
 };
 
@@ -63,59 +24,20 @@ export const verifyCertificateJson = async (req, res) => {
 export const generateCertificate = async (req, res) => {
   try {
     const { courseId } = req.params;
+    const result = await certificateService.generateCertificate(courseId, req.user._id);
 
-    // Check if enrollment exists and is completed
-    const enrollment = await Enrollment.findOne({
-      user: req.user._id,
-      course: courseId,
-    });
+    if (!result.isNew) {
+      return ApiResponse.success('Certificate already exists', result.certificate).send(res);
+    }
 
-    if (!enrollment) {
+    return ApiResponse.created('Certificate generated successfully', result.certificate).send(res);
+  } catch (error) {
+    if (error.message === 'Enrollment not found') {
       return ApiResponse.notFound('Enrollment not found').send(res);
     }
-
-    if (!enrollment.completed) {
-      return ApiResponse.badRequest(
-        'Course must be completed to generate certificate'
-      ).send(res);
+    if (error.message === 'Course must be completed to generate certificate') {
+      return ApiResponse.badRequest(error.message).send(res);
     }
-
-    // Check if certificate already exists
-    let certificate = await Certificate.findOne({
-      user: req.user._id,
-      course: courseId,
-    });
-
-    if (certificate) {
-      const populatedCertificate = await Certificate.findById(
-        certificate._id
-      ).populate('course', 'title');
-      return ApiResponse.success(
-        'Certificate already exists',
-        populatedCertificate
-      ).send(res);
-    }
-
-    // Generate certificate ID
-    const certificateId = generateCertificateId();
-
-    // Save certificate record (PDF generated on-demand)
-    certificate = await Certificate.create({
-      user: req.user._id,
-      course: courseId,
-      certificateId,
-      issuedAt: new Date(),
-    });
-
-    const populatedCertificate = await Certificate.findById(
-      certificate._id
-    ).populate('course', 'title slug thumbnail');
-
-    return ApiResponse.created(
-      'Certificate generated successfully',
-      populatedCertificate
-    ).send(res);
-  } catch (error) {
     console.error('Generate certificate error:', error);
     return ApiResponse.serverError('Failed to generate certificate').send(res);
   }
@@ -126,18 +48,8 @@ export const generateCertificate = async (req, res) => {
  */
 export const getMyCertificates = async (req, res) => {
   try {
-    const certificates = await Certificate.find({ user: req.user._id })
-      .populate('course', 'title slug thumbnail instructor')
-      .populate({
-        path: 'course',
-        populate: { path: 'instructor', select: 'name' },
-      })
-      .sort({ issuedAt: -1 });
-
-    return ApiResponse.success(
-      'Certificates fetched successfully',
-      certificates
-    ).send(res);
+    const certificates = await certificateService.getMyCertificates(req.user._id);
+    return ApiResponse.success('Certificates fetched successfully', certificates).send(res);
   } catch (error) {
     console.error('Get certificates error:', error);
     return ApiResponse.serverError('Failed to fetch certificates').send(res);
@@ -150,21 +62,12 @@ export const getMyCertificates = async (req, res) => {
 export const getCertificate = async (req, res) => {
   try {
     const { courseId } = req.params;
-
-    const certificate = await Certificate.findOne({
-      user: req.user._id,
-      course: courseId,
-    }).populate('course', 'title slug thumbnail instructor');
-
-    if (!certificate) {
+    const certificate = await certificateService.getCertificate(courseId, req.user._id);
+    return ApiResponse.success('Certificate fetched successfully', certificate).send(res);
+  } catch (error) {
+    if (error.message === 'Certificate not found') {
       return ApiResponse.notFound('Certificate not found').send(res);
     }
-
-    return ApiResponse.success(
-      'Certificate fetched successfully',
-      certificate
-    ).send(res);
-  } catch (error) {
     console.error('Get certificate error:', error);
     return ApiResponse.serverError('Failed to fetch certificate').send(res);
   }
@@ -176,36 +79,12 @@ export const getCertificate = async (req, res) => {
 export const viewCertificate = async (req, res) => {
   try {
     const { courseId } = req.params;
-
-    const certificate = await Certificate.findOne({
-      user: req.user._id,
-      course: courseId,
-    })
-      .populate('course', 'title instructor')
-      .populate('user', 'name')
-      .populate({
-        path: 'course',
-        populate: { path: 'instructor', select: 'name' },
-      });
-
-    if (!certificate) {
+    const certificateData = await certificateService.viewCertificate(courseId, req.user._id);
+    return ApiResponse.success('Certificate data fetched successfully', certificateData).send(res);
+  } catch (error) {
+    if (error.message === 'Certificate not found') {
       return ApiResponse.notFound('Certificate not found').send(res);
     }
-
-    // Return certificate data as JSON for frontend rendering
-    const certificateData = {
-      userName: certificate.user.name,
-      courseTitle: certificate.course.title,
-      completionDate: certificate.issuedAt,
-      certificateId: certificate.certificateId,
-      instructorName: certificate.course.instructor.name,
-    };
-
-    return ApiResponse.success(
-      'Certificate data fetched successfully',
-      certificateData
-    ).send(res);
-  } catch (error) {
     console.error('View certificate error:', error);
     return ApiResponse.serverError('Failed to view certificate').send(res);
   }
@@ -217,16 +96,9 @@ export const viewCertificate = async (req, res) => {
 export const verifyCertificate = async (req, res) => {
   try {
     const { certificateId } = req.params;
+    const html = await certificateService.verifyCertificateHtml(certificateId);
 
-    const certificate = await Certificate.findOne({ certificateId })
-      .populate('user', 'name')
-      .populate('course', 'title instructor')
-      .populate({
-        path: 'course',
-        populate: { path: 'instructor', select: 'name' },
-      });
-
-    if (!certificate) {
+    if (!html) {
       return res.status(404).send(`
         <!DOCTYPE html>
         <html>
@@ -248,24 +120,6 @@ export const verifyCertificate = async (req, res) => {
         </html>
       `);
     }
-
-    const completionDate = new Date(certificate.issuedAt).toLocaleDateString(
-      'en-US',
-      {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }
-    );
-
-    // Generate HTML certificate for public view
-    const html = generateCertificateHTML({
-      userName: certificate.user.name,
-      courseTitle: certificate.course.title,
-      completionDate,
-      certificateId: certificate.certificateId,
-      instructorName: certificate.course.instructor.name,
-    });
 
     res.setHeader('Content-Type', 'text/html');
     res.send(html);

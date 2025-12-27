@@ -28,6 +28,7 @@ dist-ssr
 # env files
 .env
 backend/.env
+frontend/.env
 .env.*
 FRONTEND_README.md
 INSTRUCTOR_FEATURES.md

@@ -39,28 +39,28 @@ class ApiResponse {
   }
 
   // Error responses
-  static badRequest(message) {
-    return new ApiResponse(400, false, message);
+  static badRequest(message, data = null) {
+    return new ApiResponse(400, false, message, data);
   }
 
-  static unauthorized(message = 'Unauthorized') {
-    return new ApiResponse(401, false, message);
+  static unauthorized(message = 'Unauthorized', data = null) {
+    return new ApiResponse(401, false, message, data);
   }
 
-  static forbidden(message = 'Forbidden') {
-    return new ApiResponse(403, false, message);
+  static forbidden(message = 'Forbidden', data = null) {
+    return new ApiResponse(403, false, message, data);
   }
 
-  static notFound(message = 'Not found') {
-    return new ApiResponse(404, false, message);
+  static notFound(message = 'Not found', data = null) {
+    return new ApiResponse(404, false, message, data);
   }
 
-  static conflict(message = 'Conflict') {
-    return new ApiResponse(409, false, message);
+  static conflict(message = 'Conflict', data = null) {
+    return new ApiResponse(409, false, message, data);
   }
 
-  static serverError(message = 'Server error') {
-    return new ApiResponse(500, false, message);
+  static serverError(message = 'Server error', data = null) {
+    return new ApiResponse(500, false, message, data);
   }
 }
 
