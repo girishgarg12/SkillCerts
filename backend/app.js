@@ -35,6 +35,22 @@ app.use('/uploads', express.static('uploads'));
 connectDB();
 
 // Routes
+app.get('/', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'SkillCerts API is running',
+        env: process.env.NODE_ENV
+    });
+});
+
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        success: true,
+        status: 'OK',
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.use('/api/user', userRouter);
 app.use('/api/courses', courseRouter);
 app.use('/api/categories', categoryRouter);
