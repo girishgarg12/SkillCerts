@@ -170,8 +170,16 @@ pipeline {
                 sh '''
                     RETRIES=${HEALTH_CHECK_RETRIES}
                     DELAY=${HEALTH_CHECK_DELAY}
-                    BACKEND_URL="http://localhost:3000/health"
-                    FRONTEND_URL="http://localhost:80"
+
+                    # Detect Docker host IP/name for health checks when running inside a container
+                    HOST_IP="localhost"
+                    if getent hosts host.docker.internal > /dev/null 2>&1; then
+                        HOST_IP="host.docker.internal"
+                        echo "Detected Docker Desktop/WSL2 environment. Using host.docker.internal for health check."
+                    fi
+
+                    BACKEND_URL="http://${HOST_IP}:3000/health"
+                    FRONTEND_URL="http://${HOST_IP}:80"
 
                     echo "=== Waiting for backend health ==="
                     for i in $(seq 1 $RETRIES); do
