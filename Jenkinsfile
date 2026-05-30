@@ -144,16 +144,16 @@ pipeline {
                     cd ${DEPLOY_DIR}
 
                     echo "=== Current running containers ==="
-                    docker compose ps || true
+                    docker-compose ps || true
 
                     echo "=== Pulling latest images via compose ==="
-                    docker compose pull
+                    docker-compose pull
 
                     echo "=== Starting services with zero-downtime rolling update ==="
-                    docker compose up -d --remove-orphans
+                    docker-compose up -d --remove-orphans
 
                     echo "✅ Containers deployed"
-                    docker compose ps
+                    docker-compose ps
                 '''
             }
         }
@@ -180,7 +180,7 @@ pipeline {
                         sleep $DELAY
                         if [ "$i" = "$RETRIES" ]; then
                             echo "❌ Backend health check failed after $RETRIES attempts!"
-                            docker compose -f ${COMPOSE_FILE} logs backend --tail=50
+                            docker-compose -f ${COMPOSE_FILE} logs backend --tail=50
                             exit 1
                         fi
                     done
@@ -196,7 +196,7 @@ pipeline {
                         sleep $DELAY
                         if [ "$i" = "$RETRIES" ]; then
                             echo "❌ Frontend health check failed after $RETRIES attempts!"
-                            docker compose -f ${COMPOSE_FILE} logs frontend --tail=50
+                            docker-compose -f ${COMPOSE_FILE} logs frontend --tail=50
                             exit 1
                         fi
                     done
@@ -241,8 +241,8 @@ pipeline {
             sh '''
                 cd "${WORKSPACE}"
                 # Attempt to restore the previous state
-                docker compose down || true
-                docker compose up -d --no-build || true
+                docker-compose down || true
+                docker-compose up -d --no-build || true
                 echo "⚠️  Rollback attempted. Check container logs."
             '''
             // slackSend(color: 'danger', message: "❌ SkillCerts deployment FAILED: ${params.GIT_COMMIT}")
