@@ -50,13 +50,8 @@
         "url": {
           "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
           "protocol": "https",
-          "host": [
-            "postman-echo",
-            "com"
-          ],
-          "path": [
-            "get"
-          ],
+          "host": ["postman-echo", "com"],
+          "path": ["get"],
           "query": [
             {
               "key": "foo1",
@@ -115,12 +110,8 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/get?foo=bar&baz=value",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "get"
-          ],
+          "host": ["{{baseUrl}}"],
+          "path": ["get"],
           "query": [
             {
               "key": "foo",
@@ -178,12 +169,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/post",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "post"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["post"]
         },
         "description": "The tests in this request validate that the request body sent as form-data is valid."
       },

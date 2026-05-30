@@ -32,12 +32,8 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/register",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "register"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["register"]
         },
         "description": "This returns a `token` that you can use to retrieve information later on.\n\nWe have included a test to confirm if a token is returned. We have also added test scripts to copy the token to the `token` collection variable. This makes it easy for us to reuse this token in other requests in the collection."
       },
@@ -77,12 +73,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/my-name?token={{token}}",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "my-name"
-          ],
+          "host": ["{{baseUrl}}"],
+          "path": ["my-name"],
           "query": [
             {
               "key": "token",
@@ -124,12 +116,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/unregister",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "unregister"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["unregister"]
         },
         "description": "This request un-registers a token by using the token collection variable in the POST body.\n\nWe also added a test to ensure the response has a 200 OK status code."
       },
@@ -141,18 +129,14 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

@@ -43,13 +43,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/signup",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "signup"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "signup"]
             }
           },
           "response": []
@@ -88,13 +83,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/signup",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "signup"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "signup"]
             }
           },
           "response": []
@@ -133,13 +123,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/signin",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "signin"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "signin"]
             }
           },
           "response": []
@@ -158,13 +143,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/user/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "me"]
             }
           },
           "response": []
@@ -186,12 +166,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/courses?page=1&limit=10",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses"],
                   "query": [
                     {
                       "key": "page",
@@ -214,12 +190,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/courses?search=javascript",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses"],
                   "query": [
                     {
                       "key": "search",
@@ -238,13 +210,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/courses/{{courseId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses",
-                    "{{courseId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses", "{{courseId}}"]
                 }
               },
               "response": []
@@ -293,12 +260,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/courses",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses"]
                 }
               },
               "response": []
@@ -317,14 +280,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/courses/instructor/my-courses",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses",
-                    "instructor",
-                    "my-courses"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses", "instructor", "my-courses"]
                 }
               },
               "response": []
@@ -351,13 +308,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/courses/{{courseId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses",
-                    "{{courseId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses", "{{courseId}}"]
                 }
               },
               "response": []
@@ -376,14 +328,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/courses/{{courseId}}/publish",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses",
-                    "{{courseId}}",
-                    "publish"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses", "{{courseId}}", "publish"]
                 }
               },
               "response": []
@@ -402,13 +348,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/courses/{{courseId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses",
-                    "{{courseId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses", "{{courseId}}"]
                 }
               },
               "response": []
@@ -433,12 +374,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/categories",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories"]
                 }
               },
               "response": []
@@ -451,13 +388,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/categories/{{categoryId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "categories",
-                    "{{categoryId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories", "{{categoryId}}"]
                 }
               },
               "response": []
@@ -506,12 +438,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/categories",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories"]
                 }
               },
               "response": []
@@ -538,13 +466,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/categories/{{categoryId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "categories",
-                    "{{categoryId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories", "{{categoryId}}"]
                 }
               },
               "response": []
@@ -563,13 +486,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/categories/{{categoryId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "categories",
-                    "{{categoryId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories", "{{categoryId}}"]
                 }
               },
               "response": []
@@ -603,13 +521,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/user/signup",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "user",
-                    "signup"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["user", "signup"]
                 }
               },
               "response": []
@@ -631,13 +544,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/user/signin",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "user",
-                    "signin"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["user", "signin"]
                 }
               },
               "response": []
@@ -665,12 +573,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/courses",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "courses"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["courses"]
                 }
               },
               "response": []
@@ -698,12 +602,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/categories",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories"]
                 }
               },
               "response": []
@@ -730,12 +630,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/categories",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["categories"]
                 }
               },
               "response": []

@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const lectureSchema = new mongoose.Schema({
   title: { type: String, required: true },
 
   section: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Section",
+    ref: 'Section',
     required: true,
   },
 
@@ -17,4 +17,4 @@ const lectureSchema = new mongoose.Schema({
   order: Number,
 });
 
-export const Lecture = mongoose.model("Lecture", lectureSchema);
+export const Lecture = mongoose.model('Lecture', lectureSchema);

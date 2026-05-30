@@ -1,16 +1,16 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const reviewSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
 
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
+      ref: 'Course',
       required: true,
     },
 
@@ -22,4 +22,4 @@ const reviewSchema = new mongoose.Schema(
 
 reviewSchema.index({ user: 1, course: 1 }, { unique: true });
 
-export const Review = mongoose.model("Review", reviewSchema);
+export const Review = mongoose.model('Review', reviewSchema);

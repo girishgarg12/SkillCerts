@@ -7,7 +7,11 @@ import {
   deleteSection,
   reorderSections,
 } from '../controller/section.controller.js';
-import { authenticate, authorize, optionalAuthenticate } from '../middleware/auth.middleware.js';
+import {
+  authenticate,
+  authorize,
+  optionalAuthenticate,
+} from '../middleware/auth.middleware.js';
 
 const sectionRouter = Router();
 

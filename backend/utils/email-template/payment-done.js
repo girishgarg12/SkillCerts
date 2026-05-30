@@ -9,7 +9,7 @@ function escapeHTML(str) {
       '<': '&lt;',
       '>': '&gt;',
       '"': '&quot;',
-      "'": '&#39;'
+      "'": '&#39;',
     };
     return escapeMap[char];
   });
@@ -18,7 +18,13 @@ function escapeHTML(str) {
 /**
  * Course Purchase Confirmation Email Template
  */
-export const coursePurchasedTemplate = ({ userName, courseTitle, courseUrl, amount, currency = 'INR' }) => {
+export const coursePurchasedTemplate = ({
+  userName,
+  courseTitle,
+  courseUrl,
+  amount,
+  currency = 'INR',
+}) => {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +73,9 @@ export const coursePurchasedTemplate = ({ userName, courseTitle, courseUrl, amou
                 </h3>
               </div>
 
-              ${amount ? `
+              ${
+                amount
+                  ? `
               <!-- Payment Details -->
               <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 24px 0;">
                 <h4 style="margin: 0 0 12px; color: #374151; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Payment Details</h4>
@@ -82,7 +90,9 @@ export const coursePurchasedTemplate = ({ userName, courseTitle, courseUrl, amou
                   </tr>
                 </table>
               </div>
-              ` : ''}
+              `
+                  : ''
+              }
 
               <!-- CTA Button -->
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 32px 0;">

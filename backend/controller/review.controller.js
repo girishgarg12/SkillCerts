@@ -4,8 +4,15 @@ import ApiResponse from '../utils/ApiResponse.js';
 
 // Validation schemas
 const createReviewSchema = z.object({
-  rating: z.number().min(1, 'Rating must be at least 1').max(5, 'Rating must be at most 5'),
-  comment: z.string().min(10, 'Comment must be at least 10 characters').max(1000, 'Comment must be at most 1000 characters').optional(),
+  rating: z
+    .number()
+    .min(1, 'Rating must be at least 1')
+    .max(5, 'Rating must be at most 5'),
+  comment: z
+    .string()
+    .min(10, 'Comment must be at least 10 characters')
+    .max(1000, 'Comment must be at most 1000 characters')
+    .optional(),
 });
 
 const updateReviewSchema = z.object({
@@ -20,16 +27,25 @@ export const createReview = async (req, res) => {
   try {
     const { courseId } = req.params;
     const { rating, comment } = createReviewSchema.parse(req.body);
-    const review = await reviewService.createReview(courseId, req.user._id, { rating, comment });
+    const review = await reviewService.createReview(courseId, req.user._id, {
+      rating,
+      comment,
+    });
     return ApiResponse.created('Review created successfully', review).send(res);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return ApiResponse.badRequest('Validation failed', error.issues).send(res);
+      return ApiResponse.badRequest('Validation failed', error.issues).send(
+        res
+      );
     }
     if (error.message === 'Course not found') {
       return ApiResponse.notFound('Course not found').send(res);
     }
-    if (error.message === 'You must be enrolled in this course to leave a review' || error.message === 'Instructors cannot review their own courses') {
+    if (
+      error.message ===
+        'You must be enrolled in this course to leave a review' ||
+      error.message === 'Instructors cannot review their own courses'
+    ) {
       return ApiResponse.forbidden(error.message).send(res); // or badRequest depending on interpretation, original was forbidden for enrollment, badRequest for instructor
     }
     if (error.message.includes('Review already exists')) {
@@ -47,11 +63,17 @@ export const updateReview = async (req, res) => {
   try {
     const { courseId } = req.params;
     const updates = updateReviewSchema.parse(req.body);
-    const review = await reviewService.updateReview(courseId, req.user._id, updates);
+    const review = await reviewService.updateReview(
+      courseId,
+      req.user._id,
+      updates
+    );
     return ApiResponse.success('Review updated successfully', review).send(res);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return ApiResponse.badRequest('Validation failed', error.issues).send(res);
+      return ApiResponse.badRequest('Validation failed', error.issues).send(
+        res
+      );
     }
     if (error.message.includes('Review not found')) {
       return ApiResponse.notFound(error.message).send(res);
@@ -85,8 +107,14 @@ export const getCourseReviews = async (req, res) => {
   try {
     const { courseId } = req.params;
     const { page, limit, rating } = req.query;
-    const result = await reviewService.getCourseReviews(courseId, { page, limit, rating });
-    return ApiResponse.success('Reviews fetched successfully', result).send(res);
+    const result = await reviewService.getCourseReviews(courseId, {
+      page,
+      limit,
+      rating,
+    });
+    return ApiResponse.success('Reviews fetched successfully', result).send(
+      res
+    );
   } catch (error) {
     console.error('Get course reviews error:', error);
     return ApiResponse.serverError('Failed to fetch reviews').send(res);
@@ -116,7 +144,10 @@ export const getMyReview = async (req, res) => {
 export const getMyReviews = async (req, res) => {
   try {
     const reviews = await reviewService.getMyReviews(req.user._id);
-    return ApiResponse.success('Your reviews fetched successfully', reviews).send(res);
+    return ApiResponse.success(
+      'Your reviews fetched successfully',
+      reviews
+    ).send(res);
   } catch (error) {
     console.error('Get my reviews error:', error);
     return ApiResponse.serverError('Failed to fetch reviews').send(res);

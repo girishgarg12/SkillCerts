@@ -2,7 +2,13 @@
  * Generate beautiful HTML certificate
  */
 export const generateCertificateHTML = (data) => {
-  const { userName, courseTitle, completionDate, certificateId, instructorName } = data;
+  const {
+    userName,
+    courseTitle,
+    completionDate,
+    certificateId,
+    instructorName,
+  } = data;
 
   return `
 <!DOCTYPE html>

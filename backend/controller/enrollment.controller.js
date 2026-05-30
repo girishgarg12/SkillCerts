@@ -13,16 +13,27 @@ const enrollCourseSchema = z.object({
 export const enrollCourse = async (req, res) => {
   try {
     const { courseId } = enrollCourseSchema.parse(req.body);
-    const enrollment = await enrollmentService.enrollUser(req.user._id, courseId, req.user.email, req.user.name);
+    const enrollment = await enrollmentService.enrollUser(
+      req.user._id,
+      courseId,
+      req.user.email,
+      req.user.name
+    );
     return ApiResponse.created('Enrolled successfully', enrollment).send(res);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return ApiResponse.badRequest('Validation failed', error.issues).send(res);
+      return ApiResponse.badRequest('Validation failed', error.issues).send(
+        res
+      );
     }
     if (error.message === 'Course not found') {
       return ApiResponse.notFound('Course not found').send(res);
     }
-    if (error.message === 'Course is not published yet' || error.message.includes('Payment required') || error.message === 'You cannot enroll in a course you created') {
+    if (
+      error.message === 'Course is not published yet' ||
+      error.message.includes('Payment required') ||
+      error.message === 'You cannot enroll in a course you created'
+    ) {
       return ApiResponse.badRequest(error.message).send(res);
     }
     if (error.message === 'Already enrolled in this course') {
@@ -39,8 +50,14 @@ export const enrollCourse = async (req, res) => {
 export const getMyEnrollments = async (req, res) => {
   try {
     const { status } = req.query;
-    const enrollments = await enrollmentService.getUserEnrollments(req.user._id, status);
-    return ApiResponse.success('Enrollments fetched successfully', enrollments).send(res);
+    const enrollments = await enrollmentService.getUserEnrollments(
+      req.user._id,
+      status
+    );
+    return ApiResponse.success(
+      'Enrollments fetched successfully',
+      enrollments
+    ).send(res);
   } catch (error) {
     console.error('Get enrollments error:', error);
     return ApiResponse.serverError('Failed to fetch enrollments').send(res);
@@ -53,8 +70,14 @@ export const getMyEnrollments = async (req, res) => {
 export const getEnrollment = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const enrollment = await enrollmentService.getEnrollment(req.user._id, courseId);
-    return ApiResponse.success('Enrollment fetched successfully', enrollment).send(res);
+    const enrollment = await enrollmentService.getEnrollment(
+      req.user._id,
+      courseId
+    );
+    return ApiResponse.success(
+      'Enrollment fetched successfully',
+      enrollment
+    ).send(res);
   } catch (error) {
     if (error.message === 'Enrollment not found') {
       return ApiResponse.notFound('Enrollment not found').send(res);
@@ -104,17 +127,28 @@ export const unenrollCourse = async (req, res) => {
 export const getCourseEnrollments = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const result = await enrollmentService.getCourseEnrollments(courseId, req.user._id, req.user.role);
-    return ApiResponse.success('Course enrollments fetched successfully', result).send(res);
+    const result = await enrollmentService.getCourseEnrollments(
+      courseId,
+      req.user._id,
+      req.user.role
+    );
+    return ApiResponse.success(
+      'Course enrollments fetched successfully',
+      result
+    ).send(res);
   } catch (error) {
     if (error.message === 'Course not found') {
       return ApiResponse.notFound('Course not found').send(res);
     }
     if (error.message === 'Unauthorized') {
-      return ApiResponse.forbidden('You are not authorized to view these enrollments').send(res);
+      return ApiResponse.forbidden(
+        'You are not authorized to view these enrollments'
+      ).send(res);
     }
     console.error('Get course enrollments error:', error);
-    return ApiResponse.serverError('Failed to fetch course enrollments').send(res);
+    return ApiResponse.serverError('Failed to fetch course enrollments').send(
+      res
+    );
   }
 };
 
@@ -124,7 +158,12 @@ export const getCourseEnrollments = async (req, res) => {
 export const markCourseCompleted = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const result = await enrollmentService.markCompletion(req.user._id, courseId, req.user.email, req.user.name);
+    const result = await enrollmentService.markCompletion(
+      req.user._id,
+      courseId,
+      req.user.email,
+      req.user.name
+    );
     return ApiResponse.success('Course marked as completed', result).send(res);
   } catch (error) {
     if (error.message === 'Enrollment not found') {
@@ -134,6 +173,8 @@ export const markCourseCompleted = async (req, res) => {
       return ApiResponse.badRequest(error.message).send(res);
     }
     console.error('Mark course completed error:', error);
-    return ApiResponse.serverError('Failed to mark course as completed').send(res);
+    return ApiResponse.serverError('Failed to mark course as completed').send(
+      res
+    );
   }
 };

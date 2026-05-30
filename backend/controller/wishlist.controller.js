@@ -13,7 +13,9 @@ const addToWishlistSchema = z.object({
 export const getMyWishlist = async (req, res) => {
   try {
     const wishlist = await wishlistService.getMyWishlist(req.user._id);
-    return ApiResponse.success('Wishlist fetched successfully', wishlist).send(res);
+    return ApiResponse.success('Wishlist fetched successfully', wishlist).send(
+      res
+    );
   } catch (error) {
     console.error('Get wishlist error:', error);
     return ApiResponse.serverError('Failed to fetch wishlist').send(res);
@@ -26,11 +28,16 @@ export const getMyWishlist = async (req, res) => {
 export const addToWishlist = async (req, res) => {
   try {
     const { courseId } = addToWishlistSchema.parse(req.body);
-    const wishlist = await wishlistService.addToWishlist(courseId, req.user._id);
+    const wishlist = await wishlistService.addToWishlist(
+      courseId,
+      req.user._id
+    );
     return ApiResponse.created('Course added to wishlist', wishlist).send(res);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return ApiResponse.badRequest('Validation failed', error.issues).send(res);
+      return ApiResponse.badRequest('Validation failed', error.issues).send(
+        res
+      );
     }
     if (error.message === 'Course not found') {
       return ApiResponse.notFound('Course not found').send(res);
@@ -66,8 +73,13 @@ export const removeFromWishlist = async (req, res) => {
 export const checkWishlist = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const isInWishlist = await wishlistService.checkWishlist(courseId, req.user._id);
-    return ApiResponse.success('Wishlist status checked', { isInWishlist }).send(res);
+    const isInWishlist = await wishlistService.checkWishlist(
+      courseId,
+      req.user._id
+    );
+    return ApiResponse.success('Wishlist status checked', {
+      isInWishlist,
+    }).send(res);
   } catch (error) {
     console.error('Check wishlist error:', error);
     return ApiResponse.serverError('Failed to check wishlist status').send(res);
@@ -80,11 +92,13 @@ export const checkWishlist = async (req, res) => {
 export const clearWishlist = async (req, res) => {
   try {
     const count = await wishlistService.clearWishlist(req.user._id);
-    const message = count > 0 ? `Wishlist cleared (${count} items removed)` : 'Wishlist is already empty';
+    const message =
+      count > 0
+        ? `Wishlist cleared (${count} items removed)`
+        : 'Wishlist is already empty';
     return ApiResponse.success(message).send(res);
   } catch (error) {
     console.error('Clear wishlist error:', error);
     return ApiResponse.serverError('Failed to clear wishlist').send(res);
   }
 };
-

@@ -23,13 +23,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/user/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "profile"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "profile"]
             }
           },
           "response": []
@@ -57,13 +52,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/profile",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "profile"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "profile"]
             }
           },
           "response": []
@@ -91,13 +81,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/change-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "change-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "change-password"]
             }
           },
           "response": []
@@ -126,13 +111,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/forgot-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "forgot-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "forgot-password"]
             }
           },
           "response": []
@@ -155,13 +135,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/reset-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "reset-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "reset-password"]
             }
           },
           "response": []

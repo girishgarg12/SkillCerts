@@ -23,13 +23,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/progress/my",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "my"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "my"]
             },
             "description": "Get progress across all enrolled courses"
           },
@@ -49,13 +44,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/progress/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "{{courseId}}"]
             },
             "description": "Get progress for specific course with completed lectures"
           },
@@ -83,14 +73,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "{{courseId}}",
-                "toggle"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "{{courseId}}", "toggle"]
             },
             "description": "Mark lecture as completed (or uncompleted if already completed)"
           },
@@ -118,14 +102,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "{{courseId}}",
-                "toggle"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "{{courseId}}", "toggle"]
             },
             "description": "Toggle same lecture again to mark as incomplete"
           },
@@ -145,14 +123,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/progress/{{courseId}}/reset",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "{{courseId}}",
-                "reset"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "{{courseId}}", "reset"]
             },
             "description": "Reset all progress for a course (clears completed lectures, sets 0%)"
           },
@@ -173,13 +145,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/progress/my",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "my"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "my"]
             },
             "description": "Test getting progress without auth (should return 401)"
           },
@@ -199,13 +166,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/progress/<unenrolled_course_id>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "<unenrolled_course_id>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "<unenrolled_course_id>"]
             },
             "description": "Test getting progress for unenrolled course (should return 403)"
           },
@@ -233,14 +195,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/progress/<unenrolled_course_id>/toggle",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "<unenrolled_course_id>",
-                "toggle"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "<unenrolled_course_id>", "toggle"]
             },
             "description": "Test toggling lecture without enrollment (should return 403)"
           },
@@ -268,14 +224,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "{{courseId}}",
-                "toggle"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "{{courseId}}", "toggle"]
             },
             "description": "Test with non-existent lecture ID (should return 404)"
           },
@@ -303,14 +253,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/progress/{{courseId}}/toggle",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "{{courseId}}",
-                "toggle"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "{{courseId}}", "toggle"]
             },
             "description": "Test toggling lecture from different course (should return 400)"
           },
@@ -330,14 +274,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/progress/<unenrolled_course_id>/reset",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "progress",
-                "<unenrolled_course_id>",
-                "reset"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["progress", "<unenrolled_course_id>", "reset"]
             },
             "description": "Test resetting progress without enrollment (should return 403)"
           },

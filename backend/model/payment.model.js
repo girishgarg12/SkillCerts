@@ -1,17 +1,17 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const paymentSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
 
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
+      ref: 'Course',
       required: true,
       index: true,
     },
@@ -26,15 +26,15 @@ const paymentSchema = new mongoose.Schema(
       type: String,
       required: true,
       uppercase: true,
-      default: "INR",
-      enum: ["INR", "USD"],
+      default: 'INR',
+      enum: ['INR', 'USD'],
     },
 
     status: {
       type: String,
       required: true,
-      enum: ["pending", "success", "failed", "refunded"],
-      default: "pending",
+      enum: ['pending', 'success', 'failed', 'refunded'],
+      default: 'pending',
       index: true,
     },
 
@@ -70,7 +70,7 @@ const paymentSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    strict: "throw", // ❗ rejects unknown fields
+    strict: 'throw', // ❗ rejects unknown fields
   }
 );
 
@@ -79,7 +79,7 @@ const paymentSchema = new mongoose.Schema(
  */
 paymentSchema.index(
   { user: 1, course: 1, status: 1 },
-  { unique: true, partialFilterExpression: { status: "success" } }
+  { unique: true, partialFilterExpression: { status: 'success' } }
 );
 
-export const Payment = mongoose.model("Payment", paymentSchema);
+export const Payment = mongoose.model('Payment', paymentSchema);

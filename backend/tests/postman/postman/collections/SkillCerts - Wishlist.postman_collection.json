@@ -23,12 +23,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/wishlist",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist"]
             },
             "description": "Get all courses in user's wishlist with course details"
           },
@@ -56,12 +52,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/wishlist",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist"]
             },
             "description": "Add course to wishlist"
           },
@@ -81,14 +73,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/wishlist/check/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist",
-                "check",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist", "check", "{{courseId}}"]
             },
             "description": "Check if a specific course is in wishlist"
           },
@@ -108,13 +94,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/wishlist/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist", "{{courseId}}"]
             },
             "description": "Remove course from wishlist"
           },
@@ -134,12 +115,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/wishlist",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist"]
             },
             "description": "Clear entire wishlist (removes all courses)"
           },
@@ -169,12 +146,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/wishlist",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist"]
             },
             "description": "Test adding to wishlist without auth (should return 401)"
           },
@@ -202,12 +175,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/wishlist",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist"]
             },
             "description": "Test adding non-existent course (should return 404)"
           },
@@ -235,12 +204,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/wishlist",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist"]
             },
             "description": "Test adding course already in wishlist (should return 409)"
           },
@@ -260,13 +225,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/wishlist/<course_not_in_wishlist>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wishlist",
-                "<course_not_in_wishlist>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wishlist", "<course_not_in_wishlist>"]
             },
             "description": "Test removing course not in wishlist (should return 404)"
           },

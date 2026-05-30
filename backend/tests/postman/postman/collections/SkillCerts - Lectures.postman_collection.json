@@ -17,14 +17,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/lectures/section/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "section",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "section", "{{sectionId}}"]
             },
             "description": "Get all lectures in a section (public for published courses)"
           },
@@ -38,13 +32,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/lectures/{{lectureId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "{{lectureId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "{{lectureId}}"]
             },
             "description": "Get preview lecture (isPreview: true) - no enrollment required"
           },
@@ -64,13 +53,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/lectures/{{lectureId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "{{lectureId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "{{lectureId}}"]
             },
             "description": "Get lecture (requires enrollment if not preview)"
           },
@@ -121,14 +105,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/section/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "section",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "section", "{{sectionId}}"]
             },
             "description": "Create lecture (order auto-assigned)"
           },
@@ -172,14 +150,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/section/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "section",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "section", "{{sectionId}}"]
             },
             "description": "Create lecture with custom order"
           },
@@ -207,13 +179,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/{{lectureId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "{{lectureId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "{{lectureId}}"]
             },
             "description": "Update lecture details"
           },
@@ -241,15 +208,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/section/{{sectionId}}/reorder",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "section",
-                "{{sectionId}}",
-                "reorder"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "section", "{{sectionId}}", "reorder"]
             },
             "description": "Bulk reorder lectures (array order determines new lecture order)"
           },
@@ -269,13 +229,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/lectures/{{lectureId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "{{lectureId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "{{lectureId}}"]
             },
             "description": "Delete lecture"
           },
@@ -305,14 +260,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/section/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "section",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "section", "{{sectionId}}"]
             },
             "description": "Test creating lecture without auth (should return 401)"
           },
@@ -340,14 +289,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/section/<other_instructor_section_id>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "section",
-                "<other_instructor_section_id>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "section", "<other_instructor_section_id>"]
             },
             "description": "Test creating lecture in another instructor's section (should return 403)"
           },
@@ -375,14 +318,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/section/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "section",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "section", "{{sectionId}}"]
             },
             "description": "Test invalid video URL validation (should return 400)"
           },
@@ -402,13 +339,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/lectures/<non_preview_lecture_id>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "<non_preview_lecture_id>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "<non_preview_lecture_id>"]
             },
             "description": "Test accessing non-preview lecture without enrollment (should return 403)"
           },
@@ -436,13 +368,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/lectures/65f1a2b3c4d5e6f7g8h9i0j1",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "lectures",
-                "65f1a2b3c4d5e6f7g8h9i0j1"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["lectures", "65f1a2b3c4d5e6f7g8h9i0j1"]
             },
             "description": "Test updating non-existent lecture (should return 404)"
           },

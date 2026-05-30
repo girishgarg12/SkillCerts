@@ -17,14 +17,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/sections/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "{{courseId}}"]
             },
             "description": "Get all sections for a course with lectures (public for published courses)"
           },
@@ -38,13 +32,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/sections/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "{{sectionId}}"]
             },
             "description": "Get single section with lectures"
           },
@@ -95,14 +84,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "{{courseId}}"]
             },
             "description": "Create section (order auto-assigned)"
           },
@@ -146,14 +129,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "{{courseId}}"]
             },
             "description": "Create section with custom order"
           },
@@ -181,13 +158,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "{{sectionId}}"]
             },
             "description": "Update section title and order"
           },
@@ -215,15 +187,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/course/{{courseId}}/reorder",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "{{courseId}}",
-                "reorder"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "{{courseId}}", "reorder"]
             },
             "description": "Bulk reorder sections (array order determines new section order)"
           },
@@ -243,13 +208,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/sections/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "{{sectionId}}"]
             },
             "description": "Delete section and all its lectures"
           },
@@ -279,14 +239,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "{{courseId}}"]
             },
             "description": "Test creating section without auth (should return 401)"
           },
@@ -314,14 +268,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/course/<other_instructor_course_id>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "<other_instructor_course_id>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "<other_instructor_course_id>"]
             },
             "description": "Test creating section in another instructor's course (should return 403)"
           },
@@ -349,14 +297,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "{{courseId}}"]
             },
             "description": "Test title validation (should return 400)"
           },
@@ -384,13 +326,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/65f1a2b3c4d5e6f7g8h9i0j1",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "65f1a2b3c4d5e6f7g8h9i0j1"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "65f1a2b3c4d5e6f7g8h9i0j1"]
             },
             "description": "Test updating non-existent section (should return 404)"
           },
@@ -418,15 +355,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/course/{{courseId}}/reorder",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "course",
-                "{{courseId}}",
-                "reorder"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "course", "{{courseId}}", "reorder"]
             },
             "description": "Test reordering with empty array (should return 400)"
           },

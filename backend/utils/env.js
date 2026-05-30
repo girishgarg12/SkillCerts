@@ -12,7 +12,7 @@ const envSchema = z.object({
   RZP_SECRET: z.string(),
   RZP_WEBHOOK_SECRET: z.string(),
   RESEND_MAIL_SECRET: z.string(),
-  FRONTEND_URL: z.string().default('http://localhost:3000')
+  FRONTEND_URL: z.string().default('http://localhost:3000'),
 });
 
 /**
@@ -25,7 +25,7 @@ const validateEnv = () => {
     return validated;
   } catch (error) {
     console.error('❌ Environment validation failed:\n');
-    
+
     if (error instanceof z.ZodError) {
       error.issues.forEach((err) => {
         console.error(`  - ${err.path.join('.')}: ${err.message}`);
@@ -33,8 +33,10 @@ const validateEnv = () => {
     } else {
       console.error(`  - ${error.message}`);
     }
-    
-    console.error('\n💡 Please check your .env file and ensure all required variables are set.\n');
+
+    console.error(
+      '\n💡 Please check your .env file and ensure all required variables are set.\n'
+    );
     process.exit(1);
   }
 };

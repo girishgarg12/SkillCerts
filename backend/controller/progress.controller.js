@@ -13,8 +13,13 @@ const toggleLectureSchema = z.object({
 export const getCourseProgress = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const progress = await progressService.getCourseProgress(courseId, req.user._id);
-    return ApiResponse.success('Progress fetched successfully', progress).send(res);
+    const progress = await progressService.getCourseProgress(
+      courseId,
+      req.user._id
+    );
+    return ApiResponse.success('Progress fetched successfully', progress).send(
+      res
+    );
   } catch (error) {
     if (error.message === 'Not enrolled in this course') {
       return ApiResponse.forbidden('Not enrolled in this course').send(res);
@@ -32,8 +37,13 @@ export const getCourseProgress = async (req, res) => {
  */
 export const getMyProgress = async (req, res) => {
   try {
-    const progressWithDetails = await progressService.getMyProgress(req.user._id);
-    return ApiResponse.success('All progress fetched successfully', progressWithDetails).send(res);
+    const progressWithDetails = await progressService.getMyProgress(
+      req.user._id
+    );
+    return ApiResponse.success(
+      'All progress fetched successfully',
+      progressWithDetails
+    ).send(res);
   } catch (error) {
     console.error('Get all progress error:', error);
     return ApiResponse.serverError('Failed to fetch progress').send(res);
@@ -47,10 +57,16 @@ export const toggleLectureCompletion = async (req, res) => {
   try {
     const { courseId } = req.params;
     const { lectureId } = toggleLectureSchema.parse(req.body);
-    const result = await progressService.toggleLectureCompletion(courseId, lectureId, req.user._id);
+    const result = await progressService.toggleLectureCompletion(
+      courseId,
+      lectureId,
+      req.user._id
+    );
 
     return ApiResponse.success(
-      result.isCompleted ? 'Lecture marked as completed' : 'Lecture marked as incomplete',
+      result.isCompleted
+        ? 'Lecture marked as completed'
+        : 'Lecture marked as incomplete',
       {
         progress: result.progress,
         courseCompleted: result.courseCompleted,
@@ -58,7 +74,9 @@ export const toggleLectureCompletion = async (req, res) => {
     ).send(res);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return ApiResponse.badRequest('Validation failed', error.issues).send(res);
+      return ApiResponse.badRequest('Validation failed', error.issues).send(
+        res
+      );
     }
     if (error.message === 'Not enrolled in this course') {
       return ApiResponse.forbidden('Not enrolled in this course').send(res);
@@ -70,7 +88,9 @@ export const toggleLectureCompletion = async (req, res) => {
       return ApiResponse.badRequest(error.message).send(res);
     }
     console.error('Toggle lecture completion error:', error);
-    return ApiResponse.serverError('Failed to update lecture completion').send(res);
+    return ApiResponse.serverError('Failed to update lecture completion').send(
+      res
+    );
   }
 };
 
@@ -80,8 +100,13 @@ export const toggleLectureCompletion = async (req, res) => {
 export const resetProgress = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const progress = await progressService.resetProgress(courseId, req.user._id);
-    return ApiResponse.success('Progress reset successfully', progress).send(res);
+    const progress = await progressService.resetProgress(
+      courseId,
+      req.user._id
+    );
+    return ApiResponse.success('Progress reset successfully', progress).send(
+      res
+    );
   } catch (error) {
     if (error.message === 'Not enrolled in this course') {
       return ApiResponse.forbidden('Not enrolled in this course').send(res);

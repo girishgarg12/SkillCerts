@@ -50,7 +50,11 @@
           "request": {
             "method": "POST",
             "header": [
-              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/generate/{{courseId}}",
@@ -66,7 +70,11 @@
           "request": {
             "method": "GET",
             "header": [
-              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/my",
@@ -82,7 +90,11 @@
           "request": {
             "method": "GET",
             "header": [
-              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/course/{{courseId}}",
@@ -98,7 +110,11 @@
           "request": {
             "method": "GET",
             "header": [
-              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/download/{{courseId}}",
@@ -140,7 +156,11 @@
           "request": {
             "method": "POST",
             "header": [
-              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/generate/<incomplete_course_id>",
@@ -156,7 +176,11 @@
           "request": {
             "method": "POST",
             "header": [
-              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/generate/<unenrolled_course_id>",
@@ -172,12 +196,20 @@
           "request": {
             "method": "GET",
             "header": [
-              {"key": "Authorization", "value": "Bearer {{authToken}}", "type": "text"}
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/download/<course_without_certificate>",
               "host": ["{{baseUrl}}"],
-              "path": ["certificates", "download", "<course_without_certificate>"]
+              "path": [
+                "certificates",
+                "download",
+                "<course_without_certificate>"
+              ]
             },
             "description": "Test downloading non-existent certificate (should return 404)"
           },

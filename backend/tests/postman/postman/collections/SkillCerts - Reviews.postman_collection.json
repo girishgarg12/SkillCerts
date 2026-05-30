@@ -17,14 +17,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/reviews/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "course", "{{courseId}}"]
             },
             "description": "Get all reviews for a course with rating distribution"
           },
@@ -38,14 +32,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/reviews/course/{{courseId}}?page=1&limit=5",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "course",
-                "{{courseId}}"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "course", "{{courseId}}"],
               "query": [
                 {
                   "key": "page",
@@ -69,14 +57,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/reviews/course/{{courseId}}?rating=5",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "course",
-                "{{courseId}}"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "course", "{{courseId}}"],
               "query": [
                 {
                   "key": "rating",
@@ -133,13 +115,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/reviews/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "{{courseId}}"]
             },
             "description": "Create a review (must be enrolled in course)"
           },
@@ -167,13 +144,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/reviews/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "{{courseId}}"]
             },
             "description": "Update existing review"
           },
@@ -193,14 +165,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/reviews/my/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "my",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "my", "{{courseId}}"]
             },
             "description": "Get my review for a specific course"
           },
@@ -220,13 +186,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/reviews/my",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "my"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "my"]
             },
             "description": "Get all reviews created by current user"
           },
@@ -246,13 +207,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/reviews/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "{{courseId}}"]
             },
             "description": "Delete your review for a course"
           },
@@ -287,13 +243,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/reviews/<unenrolled_course_id>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "<unenrolled_course_id>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "<unenrolled_course_id>"]
             },
             "description": "Test creating review without enrollment (should return 403)"
           },
@@ -321,13 +272,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/reviews/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "{{courseId}}"]
             },
             "description": "Test invalid rating (should return 400)"
           },
@@ -355,13 +301,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/reviews/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "{{courseId}}"]
             },
             "description": "Test comment too short (should return 400)"
           },
@@ -389,13 +330,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/reviews/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "{{courseId}}"]
             },
             "description": "Test creating duplicate review (should return 409)"
           },
@@ -423,13 +359,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/reviews/<course_without_review>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reviews",
-                "<course_without_review>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "<course_without_review>"]
             },
             "description": "Test updating non-existent review (should return 404)"
           },

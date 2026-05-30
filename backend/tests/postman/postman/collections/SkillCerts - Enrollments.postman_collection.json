@@ -47,12 +47,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/enrollments",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments"]
             },
             "description": "Enroll in a course (requires authentication)"
           },
@@ -72,13 +68,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/my",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "my"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "my"]
             },
             "description": "Get all enrollments for current user"
           },
@@ -98,13 +89,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/my?status=ongoing",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "my"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "my"],
               "query": [
                 {
                   "key": "status",
@@ -130,13 +116,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/my?status=completed",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "my"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "my"],
               "query": [
                 {
                   "key": "status",
@@ -162,13 +143,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}"]
             },
             "description": "Get single enrollment with progress"
           },
@@ -188,14 +164,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/check/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "check",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "check", "{{courseId}}"]
             },
             "description": "Check if user is enrolled in a course"
           },
@@ -215,14 +185,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/{{courseId}}/complete",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "{{courseId}}",
-                "complete"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}", "complete"]
             },
             "description": "Mark a course as completed"
           },
@@ -242,13 +206,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}"]
             },
             "description": "Unenroll from a course (cannot unenroll if completed)"
           },
@@ -275,14 +234,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "course", "{{courseId}}"]
             },
             "description": "Get all enrollments for a course (instructor/admin only)"
           },
@@ -312,12 +265,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/enrollments",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments"]
             },
             "description": "Test unauthorized access (should return 401)"
           },
@@ -345,12 +294,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/enrollments",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments"]
             },
             "description": "Test duplicate enrollment (should return 409)"
           },
@@ -378,12 +323,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/enrollments",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments"]
             },
             "description": "Test enrolling in non-existent course (should return 404)"
           },
@@ -403,13 +344,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/enrollments/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}"]
             },
             "description": "Test unenrolling from completed course (should return 400)"
           },

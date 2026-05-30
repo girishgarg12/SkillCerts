@@ -47,13 +47,8 @@
             "url": {
               "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "get"
-              ],
+              "host": ["postman-echo", "com"],
+              "path": ["get"],
               "query": [
                 {
                   "key": "foo1",
@@ -77,13 +72,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "get"
-                  ],
+                  "host": ["postman-echo", "com"],
+                  "path": ["get"],
                   "query": [
                     {
                       "key": "foo1",
@@ -171,13 +161,8 @@
             "url": {
               "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "get"
-              ],
+              "host": ["postman-echo", "com"],
+              "path": ["get"],
               "query": [
                 {
                   "key": "foo1",
@@ -201,13 +186,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "get"
-                  ],
+                  "host": ["postman-echo", "com"],
+                  "path": ["get"],
                   "query": [
                     {
                       "key": "foo1",
@@ -270,18 +250,14 @@
           "listen": "prerequest",
           "script": {
             "type": "text/javascript",
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         },
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         }
       ]
@@ -312,13 +288,8 @@
             "url": {
               "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "get"
-              ],
+              "host": ["postman-echo", "com"],
+              "path": ["get"],
               "query": [
                 {
                   "key": "foo1",
@@ -342,13 +313,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "get"
-                  ],
+                  "host": ["postman-echo", "com"],
+                  "path": ["get"],
                   "query": [
                     {
                       "key": "foo1",
@@ -429,13 +395,8 @@
             "url": {
               "raw": "https://postman-echo.com/put",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "put"
-              ]
+              "host": ["postman-echo", "com"],
+              "path": ["put"]
             },
             "description": "This test is to validate the response time. This Snippet is also available on the right sidebar under `Response time is less than 200ms`."
           },
@@ -453,13 +414,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/put",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "put"
-                  ]
+                  "host": ["postman-echo", "com"],
+                  "path": ["put"]
                 }
               },
               "status": "OK",
@@ -538,13 +494,8 @@
             "url": {
               "raw": "https://postman-echo.com/patch",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "patch"
-              ]
+              "host": ["postman-echo", "com"],
+              "path": ["patch"]
             },
             "description": "This test is to validate the content type of the returned content. This SNIPPET is also available on the right sidebar under `Response headers: Content-Type header check`."
           },
@@ -562,13 +513,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/patch",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "patch"
-                  ]
+                  "host": ["postman-echo", "com"],
+                  "path": ["patch"]
                 }
               },
               "status": "OK",
@@ -657,13 +603,8 @@
             "url": {
               "raw": "https://postman-echo.com/post",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "post"
-              ]
+              "host": ["postman-echo", "com"],
+              "path": ["post"]
             },
             "description": "This test is written to validate the server performed a function as expected."
           },
@@ -692,13 +633,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/post",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "post"
-                  ]
+                  "host": ["postman-echo", "com"],
+                  "path": ["post"]
                 }
               },
               "status": "OK",
@@ -793,13 +729,8 @@
             "url": {
               "raw": "https://postman-echo.com/delete",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "delete"
-              ]
+              "host": ["postman-echo", "com"],
+              "path": ["delete"]
             },
             "description": "This test is written to demonstrate how to bundle several assertions within a single test and several tests within a try-catch code block."
           },
@@ -817,13 +748,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/delete",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "delete"
-                  ]
+                  "host": ["postman-echo", "com"],
+                  "path": ["delete"]
                 }
               },
               "status": "OK",
@@ -905,13 +831,8 @@
             "url": {
               "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "get"
-              ],
+              "host": ["postman-echo", "com"],
+              "path": ["get"],
               "query": [
                 {
                   "key": "foo1",
@@ -935,13 +856,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "get"
-                  ],
+                  "host": ["postman-echo", "com"],
+                  "path": ["get"],
                   "query": [
                     {
                       "key": "foo1",
@@ -1041,13 +957,8 @@
             "url": {
               "raw": "https://postman-echo.com/post",
               "protocol": "https",
-              "host": [
-                "postman-echo",
-                "com"
-              ],
-              "path": [
-                "post"
-              ]
+              "host": ["postman-echo", "com"],
+              "path": ["post"]
             },
             "description": "This test checks if it is possible to inject malicious strings as a request parameter. If your server is not handling user input properly, these strings can be interpreted by your server as SQL commands that result in leaking sensitive information or general mayhem."
           },
@@ -1079,13 +990,8 @@
                 "url": {
                   "raw": "https://postman-echo.com/post",
                   "protocol": "https",
-                  "host": [
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "post"
-                  ]
+                  "host": ["postman-echo", "com"],
+                  "path": ["post"]
                 }
               },
               "status": "OK",
@@ -1142,18 +1048,14 @@
           "listen": "prerequest",
           "script": {
             "type": "text/javascript",
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         },
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         }
       ]
@@ -1164,18 +1066,14 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ]

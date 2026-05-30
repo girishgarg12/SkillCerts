@@ -25,8 +25,8 @@ app.use(cors());
 
 // Simple Logger
 app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
-    next();
+  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  next();
 });
 
 app.use('/uploads', express.static('uploads'));
@@ -36,19 +36,19 @@ connectDB();
 
 // Routes
 app.get('/', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'SkillCerts API is running',
-        env: process.env.NODE_ENV
-    });
+  res.status(200).json({
+    success: true,
+    message: 'SkillCerts API is running',
+    env: process.env.NODE_ENV,
+  });
 });
 
 app.get('/health', (req, res) => {
-    res.status(200).json({
-        success: true,
-        status: 'OK',
-        timestamp: new Date().toISOString()
-    });
+  res.status(200).json({
+    success: true,
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.use('/api/user', userRouter);
@@ -65,20 +65,20 @@ app.use('/api/certificates', certificateRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
-    console.error('SERVER_ERROR:', err);
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).json({
-        success: false,
-        message: err.message || 'Internal Server Error',
-        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-    });
+  console.error('SERVER_ERROR:', err);
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+  });
 });
 
 // Start Server
 const PORT = env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
-    console.log(`📌 Environment: ${env.NODE_ENV}`);
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`📌 Environment: ${env.NODE_ENV}`);
 });
 
 export { app };

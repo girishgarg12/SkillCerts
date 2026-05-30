@@ -23,12 +23,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/post",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "post"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["post"]
         },
         "description": "This request shows an example of generating mock user data in the request body. You can use this to populate some users for testing your API or application, or to ensure that your API accepts a range of inputs within certain parameters."
       },
@@ -51,12 +47,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/post",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "post"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["post"]
         },
         "description": "This request shows an example of generating mock purchase details in the request body. It demonstrates a few finance-related dynamic variables, in addition to the ones for random ID, Integer, Boolean, and Timestamp."
       },
@@ -100,12 +92,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/post",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "post"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["post"]
         },
         "description": "This request shows an example of generating longer-form content, in this case, a blog post, and transforming mock data as part of a pre-request script.\n\nIn the body, we use dynamic variables to generate a name, a short set of words as a title, a 'slug' (URL-safe textual identifier like \"dolores-est-iusto\"), and a post summary.\n\nIn the pre-request script, we generate some paragraphs of text using `pm.variables.replaceIn`. We then transform this text to make it JSON-safe by replacing newline characters with escaped newline characters and setting the result to a variable we can reference in the body."
       },
@@ -117,18 +105,14 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

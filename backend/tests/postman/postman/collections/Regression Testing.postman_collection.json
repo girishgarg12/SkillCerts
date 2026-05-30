@@ -28,12 +28,8 @@
         "header": [],
         "url": {
           "raw": "{{baseUrl}}/get",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "get"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["get"]
         },
         "description": "The test on this request asserts that the reponse has a \"200 OK\" status.\n\nYou can check for any HTTP status code using the same mechanism, for example `pm.response.to.have.status(403)` if your API should return an \"Unauthorized\" response."
       },
@@ -100,12 +96,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/post",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "post"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["post"]
         },
         "description": "This request has a test using Postman's built-in support for JSON Schema verification to ensure that the response data matches the expected shape.\n\nSchema validation can be used to verify your API returns data in the right format, without worrying about the exact values. This might be helpful when testing various inputs for a consistent output format.\n\nLearn more about JSON Schema at [https://json-schema.org](https://json-schema.org/.)."
       },
@@ -162,12 +154,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/post",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "post"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["post"]
         },
         "description": "This request uses tests to verify both the structure (existence and type of individual properties) and exact values of the response data.\n\nUse `pm.expect(subject)` to wrap test subjects, and [Chai](https://www.chaijs.com/api/bdd/) for assertions."
       },
@@ -208,12 +196,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/get",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "get"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["get"]
         },
         "description": "This request has a test asserting that a response is received within a specific time limit (in this case 5 seconds). This is useful for ensuring consistent API performance.\n\nYou can access details of the response, such as response time, on the `pm.response` object. See the [response object documentation](https://learning.postman.com/docs/writing-scripts/script-references/postman-sandbox-api-reference/#scripting-with-response-data) for other properties available."
       },
@@ -254,12 +238,8 @@
         },
         "url": {
           "raw": "{{baseUrl}}/get",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "get"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["get"]
         },
         "description": "This request has a test asserting that certain response headers are present or have an expected value.\n\nYou can access details of the response, such as headers, on the `pm.response` object. See the [response object documentation](https://learning.postman.com/docs/writing-scripts/script-references/postman-sandbox-api-reference/#scripting-with-response-data) for other properties available."
       },
@@ -271,18 +251,14 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

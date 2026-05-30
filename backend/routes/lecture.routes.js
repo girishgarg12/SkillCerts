@@ -18,8 +18,22 @@ lectureRouter.get('/:id', getLecture);
 
 // Instructor/Admin routes
 lectureRouter.use(authenticate, authorize('instructor', 'admin'));
-lectureRouter.post('/section/:sectionId', upload.fields([{ name: 'video', maxCount: 1 }, { name: 'notes', maxCount: 1 }]), createLecture);
-lectureRouter.put('/:id', upload.fields([{ name: 'video', maxCount: 1 }, { name: 'notes', maxCount: 1 }]), updateLecture);
+lectureRouter.post(
+  '/section/:sectionId',
+  upload.fields([
+    { name: 'video', maxCount: 1 },
+    { name: 'notes', maxCount: 1 },
+  ]),
+  createLecture
+);
+lectureRouter.put(
+  '/:id',
+  upload.fields([
+    { name: 'video', maxCount: 1 },
+    { name: 'notes', maxCount: 1 },
+  ]),
+  updateLecture
+);
 lectureRouter.delete('/:id', deleteLecture);
 lectureRouter.patch('/section/:sectionId/reorder', reorderLectures);
 

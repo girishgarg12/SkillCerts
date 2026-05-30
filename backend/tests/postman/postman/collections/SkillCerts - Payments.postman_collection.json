@@ -49,13 +49,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/payments/create-order",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "create-order"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "create-order"]
             },
             "description": "Step 1: Backend creates Razorpay order, validates course from DB, stores payment as pending"
           },
@@ -83,13 +78,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/payments/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "verify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "verify"]
             },
             "description": "Step 2: Backend verifies Razorpay signature, marks payment success, auto-enrolls user. Replace with actual values from Razorpay response."
           },
@@ -116,13 +106,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/payments/my",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "my"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "my"]
             },
             "description": "Get all payments for current user"
           },
@@ -142,13 +127,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/payments/{{paymentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "{{paymentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "{{paymentId}}"]
             },
             "description": "Get single payment details"
           },
@@ -175,14 +155,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/payments/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "course", "{{courseId}}"]
             },
             "description": "Get all payments for a course with total revenue (instructor/admin only)"
           },
@@ -217,13 +191,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/payments/create-order",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "create-order"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "create-order"]
             },
             "description": "Test creating order for free course (should return 400)"
           },
@@ -251,13 +220,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/payments/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "verify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "verify"]
             },
             "description": "Test invalid signature verification (should return 400, mark payment as failed)"
           },
@@ -285,13 +249,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/payments/create-order",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "create-order"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "create-order"]
             },
             "description": "Test creating order for already enrolled course (should return 409)"
           },

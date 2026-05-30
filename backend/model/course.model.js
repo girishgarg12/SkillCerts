@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const courseSchema = new mongoose.Schema(
   {
@@ -14,23 +14,23 @@ const courseSchema = new mongoose.Schema(
 
     level: {
       type: String,
-      enum: ["beginner", "intermediate", "advanced"],
+      enum: ['beginner', 'intermediate', 'advanced'],
     },
 
     language: String,
-    
+
     learningOutcomes: [String],
     requirements: [String],
 
     instructor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
 
     category: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      ref: 'Category',
     },
 
     totalDuration: Number,
@@ -42,4 +42,4 @@ const courseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Course = mongoose.model("Course", courseSchema);
+export const Course = mongoose.model('Course', courseSchema);

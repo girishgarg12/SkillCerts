@@ -1,26 +1,26 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const progressSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
 
   course: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Course",
+    ref: 'Course',
     required: true,
   },
 
   completedLectures: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Lecture",
+      ref: 'Lecture',
     },
   ],
 
   progressPercentage: { type: Number, default: 0 },
 });
 
-export const Progress = mongoose.model("Progress", progressSchema);
+export const Progress = mongoose.model('Progress', progressSchema);

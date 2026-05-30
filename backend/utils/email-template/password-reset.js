@@ -9,7 +9,7 @@ function escapeHTML(str) {
       '<': '&lt;',
       '>': '&gt;',
       '"': '&quot;',
-      "'": '&#39;'
+      "'": '&#39;',
     };
     return escapeMap[char];
   });
@@ -18,7 +18,11 @@ function escapeHTML(str) {
 /**
  * Password Reset Email Template
  */
-export const passwordResetTemplate = ({ userName, resetUrl, expiresIn = '1 hour' }) => {
+export const passwordResetTemplate = ({
+  userName,
+  resetUrl,
+  expiresIn = '1 hour',
+}) => {
   return `
 <!DOCTYPE html>
 <html lang="en">

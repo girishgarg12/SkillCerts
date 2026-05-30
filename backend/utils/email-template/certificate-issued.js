@@ -9,7 +9,7 @@ function escapeHTML(str) {
       '<': '&lt;',
       '>': '&gt;',
       '"': '&quot;',
-      "'": '&#39;'
+      "'": '&#39;',
     };
     return escapeMap[char];
   });
@@ -18,7 +18,12 @@ function escapeHTML(str) {
 /**
  * Certificate Issued Email Template
  */
-export const certificateIssuedTemplate = ({ userName, courseTitle, certificateUrl, certificateId }) => {
+export const certificateIssuedTemplate = ({
+  userName,
+  courseTitle,
+  certificateUrl,
+  certificateId,
+}) => {
   return `
 <!DOCTYPE html>
 <html lang="en">

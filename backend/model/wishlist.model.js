@@ -1,19 +1,17 @@
-import mongoose from "mongoose";
-
+import mongoose from 'mongoose';
 
 const wishlistSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     unique: true,
   },
   courses: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
+      ref: 'Course',
     },
   ],
 });
 
-export const Wishlist = mongoose.model("Wishlist", wishlistSchema);
-  
+export const Wishlist = mongoose.model('Wishlist', wishlistSchema);

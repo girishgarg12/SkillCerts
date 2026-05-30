@@ -39,14 +39,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/generate/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "generate",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "generate", "{{courseId}}"]
             },
             "description": "Generate certificate for completed course (course must be 100% complete)"
           },
@@ -66,13 +60,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/my",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "my"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "my"]
             },
             "description": "Get all certificates for current user"
           },
@@ -92,14 +81,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/course/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "course",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "course", "{{courseId}}"]
             },
             "description": "Get certificate for specific course"
           },
@@ -119,14 +102,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/download/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "download",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "download", "{{courseId}}"]
             },
             "description": "Download certificate as PDF file"
           },
@@ -147,14 +124,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/certificates/verify/{{certificateId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "verify",
-                "{{certificateId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "verify", "{{certificateId}}"]
             },
             "description": "Publicly verify certificate authenticity using certificate ID"
           },
@@ -181,14 +152,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/generate/<incomplete_course_id>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "generate",
-                "<incomplete_course_id>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "generate", "<incomplete_course_id>"]
             },
             "description": "Test generating certificate for incomplete course (should return 400)"
           },
@@ -208,14 +173,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/generate/<unenrolled_course_id>",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "generate",
-                "<unenrolled_course_id>"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "generate", "<unenrolled_course_id>"]
             },
             "description": "Test generating certificate without enrollment (should return 404)"
           },
@@ -235,9 +194,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/certificates/download/<course_without_certificate>",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "certificates",
                 "download",
@@ -256,14 +213,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/certificates/verify/INVALID-CERT-ID",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "certificates",
-                "verify",
-                "INVALID-CERT-ID"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["certificates", "verify", "INVALID-CERT-ID"]
             },
             "description": "Test verifying invalid certificate ID (should return 404)"
           },

@@ -43,9 +43,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -60,14 +58,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth"]
             },
             "description": "This request generates a new API key and saves it to the collection variables if the request is successful."
           },
@@ -80,14 +72,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/auth",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "auth"]
                 }
               },
               "status": "OK",
@@ -189,14 +175,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts"]
             },
             "description": "Generates a new account (`fromAccount`), that the funds will be transferred from, and saves the following information if the request is successful:\n\n- Account owner from the request body (saved as collection variable `e2e_user_name_from`)\n- Account id from the response body (saved as collection variable `e2e_user_account_id_from`)"
           },
@@ -218,14 +198,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/accounts",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "accounts"]
                 }
               },
               "status": "OK",
@@ -329,14 +303,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts"]
             },
             "description": "Generates another new account (`toAccount`), that the funds will be transferred to, and saves the following information if the request is successful:\n\n- Account owner from the request body (saved as collection variable `e2e_user_name_to`)\n- Account id from the response body (saved as collection variable `e2e_user_account_id_to`)"
           },
@@ -358,14 +326,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/accounts",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "accounts"]
                 }
               },
               "status": "OK",
@@ -438,9 +400,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -464,14 +424,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts"]
             },
             "description": "Get a list of all accounts to ensure the accounts were created and saved correctly."
           },
@@ -493,14 +447,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/accounts",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "accounts"]
                 }
               },
               "status": "OK",
@@ -553,9 +501,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -580,14 +526,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/transactions",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "transactions"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transactions"]
             },
             "description": "Create a new transaction between the `fromAccount` and `toAccount`"
           },
@@ -613,14 +553,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/transactions",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "transactions"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "transactions"]
                 }
               },
               "status": "OK",
@@ -687,9 +621,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -706,14 +638,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/transactions?toAccountId={{e2e_user_account_id_to}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "transactions"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transactions"],
               "query": [
                 {
                   "key": "toAccountId",
@@ -737,14 +663,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/transactions?toAccountId={{e2e_user_account_id_to}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "transactions"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "transactions"],
                   "query": [
                     {
                       "key": "toAccountId",
@@ -813,9 +733,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -832,15 +750,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/transactions/:transactionId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "transactions",
-                ":transactionId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transactions", ":transactionId"],
               "variable": [
                 {
                   "key": "transactionId",
@@ -864,15 +775,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/transactions/:transactionId",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "transactions",
-                    ":transactionId"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "transactions", ":transactionId"],
                   "variable": [
                     {
                       "key": "transactionId",
@@ -951,9 +855,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -977,15 +879,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -1013,15 +908,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -1098,9 +986,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -1124,15 +1010,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -1160,15 +1039,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -1223,9 +1095,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -1246,15 +1116,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -1283,17 +1146,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/accounts/:accountId",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -1354,9 +1208,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -1373,15 +1225,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -1406,17 +1251,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/accounts/:accountId",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -1463,9 +1299,7 @@
           "listen": "prerequest",
           "script": {
             "type": "text/javascript",
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         },
         {
@@ -1523,9 +1357,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -1540,14 +1372,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/v1/auth",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "auth"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth"]
             },
             "description": "This request generates a new API Key, and saves it to the collection variables if the request was successful."
           },
@@ -1561,16 +1387,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/auth",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "auth"
-                  ]
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "auth"]
                 }
               },
               "status": "OK",
@@ -1675,14 +1493,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts"]
             },
             "description": "Generates a new account (`fromAccount`), that the funds will be transferred from, and saves the following information if the request is successful:\n\n- Account owner from the request body (saved as collection variable `e2e_user_name_from`)\n    \n- Account id from the response body (saved as collection variable `e2e_user_account_id_from`)"
           },
@@ -1705,16 +1517,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/accounts",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts"
-                  ]
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "accounts"]
                 }
               },
               "status": "OK",
@@ -1821,14 +1625,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts"]
             },
             "description": "Generates another new account (`toAccount`), that the funds will be transferred to, and saves the following information if the request is successful:\n\n- Account owner from the request body (saved as collection variable `e2e_user_name_to`)\n    \n- Account id from the response body (saved as collection variable `e2e_user_account_id_to`)"
           },
@@ -1851,16 +1649,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/accounts",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts"
-                  ]
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "accounts"]
                 }
               },
               "status": "OK",
@@ -1937,9 +1727,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -1963,14 +1751,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts"]
             },
             "description": "Get a list of all accounts to ensure the accounts were created and saved correctly."
           },
@@ -1993,16 +1775,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/accounts",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts"
-                  ]
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "accounts"]
                 }
               },
               "status": "OK",
@@ -2066,9 +1840,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -2093,14 +1865,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/transactions",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "transactions"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transactions"]
             },
             "description": "Create a new transaction between the `fromAccount` and `toAccount`. We are expecting this to fail as there are insufficient funds in the `fromAccount`."
           },
@@ -2127,16 +1893,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/transactions",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "transactions"
-                  ]
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "transactions"]
                 }
               },
               "status": "Bad Request",
@@ -2195,9 +1953,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript"
               }
             }
@@ -2213,14 +1969,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/transactions?toAccountId={{e2e_user_account_id_to}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "transactions"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "transactions"],
               "query": [
                 {
                   "key": "toAccountId",
@@ -2245,16 +1995,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/transactions?toAccountId={{e2e_user_account_id_to}}",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "transactions"
-                  ],
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "transactions"],
                   "query": [
                     {
                       "key": "toAccountId",
@@ -2337,9 +2079,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -2363,15 +2103,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -2400,17 +2133,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/accounts/:accountId",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -2491,9 +2215,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -2517,15 +2239,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -2554,17 +2269,8 @@
                 "url": {
                   "raw": "https://template.postman-echo.com/api/v1/accounts/:accountId",
                   "protocol": "https",
-                  "host": [
-                    "template",
-                    "postman-echo",
-                    "com"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["template", "postman-echo", "com"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -2623,9 +2329,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -2646,15 +2350,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -2682,15 +2379,8 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -2756,9 +2446,7 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [
-                  ""
-                ],
+                "exec": [""],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -2775,15 +2463,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "accounts",
-                ":accountId"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "accounts", ":accountId"],
               "variable": [
                 {
                   "key": "accountId",
@@ -2807,15 +2488,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/api/v1/accounts/:accountId",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "accounts",
-                    ":accountId"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "accounts", ":accountId"],
                   "variable": [
                     {
                       "key": "accountId",
@@ -2862,18 +2536,14 @@
           "listen": "prerequest",
           "script": {
             "type": "text/javascript",
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         },
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": [
-              ""
-            ]
+            "exec": [""]
           }
         }
       ]
@@ -2899,18 +2569,14 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     },
     {
       "listen": "test",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          ""
-        ]
+        "exec": [""]
       }
     }
   ],

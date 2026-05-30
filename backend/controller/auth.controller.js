@@ -23,10 +23,14 @@ export const signup = async (req, res) => {
   try {
     const validatedData = signupSchema.parse(req.body);
     const result = await authService.signup(validatedData);
-    return ApiResponse.created('User registered successfully', result).send(res);
+    return ApiResponse.created('User registered successfully', result).send(
+      res
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return ApiResponse.badRequest('Validation failed', error.errors).send(res);
+      return ApiResponse.badRequest('Validation failed', error.errors).send(
+        res
+      );
     }
     if (error.message === 'Email already registered') {
       return ApiResponse.conflict('Email already registered').send(res);
@@ -46,7 +50,9 @@ export const signin = async (req, res) => {
     return ApiResponse.success('Login successful', result).send(res);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return ApiResponse.badRequest('Validation failed', error.errors).send(res);
+      return ApiResponse.badRequest('Validation failed', error.errors).send(
+        res
+      );
     }
     if (error.message === 'Invalid email or password') {
       return ApiResponse.unauthorized('Invalid email or password').send(res);
