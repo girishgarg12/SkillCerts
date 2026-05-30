@@ -234,8 +234,15 @@ jobs:
     steps:
       - name: Trigger Jenkins webhook
         run: |
+          echo "=== Jenkins Trigger Debug Info ==="
+          echo "Jenkins URL : ${{ secrets.JENKINS_URL }}"
+          echo "Jenkins User: ${{ secrets.JENKINS_USER }}"
+          echo "Backend Tag : ${{ needs.docker-build-push.outputs.backend_tag }}"
+          echo "Frontend Tag: ${{ needs.docker-build-push.outputs.frontend_tag }}"
+          echo ""
           echo "Triggering Jenkins deployment pipeline..."
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}\n" \
             -X POST \
             "${{ secrets.JENKINS_URL }}/job/skillcerts-deploy/buildWithParameters" \
             --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
@@ -244,10 +251,19 @@ jobs:
             --data-urlencode "GIT_COMMIT=${{ github.sha }}" \
             --data-urlencode "GIT_BRANCH=${{ github.ref_name }}")
 
-          echo "Jenkins responded with HTTP $HTTP_STATUS"
+          echo "=== Jenkins Response ==="
+          echo "$RESPONSE"
+
+          HTTP_STATUS=$(echo "$RESPONSE" | grep 'HTTP_STATUS' | cut -d':' -f2)
+          echo "HTTP Status Code: $HTTP_STATUS"
 
           if [ "$HTTP_STATUS" -ne 201 ] && [ "$HTTP_STATUS" -ne 200 ]; then
             echo "❌ Failed to trigger Jenkins pipeline (HTTP $HTTP_STATUS)"
+            echo "Common causes:"
+            echo "  - JENKINS_URL secret is wrong or Jenkins is not publicly accessible"
+            echo "  - JENKINS_USER or JENKINS_API_TOKEN is incorrect"
+            echo "  - Job 'skillcerts-deploy' does not exist in Jenkins"
+            echo "  - Jenkins job is not configured to accept remote triggers"
             exit 1
           fi
 

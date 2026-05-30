@@ -3,6 +3,8 @@
 # Services: frontend (Nginx), backend (Node/Express), mongo
 # -------------------------------------------------------
 
+name: skillcerts
+
 services:
 
   # ──────────────────────────────────────────────────────
@@ -34,6 +36,7 @@ services:
   # ──────────────────────────────────────────────────────
   backend:
     container_name: skillcerts-backend
+    image: ${BACKEND_IMAGE_TAG:-skillcert-backend:latest}
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -71,6 +74,7 @@ services:
   # ──────────────────────────────────────────────────────
   frontend:
     container_name: skillcerts-frontend
+    image: ${FRONTEND_IMAGE_TAG:-skillcert-frontend:latest}
     build:
       context: ./frontend
       dockerfile: Dockerfile

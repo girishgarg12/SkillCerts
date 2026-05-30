@@ -119,8 +119,12 @@ pipeline {
                     file(credentialsId: 'skillcerts-env-file', variable: 'ENV_FILE')
                 ]) {
                     sh '''
-                        # Copy environment file into workspace (already checked out)
+                        # Remove existing .env from git checkout (may be read-only)
+                        rm -f "${DEPLOY_DIR}/.env"
+
+                        # Copy environment file into workspace
                         cp "$ENV_FILE" "${DEPLOY_DIR}/.env"
+                        chmod 644 "${DEPLOY_DIR}/.env"
 
                         # Override image tags in the .env file with the ones passed from CI
                         echo "" >> "${DEPLOY_DIR}/.env"
