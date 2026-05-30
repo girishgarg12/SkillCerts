@@ -31,8 +31,8 @@ pipeline {
 
     environment {
         COMPOSE_PROJECT_NAME = 'skillcerts'
-        DEPLOY_DIR           = '/opt/skillcerts'           // Directory on the server where files live
-        COMPOSE_FILE         = "${DEPLOY_DIR}/docker-compose.yml"
+        DEPLOY_DIR           = "${WORKSPACE}"              // Use Jenkins workspace for local setup
+        COMPOSE_FILE         = "${WORKSPACE}/docker-compose.yml"
         HEALTH_CHECK_RETRIES = '10'
         HEALTH_CHECK_DELAY   = '10'                        // seconds between retries
     }
@@ -119,14 +119,8 @@ pipeline {
                     file(credentialsId: 'skillcerts-env-file', variable: 'ENV_FILE')
                 ]) {
                     sh '''
-                        # Create deploy directory if not exists
-                        mkdir -p ${DEPLOY_DIR}
-
-                        # Copy environment file
+                        # Copy environment file into workspace (already checked out)
                         cp "$ENV_FILE" "${DEPLOY_DIR}/.env"
-
-                        # Copy docker-compose file from checked-out repo
-                        cp docker-compose.yml "${DEPLOY_DIR}/docker-compose.yml"
 
                         # Override image tags in the .env file with the ones passed from CI
                         echo "" >> "${DEPLOY_DIR}/.env"
@@ -245,7 +239,7 @@ pipeline {
         failure {
             echo "❌ Deployment FAILED. Rolling back..."
             sh '''
-                cd ${DEPLOY_DIR}
+                cd "${WORKSPACE}"
                 # Attempt to restore the previous state
                 docker compose down || true
                 docker compose up -d --no-build || true
