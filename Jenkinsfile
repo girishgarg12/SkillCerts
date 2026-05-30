@@ -18,9 +18,8 @@
 
 pipeline {
 
-    agent {
-        label 'docker'   // Jenkins agent must have Docker & docker-compose installed
-    }
+    agent any   // Changed from label 'docker' for local Jenkins setup
+
 
     // ── Parameters passed from GitHub Actions ──────────
     parameters {
