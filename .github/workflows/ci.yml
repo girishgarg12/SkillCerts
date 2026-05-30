@@ -1,0 +1,253 @@
+# =========================================================
+# GitHub Actions – CI Pipeline for SkillCerts
+#
+# Triggers : push / PR to main or develop
+# Stages   : lint → test → docker-build → notify-jenkins
+# =========================================================
+
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Cancel in-progress runs for the same branch/PR
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: docker.io                          # Change to ghcr.io if using GitHub Packages
+  IMAGE_BACKEND: ${{ secrets.DOCKERHUB_USERNAME }}/skillcerts-backend
+  IMAGE_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/skillcerts-frontend
+
+jobs:
+
+  # ─────────────────────────────────────────────────────
+  # JOB 1 — Lint & Format Check (Backend)
+  # ─────────────────────────────────────────────────────
+  lint-backend:
+    name: 🔍 Lint Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --frozen-lockfile
+
+      - name: Check formatting (Prettier)
+        run: npm run format:check
+
+  # ─────────────────────────────────────────────────────
+  # JOB 2 — Lint (Frontend)
+  # ─────────────────────────────────────────────────────
+  lint-frontend:
+    name: 🔍 Lint Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --frozen-lockfile
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Build check (Vite)
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: http://localhost:3000/api
+
+  # ─────────────────────────────────────────────────────
+  # JOB 3 — Backend Tests
+  # ─────────────────────────────────────────────────────
+  test-backend:
+    name: 🧪 Test Backend
+    runs-on: ubuntu-latest
+    needs: [lint-backend]
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      mongo:
+        image: mongo:7-jammy
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval \"db.adminCommand('ping')\""
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      PORT: 3000
+      MONGODB_URI: mongodb://localhost:27017/skillcerts-test
+      JWT_SECRET: test-jwt-secret-for-ci-pipeline-only
+      JWT_EXPIRES_IN: 7d
+      RZP_KEY: dummy
+      RZP_SECRET: dummy
+      RZP_WEBHOOK_SECRET: dummy
+      RESEND_MAIL_SECRET: dummy
+      FRONTEND_URL: http://localhost
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --frozen-lockfile
+
+      - name: Run tests
+        run: npm test --if-present
+
+  # ─────────────────────────────────────────────────────
+  # JOB 4 — Build & Push Docker Images (only on main)
+  # ─────────────────────────────────────────────────────
+  docker-build-push:
+    name: 🐳 Build & Push Docker Images
+    runs-on: ubuntu-latest
+    needs: [lint-backend, lint-frontend, test-backend]
+    # Only push images on pushes to main (not PRs)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      backend_tag: ${{ steps.meta-backend.outputs.version }}
+      frontend_tag: ${{ steps.meta-frontend.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU (for multi-platform builds)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # ─── Backend Image ───────────────────────────────
+      - name: Extract metadata for backend image
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_BACKEND }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+      # ─── Frontend Image ──────────────────────────────
+      - name: Extract metadata for frontend image
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_FRONTEND }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
+
+  # ─────────────────────────────────────────────────────
+  # JOB 5 — Trigger Jenkins CD Pipeline
+  # ─────────────────────────────────────────────────────
+  trigger-jenkins:
+    name: 🚀 Trigger Jenkins Deployment
+    runs-on: ubuntu-latest
+    needs: [docker-build-push]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Trigger Jenkins webhook
+        run: |
+          echo "Triggering Jenkins deployment pipeline..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            "${{ secrets.JENKINS_URL }}/job/skillcerts-deploy/buildWithParameters" \
+            --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_API_TOKEN }}" \
+            --data-urlencode "BACKEND_IMAGE=${{ env.IMAGE_BACKEND }}:${{ needs.docker-build-push.outputs.backend_tag }}" \
+            --data-urlencode "FRONTEND_IMAGE=${{ env.IMAGE_FRONTEND }}:${{ needs.docker-build-push.outputs.frontend_tag }}" \
+            --data-urlencode "GIT_COMMIT=${{ github.sha }}" \
+            --data-urlencode "GIT_BRANCH=${{ github.ref_name }}")
+
+          echo "Jenkins responded with HTTP $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ne 201 ] && [ "$HTTP_STATUS" -ne 200 ]; then
+            echo "❌ Failed to trigger Jenkins pipeline (HTTP $HTTP_STATUS)"
+            exit 1
+          fi
+
+          echo "✅ Jenkins deployment pipeline triggered successfully!"
