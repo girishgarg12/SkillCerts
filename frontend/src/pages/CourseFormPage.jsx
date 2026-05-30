@@ -369,57 +369,8 @@ export const CourseFormPage = () => {
                                 </p>
                             </div>
 
-                            {/* Preview Video Section Hidden per user request */}
-                            {false && (
-                                <div>
-
-                                    <div className="flex gap-4 mb-4 border-b border-white/10">
-                                        <button
-                                            type="button"
-                                            onClick={() => setVideoInputType('file')}
-                                            className={`pb-2 px-1 text-sm font-medium transition-colors relative ${videoInputType === 'file' ? 'text-blue-400' : 'text-gray-400 hover:text-gray-300'}`}
-                                        >
-                                            Upload File
-                                            {videoInputType === 'file' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-t-full" />}
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setVideoInputType('url')}
-                                            className={`pb-2 px-1 text-sm font-medium transition-colors relative ${videoInputType === 'url' ? 'text-blue-400' : 'text-gray-400 hover:text-gray-300'}`}
-                                        >
-                                            Enter URL
-                                            {videoInputType === 'url' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 rounded-t-full" />}
-                                        </button>
-                                    </div>
-
-                                    {videoInputType === 'file' ? (
-                                        <div className="space-y-3">
-                                            <Input
-                                                type="file"
-                                                name="previewVideoFile"
-                                                onChange={handleChange}
-                                                accept="video/*"
-                                                className="bg-black/50 border-white/10 text-white focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-3">
-                                            <Input
-                                                type="url"
-                                                name="previewVideo"
-                                                value={formData.previewVideo}
-                                                onChange={handleChange}
-                                                placeholder="https://youtube.com/embed/..."
-                                                className="bg-black/50 border-white/10 text-white placeholder-gray-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                    )}
-
-                                    <p className="text-xs text-gray-500 mt-2 ml-1">
-                                        Add a promotional video for your course
-                                    </p>
-                                </div>
-                            )}
+                            {/* Preview Video Section — hidden intentionally */}
+                            {null}
                         </div>
                     </div>
 

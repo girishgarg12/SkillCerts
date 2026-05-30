@@ -28,10 +28,10 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close search results on route change
+  // Close search results on route change — state resets are intentional here
   useEffect(() => {
-    setShowRecommendations(false);
-    setSearchQuery('');
+    setShowRecommendations(false); // eslint-disable-line react-hooks/set-state-in-effect
+    setSearchQuery(''); // eslint-disable-line react-hooks/set-state-in-effect
   }, [location.pathname]);
 
   const handleSearchInput = (e) => {

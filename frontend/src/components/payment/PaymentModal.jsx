@@ -29,12 +29,7 @@ export const PaymentModal = ({ course, isOpen, onClose, user }) => {
   const [error, setError] = useState('');
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      loadScript();
-    }
-  }, [isOpen]);
-
+  // Defined before useEffect so it is not accessed before declaration
   const loadScript = async () => {
     const loaded = await loadRazorpayScript();
     setScriptLoaded(loaded);
@@ -42,6 +37,12 @@ export const PaymentModal = ({ course, isOpen, onClose, user }) => {
       setError('Failed to load payment gateway. Please check your internet connection.');
     }
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      loadScript(); // eslint-disable-line react-hooks/set-state-in-effect
+    }
+  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePayment = async () => {
     if (!scriptLoaded) {
