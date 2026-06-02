@@ -43,19 +43,7 @@ pipeline {
         }
 
         // Step 2: Grab latest infrastructure code and files
-        stage('📥 Checkout Repo') {
-            steps {
-                checkout([
-                    $class           : 'GitSCM',
-                    branches         : [[name: "*/${params.GIT_BRANCH}"]],
-                    userRemoteConfigs: [[
-                        url          : 'https://github.com/girishgarg12/SkillCerts.git',
-                        credentialsId: 'github-credentials'
-                    ]]
-                ])
-                echo "✅ Repository checked out successfully"
-            }
-        }
+        // (Removed redundant explicit Checkout stage, as Jenkins SCM handles this automatically on agent startup)
 
         // Step 3: Fetch pre-built images from Docker Hub to EC2 host
         stage('🐳 Pull Docker Images') {
@@ -104,7 +92,6 @@ pipeline {
             steps {
                 sh '''
                     cd ${DEPLOY_DIR}
-                    docker-compose pull
                     docker-compose up -d --remove-orphans
                 '''
             }

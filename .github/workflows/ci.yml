@@ -30,9 +30,9 @@ env:
 
 jobs:
 
-  # ─────────────────────────────────────────────────────
+
   # JOB 1 — Lint & Format Check (Backend)
-  # ─────────────────────────────────────────────────────
+
   lint-backend:
     name: 🔍 Lint Backend
     runs-on: ubuntu-latest
@@ -57,9 +57,9 @@ jobs:
       - name: Check formatting (Prettier)
         run: npm run format:check
 
-  # ─────────────────────────────────────────────────────
+
   # JOB 2 — Lint (Frontend)
-  # ─────────────────────────────────────────────────────
+
   lint-frontend:
     name: 🔍 Lint Frontend
     runs-on: ubuntu-latest
@@ -89,9 +89,9 @@ jobs:
         env:
           VITE_API_BASE_URL: http://localhost:3000/api
 
-  # ─────────────────────────────────────────────────────
+
   # JOB 3 — Backend Tests
-  # ─────────────────────────────────────────────────────
+
   test-backend:
     name: 🧪 Test Backend
     runs-on: ubuntu-latest
@@ -140,9 +140,8 @@ jobs:
       - name: Run tests
         run: npm test --if-present
 
-  # ─────────────────────────────────────────────────────
   # JOB 4 — Build & Push Docker Images (only on main)
-  # ─────────────────────────────────────────────────────
+
   docker-build-push:
     name: 🐳 Build & Push Docker Images
     runs-on: ubuntu-latest
@@ -221,9 +220,9 @@ jobs:
           build-args: |
             VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
 
-  # ─────────────────────────────────────────────────────
+
   # JOB 5 — Trigger Jenkins CD Pipeline
-  # ─────────────────────────────────────────────────────
+
   trigger-jenkins:
     name: 🚀 Trigger Jenkins Deployment
     runs-on: ubuntu-latest
