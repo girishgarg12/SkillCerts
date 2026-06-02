@@ -1,15 +1,8 @@
-# -------------------------------------------------------
-# SkillCerts - Docker Compose
-# Services: frontend (Nginx), backend (Node/Express), mongo
-# -------------------------------------------------------
-
 name: skillcerts
 
 services:
 
-  # ──────────────────────────────────────────────────────
-  # MongoDB Database
-  # ──────────────────────────────────────────────────────
+  # Database Service (MongoDB)
   mongo:
     image: mongo:7-jammy
     container_name: skillcerts-mongo
@@ -25,15 +18,14 @@ services:
     networks:
       - skillcerts-network
     healthcheck:
+      # Ping database to verify it is responsive
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 30s
 
-  # ──────────────────────────────────────────────────────
-  # Backend  — Node.js / Express API
-  # ──────────────────────────────────────────────────────
+  # Backend API Service (Node.js/Express)
   backend:
     container_name: skillcerts-backend
     image: ${BACKEND_IMAGE_TAG:-skillcert-backend:latest}
@@ -55,7 +47,7 @@ services:
       RESEND_MAIL_SECRET: ${RESEND_MAIL_SECRET}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
     volumes:
-      # Persist uploaded files across container restarts
+      # Persists course media uploads across deployments
       - uploads_data:/app/uploads
     depends_on:
       mongo:
@@ -63,15 +55,14 @@ services:
     networks:
       - skillcerts-network
     healthcheck:
+      # Queries the custom express health check endpoint
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 20s
 
-  # ──────────────────────────────────────────────────────
-  # Frontend  — React + Vite (served via Nginx)
-  # ──────────────────────────────────────────────────────
+  # Frontend Web Service (React/Vite served by Nginx)
   frontend:
     container_name: skillcerts-frontend
     image: ${FRONTEND_IMAGE_TAG:-skillcert-frontend:latest}
@@ -79,7 +70,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        # API URL baked into the Vite build at build time
+        # Bakes backend API URL into static files during build stage
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:3000/api}
     restart: unless-stopped
     ports:
@@ -90,24 +81,19 @@ services:
     networks:
       - skillcerts-network
     healthcheck:
+      # Pings the local Nginx web server using IPv4
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
 
-# ──────────────────────────────────────────────────────
-# Named Volumes
-# ──────────────────────────────────────────────────────
 volumes:
   mongo_data:
     name: skillcerts-mongo-data
   uploads_data:
     name: skillcerts-uploads
 
-# ──────────────────────────────────────────────────────
-# Networks
-# ──────────────────────────────────────────────────────
 networks:
   skillcerts-network:
     name: skillcerts-network

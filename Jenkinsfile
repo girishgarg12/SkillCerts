@@ -1,27 +1,7 @@
-// =========================================================
-// Jenkinsfile — CD Pipeline for SkillCerts
-//
-// Triggered by : GitHub Actions (via webhook/API call)
-// Stages       : Validate → Pull Images → Deploy → Smoke Test → Notify
-//
-// Required Jenkins Credentials (configure in Jenkins > Credentials):
-//   DOCKERHUB_USERNAME   - Docker Hub username
-//   DOCKERHUB_TOKEN      - Docker Hub access token
-//   SKILLCERTS_ENV_FILE  - Secret file containing production .env variables
-//
-// Required Jenkins Parameters (auto-passed from GitHub Actions):
-//   BACKEND_IMAGE        - Full backend image tag  e.g. user/skillcerts-backend:sha-abc1234
-//   FRONTEND_IMAGE       - Full frontend image tag e.g. user/skillcerts-frontend:sha-abc1234
-//   GIT_COMMIT           - Git commit SHA
-//   GIT_BRANCH           - Git branch name
-// =========================================================
-
 pipeline {
+    agent any
 
-    agent any   // Changed from label 'docker' for local Jenkins setup
-
-
-    // ── Parameters passed from GitHub Actions ──────────
+    // Parameters injected by GitHub Actions trigger
     parameters {
         string(name: 'BACKEND_IMAGE',  defaultValue: '', description: 'Docker image tag for the backend')
         string(name: 'FRONTEND_IMAGE', defaultValue: '', description: 'Docker image tag for the frontend')
@@ -31,24 +11,21 @@ pipeline {
 
     environment {
         COMPOSE_PROJECT_NAME = 'skillcerts'
-        DEPLOY_DIR           = "${WORKSPACE}"              // Use Jenkins workspace for local setup
+        DEPLOY_DIR           = "${WORKSPACE}"
         COMPOSE_FILE         = "${WORKSPACE}/docker-compose.yml"
         HEALTH_CHECK_RETRIES = '10'
-        HEALTH_CHECK_DELAY   = '10'                        // seconds between retries
+        HEALTH_CHECK_DELAY   = '10'
     }
 
     options {
         timeout(time: 20, unit: 'MINUTES')
-        buildDiscarder(logRotator(numToKeepStr: '20'))
+        buildDiscarder(logRotator(numToKeepStr: '20')) // Clean build history logs
         disableConcurrentBuilds()
         timestamps()
     }
 
     stages {
-
-        // ───────────────────────────────────────────────
-        // STAGE 1: Validate
-        // ───────────────────────────────────────────────
+        // Step 1: Ensure GitHub Actions passed both tags
         stage('🔍 Validate Parameters') {
             steps {
                 script {
@@ -65,9 +42,7 @@ pipeline {
             }
         }
 
-        // ───────────────────────────────────────────────
-        // STAGE 2: Checkout Infrastructure Files
-        // ───────────────────────────────────────────────
+        // Step 2: Grab latest infrastructure code and files
         stage('📥 Checkout Repo') {
             steps {
                 checkout([
@@ -75,16 +50,14 @@ pipeline {
                     branches         : [[name: "*/${params.GIT_BRANCH}"]],
                     userRemoteConfigs: [[
                         url          : 'https://github.com/girishgarg12/SkillCerts.git',
-                        credentialsId: 'github-credentials'   // Jenkins credential ID
+                        credentialsId: 'github-credentials'
                     ]]
                 ])
                 echo "✅ Repository checked out successfully"
             }
         }
 
-        // ───────────────────────────────────────────────
-        // STAGE 3: Docker Hub Login & Pull Images
-        // ───────────────────────────────────────────────
+        // Step 3: Fetch pre-built images from Docker Hub to EC2 host
         stage('🐳 Pull Docker Images') {
             steps {
                 withCredentials([
@@ -96,86 +69,59 @@ pipeline {
                 ]) {
                     sh '''
                         echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                        echo "✅ Logged into Docker Hub"
-
                         echo "Pulling backend image: ${BACKEND_IMAGE}"
                         docker pull ${BACKEND_IMAGE}
 
                         echo "Pulling frontend image: ${FRONTEND_IMAGE}"
                         docker pull ${FRONTEND_IMAGE}
-
-                        echo "✅ Images pulled successfully"
                     '''
                 }
             }
         }
 
-        // ───────────────────────────────────────────────
-        // STAGE 4: Prepare Deployment Directory
-        // ───────────────────────────────────────────────
+        // Step 4: Copy production secrets and write Docker Hub image tags into .env
         stage('📁 Prepare Deploy Directory') {
             steps {
                 withCredentials([
                     file(credentialsId: 'skillcerts-env-file', variable: 'ENV_FILE')
                 ]) {
                     sh '''
-                        # Remove existing .env from git checkout (may be read-only)
                         rm -f "${DEPLOY_DIR}/.env"
-
-                        # Copy environment file into workspace
                         cp "$ENV_FILE" "${DEPLOY_DIR}/.env"
                         chmod 644 "${DEPLOY_DIR}/.env"
 
-                        # Override image tags in the .env file with the ones passed from CI
                         echo "" >> "${DEPLOY_DIR}/.env"
                         echo "# Auto-injected by Jenkins CD pipeline" >> "${DEPLOY_DIR}/.env"
                         echo "BACKEND_IMAGE_TAG=${BACKEND_IMAGE}" >> "${DEPLOY_DIR}/.env"
                         echo "FRONTEND_IMAGE_TAG=${FRONTEND_IMAGE}" >> "${DEPLOY_DIR}/.env"
-
-                        echo "✅ Deploy directory prepared"
-                        ls -la ${DEPLOY_DIR}
                     '''
                 }
             }
         }
 
-        // ───────────────────────────────────────────────
-        // STAGE 5: Deploy (Rolling Update)
-        // ───────────────────────────────────────────────
+        // Step 5: Perform zero-downtime rolling update of containers
         stage('🚀 Deploy Containers') {
             steps {
                 sh '''
                     cd ${DEPLOY_DIR}
-
-                    echo "=== Current running containers ==="
-                    docker-compose ps || true
-
-                    echo "=== Pulling latest images via compose ==="
                     docker-compose pull
-
-                    echo "=== Starting services with zero-downtime rolling update ==="
                     docker-compose up -d --remove-orphans
-
-                    echo "✅ Containers deployed"
-                    docker-compose ps
                 '''
             }
         }
 
-        // ───────────────────────────────────────────────
-        // STAGE 6: Health Check / Smoke Test
-        // ───────────────────────────────────────────────
+        // Step 6: Test if containers are running and responding successfully
         stage('🏥 Health Check') {
             steps {
                 sh '''
                     RETRIES=${HEALTH_CHECK_RETRIES}
                     DELAY=${HEALTH_CHECK_DELAY}
 
-                    # Detect Docker host IP/name for health checks when running inside a container
+                    # Route traffic through Docker network host gateway on Linux/Docker Desktop
                     HOST_IP="localhost"
                     if getent hosts host.docker.internal > /dev/null 2>&1; then
                         HOST_IP="host.docker.internal"
-                        echo "Detected Docker Desktop/WSL2 environment. Using host.docker.internal for health check."
+                        echo "Using host.docker.internal for health check."
                     fi
 
                     BACKEND_URL="http://${HOST_IP}:3000/health"
@@ -218,21 +164,17 @@ pipeline {
             }
         }
 
-        // ───────────────────────────────────────────────
-        // STAGE 7: Cleanup Old Images
-        // ───────────────────────────────────────────────
+        // Step 7: Clear out old Docker images to save EC2 disk space
         stage('🧹 Cleanup') {
             steps {
                 sh '''
-                    echo "Removing dangling images to free disk space..."
                     docker image prune -f
-                    echo "✅ Cleanup complete"
                 '''
             }
         }
     }
 
-    // ── Post Actions ────────────────────────────────────
+    // Build notifications and error rollbacks
     post {
         success {
             echo """
@@ -244,24 +186,18 @@ pipeline {
             ║  Frontend: ${params.FRONTEND_IMAGE}          ║
             ╚══════════════════════════════════════════════╝
             """
-            // Add Slack/email notification here if needed
-            // slackSend(color: 'good', message: "✅ SkillCerts deployed: ${params.GIT_COMMIT}")
         }
 
         failure {
             echo "❌ Deployment FAILED. Rolling back..."
             sh '''
                 cd "${WORKSPACE}"
-                # Attempt to restore the previous state
                 docker-compose down || true
                 docker-compose up -d --no-build || true
-                echo "⚠️  Rollback attempted. Check container logs."
             '''
-            // slackSend(color: 'danger', message: "❌ SkillCerts deployment FAILED: ${params.GIT_COMMIT}")
         }
 
         always {
-            // Logout from Docker Hub
             sh 'docker logout || true'
             echo "Pipeline finished at: ${new Date()}"
         }
