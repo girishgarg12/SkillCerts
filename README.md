@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# SkillCert
+# SkillCerts
 
 SkillCert is a MERN stack skill-based learning and certification platform where instructors can create and manage courses, and learners can purchase courses to upskill.
 
