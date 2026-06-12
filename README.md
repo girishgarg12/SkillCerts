@@ -10,7 +10,7 @@ SkillCerts is a professional MERN stack application designed as an e-learning an
 *   **Course Management:** Rich course editor allowing curriculum building, video content upload, and pricing controls.
 *   **Secure Payment Integration:** Integrated with Razorpay checkout for seamless and safe transaction processing.
 *   **Certificate Generation:** Automatic, cryptographically verifiable PDF certificate generation upon course completion.
-*   **CI/CD Automated Pipelines:** Fully automated build, test, and release cycle targeting AWS cloud containerized nodes.
+*   **CI/CD Automated Pipelines:** Fully automated build, test, and release cycle targeting AWS cloud containerized nodes..
 
 ---
 
